@@ -1,0 +1,14 @@
+# Role
+당신은 OpenAI Vision API와 프롬프트 엔지니어링에 능숙한 백엔드 통합 전문가입니다.
+
+# Task 1: Vision API 엔드포인트 (`app/api/analyze-inventory/route.ts`)
+- 클라이언트에서 이미지를 base64로 받아 OpenAI `gpt-4o` 모델을 호출합니다.
+- [시스템 프롬프트]: "이미지에서 1) 그리드의 막힌 칸/빈 칸 위치, 2) 배치된 아티팩트와 기본 석판 목록을 JSON으로 추출하라."
+- **[핵심 - 커스텀 예외 처리]**: "만약 모양이 섞여 있거나 도감에 없는 기괴한 석판(신비한 항아리 합성 석판)이 보인다면, 억지로 유추하지 말고 해당 객체는 식별을 포기한 채 `isCustom: true` 플래그를 달아서 반환하라."고 강력히 지시하세요.
+
+# Task 2: Validation UI Flow (`components/ImageUploader.tsx`)
+- API 응답을 스토어에 바로 덮어씌우지 마세요.
+- 만약 API 응답 데이터 중 `isCustom: true`인 석판이 1개라도 있다면, 프론트엔드 파트에서 만든 **CustomTabletModal(5x5 에디터)**을 자동으로 띄워서 유저가 해당 석판의 효과 범위를 마우스로 직접 입력하도록 강제하는 예외 처리 파이프라인을 구현하세요.
+
+[지시사항]
+Next.js API Route의 코드와 Vision AI에게 전달할 영문 시스템 프롬프트, 그리고 프론트엔드의 업로드 및 예외 처리 연동 컴포넌트를 작성해 주세요.

@@ -1,0 +1,261 @@
+{
+ "imagePath": "인벤 예시/스크린샷2.png",
+ "rows": 6,
+ "cols": 6,
+ "totalSlots": 35,
+ "grid": {
+  "originX": 8.5,
+  "originY": 9.5,
+  "gridWidth": 712.92,
+  "gridHeight": 713.1
+ },
+ "_status": "USER-PROVIDED ground truth. 35 slots: the last row holds 5 cells, so index 35 falls outside the inventory panel and is not a slot.",
+ "_provenance": "Korean names from the user. Three needed reconciling: '차앙' is a typo for '차양' (shade, independently top-scored at 0.321 vs 0.023 runner-up); '친타미니 돌' vs local spelling '친타마니 돌' (chintamani_stone); '방어수' is the new slab `defender` (no ko_label in data/tablets.json yet). '번개 부메랑' and '고양' map to canonical values lightning_boomerang / home_town (duplicate sprite files deleted). Grid origin taken from the interior-gap fit and visually verified; the match-score sweep drifted to its range edge here (the known edge-seeking issue) and was rejected.",
+ "expected": [
+  {
+   "slotIndex": 0,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot"
+  },
+  {
+   "slotIndex": 1,
+   "matchedValue": "shade",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 2,
+   "matchedValue": "chintamani_stone",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 3,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot"
+  },
+  {
+   "slotIndex": 4,
+   "matchedValue": "frozen_bow",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 5,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot"
+  },
+  {
+   "slotIndex": 6,
+   "matchedValue": "sheet_music_galaxy",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 7,
+   "matchedValue": "swaying_eyes",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 8,
+   "matchedValue": "rock_elephant",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 9,
+   "matchedValue": "giant_telescope",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 10,
+   "matchedValue": "yearning",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 11,
+   "matchedValue": "lightning_chakram",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 12,
+   "matchedValue": "overall_armband",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 13,
+   "matchedValue": "entrance",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 14,
+   "matchedValue": "cloth_armor",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 15,
+   "matchedValue": "ancient_anvil",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 16,
+   "matchedValue": "warm_stone",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 17,
+   "matchedValue": "berut_sickle",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 18,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot"
+  },
+  {
+   "slotIndex": 19,
+   "matchedValue": "white_bread",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 20,
+   "matchedValue": "vow",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 21,
+   "matchedValue": "solis_decree",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 22,
+   "matchedValue": "defender",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 23,
+   "matchedValue": "fascinating_lure",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 24,
+   "matchedValue": "green_tooth",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 25,
+   "matchedValue": "harvesting",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 26,
+   "matchedValue": "kunai",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 27,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot"
+  },
+  {
+   "slotIndex": 28,
+   "matchedValue": "lightning_boomerang",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 29,
+   "matchedValue": "black_tea",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 30,
+   "matchedValue": "colorless_cube",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 31,
+   "matchedValue": "sealed_tejas",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 32,
+   "matchedValue": "home_town",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "user-provided ground truth"
+  },
+  {
+   "slotIndex": 33,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot"
+  },
+  {
+   "slotIndex": 34,
+   "matchedValue": "phoenix",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "user-provided ground truth"
+  }
+ ]
+}

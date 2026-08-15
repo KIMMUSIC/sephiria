@@ -1,0 +1,995 @@
+{
+  "approximation": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "dry": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  },
+  "chivalry": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -2,
+        "value": 1
+      }
+    ]
+  },
+  "advent": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": -1
+      },
+      {
+        "dx": 0,
+        "dy": 2,
+        "value": -1
+      }
+    ]
+  },
+  "sight": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": -1
+      }
+    ]
+  },
+  "handshake": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  },
+  "fate": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  },
+  "wit": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      }
+    ]
+  },
+  "exploitation": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": -1
+      }
+    ]
+  },
+  "unity": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": -1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": -1
+      }
+    ]
+  },
+  "cheer": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      }
+    ]
+  },
+  "hope": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "compete": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 3
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": -1
+      },
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": -1
+      }
+    ]
+  },
+  "beating": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 2
+      }
+    ]
+  },
+  "past": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "future": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "distribution": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  },
+  "triceps": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "harvesting": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 2
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 2
+      }
+    ]
+  },
+  "binary_star": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": 2,
+        "value": 2
+      },
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 2
+      }
+    ]
+  },
+  "nurture": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": -1
+      },
+      {
+        "dx": 0,
+        "dy": 2,
+        "value": -1
+      }
+    ]
+  },
+  "yearning": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 2
+      }
+    ]
+  },
+  "entrance": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 1
+      }
+    ]
+  },
+  "joke": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": -1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": -1
+      }
+    ]
+  },
+  "load": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": -2,
+        "value": 1
+      }
+    ]
+  },
+  "advance": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -3,
+        "value": 1
+      }
+    ]
+  },
+  "preparation": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": 2
+      }
+    ]
+  },
+  "exit": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": 1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 2
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  },
+  "tide": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 3
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": -1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": -1
+      }
+    ]
+  },
+  "dedication": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  },
+  "honor": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": -1,
+        "dy": -2,
+        "value": 1
+      }
+    ]
+  },
+  "warrant": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 3
+      }
+    ]
+  },
+  "disconnection": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 3
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 3
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": -1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": -1
+      }
+    ]
+  },
+  "vow": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 2
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "thorn": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": 2
+      },
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  },
+  "daydream": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": -1,
+        "dy": 1,
+        "value": 2
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": 2
+      }
+    ]
+  },
+  "compression": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 3
+      },
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 2
+      },
+      {
+        "dx": 0,
+        "dy": -3,
+        "value": 1
+      }
+    ]
+  },
+  "certitude": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 5
+      }
+    ]
+  },
+  "hospitality": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1,
+        "flag": "ignore"
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 2,
+        "flag": "ignore"
+      }
+    ]
+  },
+  "peace": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 3
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 3
+      }
+    ]
+  },
+  "courage": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -3,
+        "dy": -3,
+        "value": 1
+      },
+      {
+        "dx": -2,
+        "dy": -2,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": 1
+      },
+      {
+        "dx": 2,
+        "dy": 2,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": -1,
+        "dy": 1,
+        "value": 2
+      }
+    ]
+  },
+  "linear": {
+    "type": "complex",
+    "description": "맨 마지막 행에 위치하면 좌우 인접 칸 +1"
+  },
+  "home_town": {
+    "type": "complex",
+    "description": "회전 방향 한 칸의 효과를 무시(ignore)시킴"
+  },
+  "agglutination": {
+    "type": "complex",
+    "description": "위 +3, 추가로 회전에 따라 같은 행 또는 같은 열 전체 -1"
+  },
+  "transition": {
+    "type": "complex",
+    "description": "회전에 따라 같은 행 전체 +1/-1, 같은 열 전체 -1/+1 (자신 제외)"
+  },
+  "justice": {
+    "type": "complex",
+    "description": "맨 왼쪽/오른쪽 열에 위치하면 해당 열 전체 +1"
+  },
+  "base": {
+    "type": "complex",
+    "description": "같은 행 전체 +1 (자신 제외)"
+  },
+  "rebellion": {
+    "type": "complex",
+    "description": "회전에 따라 대각선 방향으로 끝까지 +1"
+  },
+  "connection": {
+    "type": "complex",
+    "description": "위 +2, 아래 방향은 효과 무시(ignore)시킴"
+  },
+  "shade": {
+    "type": "complex",
+    "description": "맨 첫 행에 위치하면 마지막 행 전체 +1"
+  },
+  "boundary": {
+    "type": "complex",
+    "description": "첫 행과 마지막 행 전체 +1"
+  },
+  "sheen": {
+    "type": "complex",
+    "description": "회전에 따라 같은 행/열 전체 +1, 추가로 위아래 +2"
+  },
+  "miracle": {
+    "type": "complex",
+    "description": "같은 행 전체 + 같은 열 전체 +1 (자신 제외, 십자형)"
+  },
+  "concurrency": {
+    "type": "complex",
+    "description": "같은 열 전체 +1 (자신 제외)"
+  },
+  "rally": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 2
+      }
+    ]
+  },
+  "development": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "wedge": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 3
+      }
+    ]
+  },
+  "junction": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -2,
+        "value": 1
+      },
+      {
+        "dx": 0,
+        "dy": -3,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 2,
+        "dy": 0,
+        "value": 1
+      },
+      {
+        "dx": 3,
+        "dy": 0,
+        "value": 1
+      }
+    ]
+  },
+  "last_stand": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": 0,
+        "dy": -1,
+        "value": 5
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": -1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": -1
+      },
+      {
+        "dx": 0,
+        "dy": 1,
+        "value": -1
+      }
+    ]
+  },
+  "flag": {
+    "type": "complex",
+    "description": "{if(0===e)return n([{dx:0,dy:-1},{dx:1,dy:0},{dx:2,dy:0,value:2},{dx:3,dy:0,value:3},{dx:0,dy:1,value:-1}],e,a,r)}"
+  },
+  "defender": {
+    "type": "simple",
+    "effects": [
+      {
+        "dx": -1,
+        "dy": -1,
+        "value": 1
+      },
+      {
+        "dx": 1,
+        "dy": -1,
+        "value": 2
+      },
+      {
+        "dx": -1,
+        "dy": 0,
+        "value": -1
+      },
+      {
+        "dx": 1,
+        "dy": 0,
+        "value": -1
+      },
+      {
+        "dx": -1,
+        "dy": 1,
+        "value": 2
+      },
+      {
+        "dx": 1,
+        "dy": 1,
+        "value": 1
+      }
+    ]
+  }
+}

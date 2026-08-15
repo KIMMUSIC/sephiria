@@ -1,0 +1,225 @@
+{
+ "imagePath": "인벤 예시/9.png",
+ "rows": 5,
+ "cols": 6,
+ "totalSlots": 30,
+ "grid": {
+  "originX": 6.25,
+  "originY": 6.0,
+  "gridWidth": 717.92,
+  "gridHeight": 599.42
+ },
+ "_status": "LIVE capture 2026-08-15. Confirmed cells only; rest ???.",
+ "expected": [
+  {
+   "slotIndex": 0,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 1,
+   "matchedValue": "cloak_of_the_green",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "환록의 망토"
+  },
+  {
+   "slotIndex": 2,
+   "matchedValue": "rabbit_village_guard_helm",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "토끼 마을 경비병 투구"
+  },
+  {
+   "slotIndex": 3,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 4,
+   "matchedValue": "yakumo_kodachi",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "소태도 야쿠모"
+  },
+  {
+   "slotIndex": 5,
+   "matchedValue": "golden_leaf",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "황금 단풍잎 0/0"
+  },
+  {
+   "slotIndex": 6,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 7,
+   "matchedValue": "shield_bag",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "방패 가방"
+  },
+  {
+   "slotIndex": 8,
+   "matchedValue": "oink_shaman_necklace",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "오잉크 주술사 목걸이"
+  },
+  {
+   "slotIndex": 9,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 10,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 11,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 12,
+   "matchedValue": "academy_brigendin",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "아카데미 브리건딘"
+  },
+  {
+   "slotIndex": 13,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 14,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 15,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 16,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 17,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 18,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 19,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 20,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 21,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 22,
+   "matchedValue": "walter_work_monocle",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "발터 단안경"
+  },
+  {
+   "slotIndex": 23,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 24,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 25,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 26,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 27,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 28,
+   "matchedValue": "palas_card",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "팔라스의 카드"
+  },
+  {
+   "slotIndex": 29,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  }
+ ]
+}

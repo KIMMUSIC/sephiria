@@ -1,0 +1,225 @@
+{
+ "imagePath": "인벤 예시/8.png",
+ "rows": 5,
+ "cols": 6,
+ "totalSlots": 30,
+ "grid": {
+  "originX": 6.0,
+  "originY": 6.0,
+  "gridWidth": 717.93,
+  "gridHeight": 600.63
+ },
+ "_status": "LIVE capture 2026-08-15. Confirmed cells only; rest ???.",
+ "expected": [
+  {
+   "slotIndex": 0,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 1,
+   "matchedValue": "white_bread",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "흰 테두리 빵 0/2"
+  },
+  {
+   "slotIndex": 2,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 3,
+   "matchedValue": "dedication",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "헌정 (4엽 녹팁)"
+  },
+  {
+   "slotIndex": 4,
+   "matchedValue": "preparation",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "준비 (대각 쌍눈)"
+  },
+  {
+   "slotIndex": 5,
+   "matchedValue": "frozen_bow",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "얼어붙은 활"
+  },
+  {
+   "slotIndex": 6,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 7,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 8,
+   "matchedValue": "exploitation",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "착취 (회+적녹, 회전)"
+  },
+  {
+   "slotIndex": 9,
+   "matchedValue": "wings",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "날개"
+  },
+  {
+   "slotIndex": 10,
+   "matchedValue": "ray_known",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "레이에 별조각 1/3"
+  },
+  {
+   "slotIndex": 11,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 12,
+   "matchedValue": "glass_hammer",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "유리 망치"
+  },
+  {
+   "slotIndex": 13,
+   "matchedValue": "harvesting",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "수확"
+  },
+  {
+   "slotIndex": 14,
+   "matchedValue": "sheet_music_bree",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "악보 '바람' 0/4"
+  },
+  {
+   "slotIndex": 15,
+   "matchedValue": "wit",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "기지 (L자 녹눈)"
+  },
+  {
+   "slotIndex": 16,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 17,
+   "matchedValue": "cloth_armor",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "천 갑옷"
+  },
+  {
+   "slotIndex": 18,
+   "matchedValue": "binary_star",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "쌍성 (민트 갈고리)"
+  },
+  {
+   "slotIndex": 19,
+   "matchedValue": "shining_hourglass",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "빛나는 모래시계 3/2"
+  },
+  {
+   "slotIndex": 20,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 21,
+   "matchedValue": "overall_armband",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "채굴작업 총괄 완장 1/4"
+  },
+  {
+   "slotIndex": 22,
+   "matchedValue": "cloth_armor",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "천 갑옷 r4c5"
+  },
+  {
+   "slotIndex": 23,
+   "matchedValue": "cloth_armor",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "천 갑옷 r4c6"
+  },
+  {
+   "slotIndex": 24,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty r5c1"
+  },
+  {
+   "slotIndex": 25,
+   "matchedValue": "dull_drop",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "무뎌진 방울 r5c2"
+  },
+  {
+   "slotIndex": 26,
+   "matchedValue": "future",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "미래 (녹백 체크 L)"
+  },
+  {
+   "slotIndex": 27,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 28,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  },
+  {
+   "slotIndex": 29,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "unconfirmed"
+  }
+ ]
+}

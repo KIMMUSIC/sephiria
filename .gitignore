@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.env
+.env.local
+.env.production.local
+*.tsbuildinfo
+next-env.d.ts
+.omc/
+.gstack/
+.venv/
+.cache/
+
+.claude/

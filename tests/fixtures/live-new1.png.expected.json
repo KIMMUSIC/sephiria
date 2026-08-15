@@ -1,0 +1,225 @@
+{
+ "imagePath": "인벤 예시/new1.png",
+ "rows": 5,
+ "cols": 6,
+ "totalSlots": 30,
+ "grid": {
+  "originX": 0.0,
+  "originY": 6.0,
+  "gridWidth": 718.3138946960776,
+  "gridHeight": 597.435316179776
+ },
+ "_status": "LIVE new1 2026-08-15. User-arranged grid + visual confirm. white_planet/cube/bead still ???. 30 slots.",
+ "expected": [
+  {
+   "slotIndex": 0,
+   "matchedValue": "begonia_flavor_pocket",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "베고니아 0/1"
+  },
+  {
+   "slotIndex": 1,
+   "matchedValue": "begonia_flavor_pocket",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "베고니아 1/1"
+  },
+  {
+   "slotIndex": 2,
+   "matchedValue": "exit",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "출구 — 초록 삼봉 석판"
+  },
+  {
+   "slotIndex": 3,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 4,
+   "matchedValue": "entrance",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "입구 — 초록 아치 +1"
+  },
+  {
+   "slotIndex": 5,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 6,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty"
+  },
+  {
+   "slotIndex": 7,
+   "matchedValue": "triceps",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "삼두"
+  },
+  {
+   "slotIndex": 8,
+   "matchedValue": "kaleidoscope",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "만화경 3/4"
+  },
+  {
+   "slotIndex": 9,
+   "matchedValue": "binary_star",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "쌍성"
+  },
+  {
+   "slotIndex": 10,
+   "matchedValue": "criton",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "크리톤 1/2"
+  },
+  {
+   "slotIndex": 11,
+   "matchedValue": "future",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "미래"
+  },
+  {
+   "slotIndex": 12,
+   "matchedValue": "yearning",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "열망"
+  },
+  {
+   "slotIndex": 13,
+   "matchedValue": "ice_cloud_butterfly",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "얼음구름 나비 0/3"
+  },
+  {
+   "slotIndex": 14,
+   "matchedValue": "helenas_staircase",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "헬레나 계단 0/5"
+  },
+  {
+   "slotIndex": 15,
+   "matchedValue": "smoke_screen",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "연막 0/0"
+  },
+  {
+   "slotIndex": 16,
+   "matchedValue": "giraffe_horns",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "기린의 뿔 1/2"
+  },
+  {
+   "slotIndex": 17,
+   "matchedValue": "sharp_eye",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "샤프 아이 — 사용자 배치"
+  },
+  {
+   "slotIndex": 18,
+   "matchedValue": "storm",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "뾰족 부싯돌 0/3"
+  },
+  {
+   "slotIndex": 19,
+   "matchedValue": "flame_insect",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "화염충 벌 0/5"
+  },
+  {
+   "slotIndex": 20,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "흰 와이어 큐브 0/4 — solis_parvo vs colorless_cube"
+  },
+  {
+   "slotIndex": 21,
+   "matchedValue": "leafy_leather",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "잎새 가죽 0/3"
+  },
+  {
+   "slotIndex": 22,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "주황 결정 0/3 — magma_bead vs ohia"
+  },
+  {
+   "slotIndex": 23,
+   "matchedValue": "yearning",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "열망"
+  },
+  {
+   "slotIndex": 24,
+   "matchedValue": "base",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "기반"
+  },
+  {
+   "slotIndex": 25,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "파란 구슬 3/5 — craving vs 하늘색 행성"
+  },
+  {
+   "slotIndex": 26,
+   "matchedValue": "harvesting",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "수확 +1"
+  },
+  {
+   "slotIndex": 27,
+   "matchedValue": "cloth_armor",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "천 갑옷 3/1"
+  },
+  {
+   "slotIndex": 28,
+   "matchedValue": "sunset_cloak",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "노을 망토 1/4"
+  },
+  {
+   "slotIndex": 29,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty last cell"
+  }
+ ]
+}

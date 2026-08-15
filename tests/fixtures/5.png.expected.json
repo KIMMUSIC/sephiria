@@ -1,0 +1,269 @@
+{
+ "imagePath": "인벤 예시/5.png",
+ "rows": 6,
+ "cols": 6,
+ "totalSlots": 36,
+ "grid": {
+  "originX": 39.02,
+  "originY": 42.92,
+  "gridWidth": 718.98,
+  "gridHeight": 705.96
+ },
+ "_status": "Phase 0 ground truth, round 2. grid = self-calibrated and visually verified. empty/occupied verified. Item identities present only where the host visually matched the cell against the actual sprite; '???' = unverified and skipped.",
+ "_provenance": "host visual verification vs public/images sprites, catalog synced to wiki 267/60",
+ "expected": [
+  {
+   "slotIndex": 0,
+   "matchedValue": "triceps",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 1,
+   "matchedValue": "flag",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 2,
+   "matchedValue": "wit",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 3,
+   "matchedValue": "unity",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 4,
+   "matchedValue": "hope",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 5,
+   "matchedValue": "defender",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 6,
+   "matchedValue": "concurrency",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 7,
+   "matchedValue": "warrant",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 8,
+   "matchedValue": "vow",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 9,
+   "matchedValue": "exit",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 10,
+   "matchedValue": "load",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 11,
+   "matchedValue": "harvesting",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 12,
+   "matchedValue": "rebellion",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 13,
+   "matchedValue": "hope",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 14,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "occupied, identity unverified"
+  },
+  {
+   "slotIndex": 15,
+   "matchedValue": "berut_sickle",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 16,
+   "matchedValue": "walter_work_monocle",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 17,
+   "matchedValue": "keel_fragment",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 18,
+   "matchedValue": "pride",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 19,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "occupied, identity unverified"
+  },
+  {
+   "slotIndex": 20,
+   "matchedValue": "sword_earring",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 21,
+   "matchedValue": "defect_probe",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 22,
+   "matchedValue": "tactical_manual",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 23,
+   "matchedValue": "black_scales",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 24,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "occupied, identity unverified"
+  },
+  {
+   "slotIndex": 25,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 26,
+   "matchedValue": "balisong",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 27,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "occupied, identity unverified"
+  },
+  {
+   "slotIndex": 28,
+   "matchedValue": "yellow_planet",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 29,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "occupied, identity unverified"
+  },
+  {
+   "slotIndex": 30,
+   "matchedValue": "black_planet",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 31,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "occupied, identity unverified"
+  },
+  {
+   "slotIndex": 32,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 33,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 34,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 35,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  }
+ ],
+ "_labelling": "Round 2 used plate-matcher top-8 proposals plus direct browsing of the full 327-sprite catalog. Candidate-assisted, so treat measured top-1 as mildly optimistic; cells whose answer was absent from the top-8 were resolved from the catalog specifically to counter that bias."
+}

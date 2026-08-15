@@ -1,0 +1,269 @@
+{
+ "imagePath": "인벤 예시/2.png",
+ "rows": 6,
+ "cols": 6,
+ "totalSlots": 36,
+ "grid": {
+  "originX": 50.36,
+  "originY": 41.2,
+  "gridWidth": 721.62,
+  "gridHeight": 726.18
+ },
+ "_status": "Phase 0 ground truth, round 2. grid = self-calibrated and visually verified. empty/occupied verified. Item identities present only where the host visually matched the cell against the actual sprite; '???' = unverified and skipped.",
+ "_provenance": "host visual verification vs public/images sprites, catalog synced to wiki 267/60",
+ "expected": [
+  {
+   "slotIndex": 0,
+   "matchedValue": "humility_crown",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 1,
+   "matchedValue": "heart_of_the_beast",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "corrected using the user-provided screenshot as reference"
+  },
+  {
+   "slotIndex": 2,
+   "matchedValue": "agma_projection_sword",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 3,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 4,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 5,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 6,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 7,
+   "matchedValue": "unclean_bandage",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 8,
+   "matchedValue": "defender",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 9,
+   "matchedValue": "walter_work_monocle",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 10,
+   "matchedValue": "tide",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 11,
+   "matchedValue": "mysterious_weight",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 12,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 13,
+   "matchedValue": "harvesting",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 14,
+   "matchedValue": "binary_star",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite (round 2)"
+  },
+  {
+   "slotIndex": 15,
+   "matchedValue": "sheet_music_storm",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 16,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 17,
+   "matchedValue": "disconnection",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 18,
+   "matchedValue": "nurture",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 19,
+   "matchedValue": "berut_sickle",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 20,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 21,
+   "matchedValue": "vow",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 22,
+   "matchedValue": "black_scales",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 23,
+   "matchedValue": "pride",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 24,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 25,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 26,
+   "matchedValue": "ruby_brooch",
+   "type": "ARTIFACT",
+   "rotation": 0,
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 27,
+   "matchedValue": "???",
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "occupied, identity unverified"
+  },
+  {
+   "slotIndex": 28,
+   "matchedValue": "warrant",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "host-verified against sprite"
+  },
+  {
+   "slotIndex": 29,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 30,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 31,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 32,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 33,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 34,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  },
+  {
+   "slotIndex": 35,
+   "matchedValue": null,
+   "type": null,
+   "rotation": 0,
+   "_visualNote": "empty slot (effect overlay text only, if any)"
+  }
+ ],
+ "_labelling": "Round 2 used plate-matcher top-8 proposals plus direct browsing of the full 327-sprite catalog. Candidate-assisted, so treat measured top-1 as mildly optimistic; cells whose answer was absent from the top-8 were resolved from the catalog specifically to counter that bias."
+}
