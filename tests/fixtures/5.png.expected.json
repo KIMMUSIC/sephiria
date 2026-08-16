@@ -28,24 +28,24 @@
   },
   {
    "slotIndex": 2,
-   "matchedValue": "wit",
+   "matchedValue": "preparation",
    "type": "TABLET",
    "rotation": "any",
-   "_visualNote": "host-verified against sprite"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was wit): TWO eyes in diamond frames, bowtie shape"
   },
   {
    "slotIndex": 3,
-   "matchedValue": "unity",
+   "matchedValue": "distribution",
    "type": "TABLET",
    "rotation": "any",
-   "_visualNote": "host-verified against sprite"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was unity): all four knobs green/white, no red"
   },
   {
    "slotIndex": 4,
-   "matchedValue": "hope",
+   "matchedValue": "advance",
    "type": "TABLET",
    "rotation": "any",
-   "_visualNote": "host-verified against sprite"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was hope): vertical with pointed green cap, no eye"
   },
   {
    "slotIndex": 5,
@@ -105,10 +105,10 @@
   },
   {
    "slotIndex": 13,
-   "matchedValue": "hope",
+   "matchedValue": "connection",
    "type": "TABLET",
    "rotation": "any",
-   "_visualNote": "host-verified against sprite"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was hope): eye on top, orange tip at bottom"
   },
   {
    "slotIndex": 14,
@@ -133,10 +133,10 @@
   },
   {
    "slotIndex": 17,
-   "matchedValue": "keel_fragment",
+   "matchedValue": "kaleidoscope",
    "type": "ARTIFACT",
    "rotation": 0,
-   "_visualNote": "host-verified against sprite"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was keel_fragment): red loaf shape, not brown wood plank"
   },
   {
    "slotIndex": 18,
@@ -189,10 +189,10 @@
   },
   {
    "slotIndex": 25,
-   "matchedValue": null,
-   "type": null,
+   "matchedValue": "red_dew",
+   "type": "ARTIFACT",
    "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
+   "_visualNote": "round-3 crop review, user-identified (was empty): small red orb = red_dew (붉은 이슬), '0/3' overlay suggests depleted-state rendering"
   },
   {
    "slotIndex": 26,

@@ -8,19 +8,43 @@ import type {
   PlacedTablet,
   ArtifactData,
   TabletData,
-  TabletEffectDef,
   RecognitionResult,
+  ItemType,
   OptimizeLastResult,
 } from '@/types'
-import { buildGridRows, slotToPosition, slotToKey } from '@/lib/gridUtils'
+import { buildGridRows, slotToKey } from '@/lib/gridUtils'
 import { calculateEffectsWithShield } from '@/lib/effectEngine'
 import { nextRotation } from '@/lib/rotationUtils'
 import { getTabletEffect } from '@/data/tabletEffects'
 import { ARTIFACT_MAP } from '@/data/artifacts'
 import { TABLET_MAP } from '@/data/tablets'
 import { generateId } from '@/lib/utils'
+import { isLowConfidence } from '@/lib/vision/confidence'
+import type { CellPrediction } from '@/lib/vision/types'
 
 const DEFAULT_SLOT_NUM = 34
+
+/** Widening of RecognitionResult — extra fields are optional so the old call shape still type-checks. */
+export interface RecognitionIngest extends RecognitionResult {
+  rotation?: 0 | 1 | 2 | 3
+  candidates?: CellPrediction['candidates']
+}
+
+export interface CellRecognitionMeta {
+  matchedValue: string | null
+  type: ItemType | null
+  rotation: 0 | 1 | 2 | 3
+  confidence: number
+  candidates?: CellPrediction['candidates']
+  lowConfidence: boolean
+  overridden: boolean
+}
+
+export interface RecognitionPick {
+  value: string
+  type: ItemType
+  rotation?: 0 | 1 | 2 | 3
+}
 
 interface InventoryState {
   // Grid
@@ -39,6 +63,10 @@ interface InventoryState {
   dragPreviewEffects: EffectMap | null
   lastOptimize: OptimizeLastResult | null
 
+  // Recognition confirm UI (Phase 4). Empty until a screenshot is applied.
+  recognitionMeta: Record<number, CellRecognitionMeta>
+  pickerSlot: number | null
+
   // Actions
   setSlotNum: (num: number) => void
   placeItem: (item: PlacedItem, slotIndex: number) => void
@@ -48,7 +76,9 @@ interface InventoryState {
   toggleLock: (slotIndex: number) => void
   recalculate: () => void
   setGridFromWorker: (slots: GridSlot[]) => void
-  loadFromRecognition: (results: RecognitionResult[]) => void
+  loadFromRecognition: (results: RecognitionIngest[]) => void
+  setPickerSlot: (slot: number | null) => void
+  overrideRecognizedCell: (slotIndex: number, pick: RecognitionPick | null) => void
   setOptimizing: (v: boolean) => void
   setFilterSet: (v: string) => void
   setFilterTier: (v: string) => void
@@ -59,12 +89,32 @@ interface InventoryState {
 
   // Helpers
   createArtifact: (data: ArtifactData, level: number) => PlacedArtifact
-  createTablet: (data: TabletData, isCustom?: boolean, customEffects?: { dx: number; dy: number; value: number }[]) => PlacedTablet
+  createTablet: (
+    data: TabletData,
+    isCustom?: boolean,
+    customEffects?: { dx: number; dy: number; value: number }[]
+  ) => PlacedTablet
 }
 
 export const useInventoryStore = create<InventoryState>((set, get) => {
   const initialGridRows = buildGridRows(DEFAULT_SLOT_NUM)
   const initialSlots: GridSlot[] = new Array(DEFAULT_SLOT_NUM).fill(null)
+
+  const placeRecognized = (
+    slotIndex: number,
+    pick: RecognitionPick,
+    level = 0
+  ): GridSlot => {
+    if (pick.type === 'ARTIFACT') {
+      const data = ARTIFACT_MAP.get(pick.value)
+      return data ? get().createArtifact(data, level) : null
+    }
+    const data = TABLET_MAP.get(pick.value)
+    if (!data) return null
+    const tablet = get().createTablet(data)
+    const rotation = pick.rotation ?? 0
+    return rotation ? { ...tablet, rotation } : tablet
+  }
 
   return {
     slots: initialSlots,
@@ -77,17 +127,22 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
     searchQuery: '',
     dragPreviewEffects: null,
     lastOptimize: null,
+    recognitionMeta: {},
+    pickerSlot: null,
 
     setSlotNum: (num: number) => {
       const clamped = Math.max(6, Math.min(60, num))
       const gridRows = buildGridRows(clamped)
       const oldSlots = get().slots
       const newSlots: GridSlot[] = new Array(clamped).fill(null)
-      // Preserve items that fit in the new grid
       for (let i = 0; i < Math.min(oldSlots.length, clamped); i++) {
         newSlots[i] = oldSlots[i]
       }
-      set({ slotNum: clamped, gridRows, slots: newSlots })
+      const recognitionMeta = { ...get().recognitionMeta }
+      for (const key of Object.keys(recognitionMeta)) {
+        if (Number(key) >= clamped) delete recognitionMeta[Number(key)]
+      }
+      set({ slotNum: clamped, gridRows, slots: newSlots, recognitionMeta })
       get().recalculate()
     },
 
@@ -95,7 +150,17 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
       const slots = [...get().slots]
       if (slotIndex < 0 || slotIndex >= slots.length) return
       slots[slotIndex] = item
-      set({ slots })
+      const recognitionMeta = { ...get().recognitionMeta }
+      if (recognitionMeta[slotIndex]) {
+        recognitionMeta[slotIndex] = {
+          ...recognitionMeta[slotIndex],
+          matchedValue: item.data.value,
+          type: item.type,
+          lowConfidence: false,
+          overridden: true,
+        }
+      }
+      set({ slots, recognitionMeta })
       get().recalculate()
     },
 
@@ -103,7 +168,17 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
       const slots = [...get().slots]
       if (slotIndex < 0 || slotIndex >= slots.length) return
       slots[slotIndex] = null
-      set({ slots })
+      const recognitionMeta = { ...get().recognitionMeta }
+      if (recognitionMeta[slotIndex]) {
+        recognitionMeta[slotIndex] = {
+          ...recognitionMeta[slotIndex],
+          matchedValue: null,
+          type: null,
+          lowConfidence: false,
+          overridden: true,
+        }
+      }
+      set({ slots, recognitionMeta })
       get().recalculate()
     },
 
@@ -113,7 +188,16 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
       const temp = slots[from]
       slots[from] = slots[to]
       slots[to] = temp
-      set({ slots })
+      const recognitionMeta = { ...get().recognitionMeta }
+      const a = recognitionMeta[from]
+      const b = recognitionMeta[to]
+      if (a || b) {
+        if (b) recognitionMeta[from] = b
+        else delete recognitionMeta[from]
+        if (a) recognitionMeta[to] = a
+        else delete recognitionMeta[to]
+      }
+      set({ slots, recognitionMeta })
       get().recalculate()
     },
 
@@ -157,33 +241,69 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
       get().recalculate()
     },
 
-    loadFromRecognition: (results: RecognitionResult[]) => {
+    loadFromRecognition: (results: RecognitionIngest[]) => {
       const slots: GridSlot[] = new Array(get().slotNum).fill(null)
+      const recognitionMeta: Record<number, CellRecognitionMeta> = {}
 
       for (const res of results) {
         if (res.slotIndex >= slots.length) continue
+        const rotation = res.rotation ?? 0
+        recognitionMeta[res.slotIndex] = {
+          matchedValue: res.matchedValue,
+          type: res.type,
+          rotation,
+          confidence: res.confidence,
+          candidates: res.candidates,
+          lowConfidence: isLowConfidence({
+            matchedValue: res.matchedValue,
+            confidence: res.confidence,
+            candidates: res.candidates,
+          }),
+          overridden: false,
+        }
 
-        if (res.type === 'ARTIFACT' && res.matchedValue) {
-          const artifactData = ARTIFACT_MAP.get(res.matchedValue)
-          if (artifactData) {
-            // Screenshots carry no HUD level (res.level 0). Default current
-            // enhance to catalog max so the optimizer does not treat the
-            // board as destroyed. data.level remains the max cap.
-            const level = res.level > 0 ? res.level : artifactData.level
-            slots[res.slotIndex] = get().createArtifact(artifactData, level)
+        if (res.type && res.matchedValue) {
+          // PLAN/07 E-3: screenshots carry no HUD level (res.level 0).
+          // Default artifacts to catalog max so the optimizer does not treat
+          // a fresh recognition as destroyed.
+          let ingestLevel = res.level
+          if (res.type === 'ARTIFACT' && !(res.level > 0)) {
+            const artifactData = ARTIFACT_MAP.get(res.matchedValue)
+            if (artifactData) ingestLevel = artifactData.level
           }
-        } else if (res.type === 'TABLET' && res.matchedValue) {
-          const tabletData = TABLET_MAP.get(res.matchedValue)
-          if (tabletData) {
-            const tablet = get().createTablet(tabletData)
-            slots[res.slotIndex] = res.rotation !== undefined
-              ? { ...tablet, rotation: res.rotation }
-              : tablet
-          }
+          slots[res.slotIndex] = placeRecognized(
+            res.slotIndex,
+            { value: res.matchedValue, type: res.type, rotation },
+            ingestLevel
+          )
         }
       }
 
-      set({ slots })
+      set({ slots, recognitionMeta, pickerSlot: null })
+      get().recalculate()
+    },
+
+    setPickerSlot: (slot) => set({ pickerSlot: slot }),
+
+    overrideRecognizedCell: (slotIndex, pick) => {
+      const slots = [...get().slots]
+      if (slotIndex < 0 || slotIndex >= slots.length) return
+      const prev = get().recognitionMeta[slotIndex]
+      const nextMeta: CellRecognitionMeta = {
+        matchedValue: pick?.value ?? null,
+        type: pick?.type ?? null,
+        rotation: pick?.rotation ?? 0,
+        confidence: prev?.confidence ?? 1,
+        candidates: prev?.candidates,
+        lowConfidence: false,
+        overridden: true,
+      }
+      slots[slotIndex] = pick ? placeRecognized(slotIndex, pick) : null
+      set({
+        slots,
+        recognitionMeta: { ...get().recognitionMeta, [slotIndex]: nextMeta },
+        pickerSlot: null,
+      })
       get().recalculate()
     },
 
@@ -196,7 +316,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
 
     clearGrid: () => {
       const slots: GridSlot[] = new Array(get().slotNum).fill(null)
-      set({ slots, effectMap: {} })
+      set({ slots, effectMap: {}, recognitionMeta: {}, pickerSlot: null })
     },
 
     createArtifact: (data: ArtifactData, level: number): PlacedArtifact => ({

@@ -66,7 +66,7 @@ export default function ArtifactCard({ artifact, size = 'md', showLevel = true }
             !isDestroyed && !isBuffed && !isDebuffed && 'bg-black/70 text-gray-200',
           )}
         >
-          {currentLevel}/{data.level}
+          {currentLevel}
         </div>
       )}
 

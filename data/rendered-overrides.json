@@ -1,0 +1,83 @@
+{
+  "generated": "2026-08-15",
+  "note": "Production loader must apply these overrides after wiki templates + sprite-natives attach. kind 'replace' swaps the template image AND native (nativeUncertain=false; harvested art IS native resolution, k=1). kind 'extra' / 'extra-depleted' push an ADDITIONAL TemplateSource with the same value/type/rotatable (wiki retained). lib/vision stays browser-clean — apply in the Node/test loader (tests/vision/harness.ts) and in the future production loader.",
+  "overrides": [
+    {
+      "value": "defender",
+      "file": "public/images/rendered/defender.png",
+      "kind": "extra",
+      "source": "2.png#8",
+      "native": [
+        18,
+        18
+      ],
+      "notes": "ADDITIONAL variant; wiki art RETAINED as fallback. 7.png#22 matches wiki (green checkered), while 2.png#8/4.png#25/5.png#5 are a dark-navy diamond/X with green tips and a red center (dominant fill RGB ~31,26,49). Harvested from 2.png#8 (18×18, least overlay among full-size cells). Cross-validation OUTCOME: 7.png#22 stays correct via wiki, but 4.png#25/5.png#5 did NOT flip — reviewer-diagnosed transfer margin (their learned plates absorb the navy fill below FGT, plus sparkle/'+2' badge nuisance the template cannot explain); roadmap-5 nuisance masking is the fix path. nativeUncertain=false, k=1."
+    },
+    {
+      "value": "heart_of_the_beast",
+      "file": "public/images/rendered/heart_of_the_beast.png",
+      "kind": "replace",
+      "source": "6.png#23",
+      "native": [
+        15,
+        14
+      ],
+      "notes": "Wiki sprite is a smooth-resample (catalog method=pinned). Harvested from 6.png#23 (currently correct). Gate: 2.png#1 must flip and 6.png#23 must stay correct. nativeUncertain=false, k=1."
+    },
+    {
+      "value": "keel_fragment",
+      "file": "public/images/rendered/keel_fragment.png",
+      "kind": "replace",
+      "source": "4.png#20",
+      "native": [
+        14,
+        15
+      ],
+      "notes": "SELF-REFERENTIAL: only occurrence. Wiki is a 60×45 plank; in-game is a curved shell. A flip of 4.png#20 is weak evidence by construction."
+    },
+    {
+      "value": "defect_probe",
+      "file": "public/images/rendered/defect_probe.png",
+      "kind": "replace",
+      "source": "5.png#21",
+      "native": [
+        17,
+        17
+      ],
+      "notes": "SELF-REFERENTIAL: only occurrence. Wiki is the smooth-resample class (catalog fallback/lowConfidence). A flip of 5.png#21 is weak evidence by construction."
+    },
+    {
+      "value": "exit",
+      "file": "public/images/rendered/exit.png",
+      "kind": "replace",
+      "source": "6.png#20",
+      "native": [
+        14,
+        12
+      ],
+      "notes": "Wiki sprite is a smooth-resample fallback with guessed k. Harvested from 6.png#20. Gates: 5.png#9, 4.png#16, 6.png#20 stay correct. 1.jpeg#28 flipping is the target but JPEG noise may prevent it. rotatable flag preserved from tablets.json (false). nativeUncertain=false, k=1."
+    },
+    {
+      "value": "eternal_winter",
+      "file": "public/images/rendered/eternal_winter__depleted.png",
+      "kind": "extra-depleted",
+      "source": "6.png#12",
+      "native": [
+        13,
+        19
+      ],
+      "notes": "SELF-REFERENTIAL depleted harvest from 6.png#12. Transform is not a clean multiply (std r/g/b 1.184/1.307/0.660) — harvested from the cell. Pre-fix flip evidence included overlay-glyph matching (red '-1/2' baked into the template). Generalization path: if a later measurement finds a stable multiply, synthesize for the whole catalog; do not harvest 327 cells."
+    },
+    {
+      "value": "fascinating_lure",
+      "file": "public/images/rendered/fascinating_lure__depleted.png",
+      "kind": "extra-depleted",
+      "source": "7.png#23",
+      "native": [
+        9,
+        15
+      ],
+      "notes": "SELF-REFERENTIAL depleted harvest from 7.png#23. Wiki is lossy webp; transform: not a clean multiply (std r/g/b 0.493/0.453/0.233) — harvest from the cell. Pre-fix flip evidence included overlay-glyph matching (red '-1/2' baked into the template)."
+    }
+  ]
+}

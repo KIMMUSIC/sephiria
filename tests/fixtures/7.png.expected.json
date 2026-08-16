@@ -10,7 +10,7 @@
   "gridHeight": 713.1
  },
  "_status": "USER-PROVIDED ground truth. 35 slots: the last row holds 5 cells, so index 35 falls outside the inventory panel and is not a slot.",
- "_provenance": "Korean names from the user. Three needed reconciling: '차앙' is a typo for '차양' (shade, independently top-scored at 0.321 vs 0.023 runner-up); '친타미니 돌' vs local spelling '친타마니 돌' (chintamani_stone); '방어수' is the new slab `defender` (no ko_label in data/tablets.json yet). '번개 부메랑' and '고양' map to canonical values lightning_boomerang / home_town (duplicate sprite files deleted). Grid origin taken from the interior-gap fit and visually verified; the match-score sweep drifted to its range edge here (the known edge-seeking issue) and was rejected.",
+ "_provenance": "Korean names from the user. Three needed reconciling: '차앙' is a typo for '차양' (shade, independently top-scored at 0.321 vs 0.023 runner-up); '친타미니 돌' vs local spelling '친타마니 돌' (chintamani_stone); '방어수' is the new slab `defender` (no ko_label in data/tablets.json yet). '번개 부메랑' and '고양' map to renamed sprites lightningboomerang / home-town. Grid origin taken from the interior-gap fit and visually verified; the match-score sweep drifted to its range edge here (the known edge-seeking issue) and was rejected.",
  "expected": [
   {
    "slotIndex": 0,
@@ -210,7 +210,7 @@
   },
   {
    "slotIndex": 28,
-   "matchedValue": "lightning_boomerang",
+   "matchedValue": "lightningboomerang",
    "type": "ARTIFACT",
    "rotation": 0,
    "_visualNote": "user-provided ground truth"
@@ -238,7 +238,7 @@
   },
   {
    "slotIndex": 32,
-   "matchedValue": "home_town",
+   "matchedValue": "home-town",
    "type": "TABLET",
    "rotation": "any",
    "_visualNote": "user-provided ground truth"

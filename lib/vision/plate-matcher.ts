@@ -1,3 +1,13 @@
+import {
+  deriveNativeArt,
+  EXACT_WINDOW,
+  exactFractionAt,
+  nnUpscale,
+  rotateNativeArt,
+  searchExact,
+  type ExactPatch,
+  type NativeArt,
+} from './exact-native'
 import type { GridScorer } from './grid-calibrate'
 import type {
   CellPrediction,
@@ -7,80 +17,93 @@ import type {
   Recognizer,
   TemplateSource,
 } from './types'
-import {
-  boxBlur3,
-  combineFamilyCues,
-  combineFineCues,
-  emptyRejected,
-  fgShape,
-  FINE_FAMILY_DELTA,
-  FINE_OUTSIDER_DELTA,
-  FINE_SWAP_DELTA,
-  HUE_HIST_LEN,
-  histIntersection,
-  isFamilyGroup,
-  isTabletLikeShape,
-  majorityType,
-  nccMasked,
-  orderAfterRerank,
-  confusableSet,
-  pickInjectGroup,
-  pickRerankGroup,
-  shouldInjectSmallSlabs,
-  shouldReject,
-  shouldSwap,
-  SMALL_SLAB_SET,
-  sobelMag,
-  spatialHueHist,
-  type Hit,
-  type ItemTypeVote,
-} from './confusable-rerank'
 
 /**
- * Analysis-by-synthesis matcher. Port of `tests/vision/REFERENCE.py`.
+ * Analysis-by-synthesis matcher — the canonical implementation (PLAN §9-G).
  *
- * Every constant below is frozen: they were swept against the fixtures and the
- * reference numbers only reproduce with these exact values.
+ * It began as a port of `tests/vision/REFERENCE.py`; that file is now a frozen
+ * historical reference and this one no longer tracks it. The per-image scale
+ * lock and scale sweep it inherited are gone: §9-G measured that the game
+ * renders icons at an integer S_SCREEN screen px per native art px (nearest
+ * neighbour) with a cell pitch of ~40 native px, so each sprite's render size
+ * follows deterministically from its native size (`data/sprite-natives.json`)
+ * and the cell pitch. Constants are validated against the fixture harness
+ * (`npm run test:vision`) as a whole, never tuned to individual fixtures
+ * (§9-F doctrine).
  */
 export const CELL = 64
 export const TOPCUT = Math.floor(CELL * 0.19) // 12
 export const TRIM = 0.07
 const FGT = 45
-const SWIN = 6
-const TOPK = 28
+// Second-chance occupancy (§10-4 / roadmap 5): depleted-harvest already uses
+// fgt=32 successfully. Tiny-icon floor (~32px) is gated by compactness,
+// interior (non-ring) and centroid so empty overlay remnants stay empty.
+const FGT2 = 32
+const MIN_BLOB_RATIO2 = 0.01 // ~33px of N_VALID=3328; amulet is 82, swaying 38
+const NUISANCE_TOP = TOPCUT + 10 // 22: overlay band just below TOPCUT
+const SPARKLE_AREA = 12 // defender corner glints 5–12px; frozen_bow strokes are ≥16
+const COUNTER_AREA = 80 // digit glyphs ~20–50px; body shine is larger / lower
+const COUNTER_MAX_X = 22 // left-half overlay; centre-top is icon art
+const BADGE_MIN_X = 44 // '+N' / depleted '-N' sit on the right edge
+// True-empty cells prefer the empty plate by >>10 residual (p50 gap ~40);
+// false-empties prefer occupied by 5–15. Slack 2 is insensitive on [0, 6].
+const OCC_PREF_SLACK = 2
 const RI = 3
-const QP = 65
 const OFFS = [-2, 0, 2]
 const RING_KEEP_RATIO = 0.04
 const MIN_BLOB_RATIO = 0.045
 const MIN_SHIFTED_FG = 20
 const MIN_TEMPLATE_ALPHA_PIXELS = 12
-const ALPHA_CUT = 128 // sprite alpha > 128 for the bbox, > 127.5 for the IoU mask
+const ALPHA_CUT = 128 // sprite alpha > 128 counts toward the tight bbox
 
-// Local second occupancy pass (does not change global FGT). Measured 2026-08-15:
-// the 5 FG-null occupied cells already have FGT=45 pixels but fail MIN_BLOB
-// (blobs 38..104 < 150). They are interior-darker than their ring
-// (ivr -5.8..-26.3, lumStd 16..45); true-empty FG-null cells are not
-// (ivr >= -0.28, and the one slightly-negative empty has lumStd 0).
-const LOCAL_IVR_CUT = -4
-const LOCAL_LUM_STD = 12
-const LOCAL_MIN_BLOB = 35
+// Deterministic per-sprite scale model (§9-G, measured): the game draws each
+// icon at S_SCREEN = round(pitch / 40) screen px per native art px, so a
+// sprite of native side N occupies S_SCREEN * N source px inside the cell.
+// SLACK absorbs the ±1px uncertainty of the fg/alpha bboxes on each side.
+// Measured on the harness: {-2..2} beats both {-1,0,1} and {-2,0,2} by 2+
+// cells and is the only set that keeps empty accuracy at the 0.96 floor.
+const NATIVE_PX_PER_PITCH = 40 // §9-G: pitch / S_SCREEN ≈ 39.6–40.1
+const MAX_S_SCREEN = 8
+const SLACK = [-2, -1, 0, 1, 2]
+// Sprites whose catalog entry is lowConfidence carry a GUESSED k (lossy webp,
+// smooth resample, off-family fit), so their deterministic scale inherits that
+// uncertainty. The k families the catalog actually measured span ~2.4..3.4
+// against guesses of 2.5/3.0, which maps to scale errors of roughly -25%..+4%
+// — an asymmetric, downward window, at typical scales about -8..+2.
+const LOWCONF_SLACK = [-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2]
+const MIN_SCALE = 8
+const MAX_SCALE = 62
 
-// Reduced settings for the grid-calibration scorer only. The scorer runs once
-// per sweep candidate, so it trades candidate breadth for speed. It never
-// produces predictions, so this cannot affect recognition accuracy.
-const SCORER_TOPK = 8
+// Roadmap 6 exact re-rank (original screenshot space). BAR/GAP measured:
+// true cells 0.93–1.00, lookalikes ~0.2–0.77 at their best offset.
+const EXACT_TOPK = 8
+export const EXACT_BAR = 0.9
+export const EXACT_GAP = 0.15
+// Sparse / lookalike cells: stage-2 rank of the truth can sit well past K=8
+// (frozen_bow SAD ~0.07). Expand by a cheap seed-only scan of every native-art
+// variant when the stage-2 winner is weak or has no native art.
+const EXACT_EXPAND_SCORE = 0.12
+const EXACT_SEED_KEEP = 0.25
+
+// Reduced settings for the grid-calibration scorer only (~29 calls per image):
+// a single scale and offset per variant. There is no IoU prefilter anywhere
+// any more. On the prediction path it lost 40/140 truths even at TOPK=96, and
+// in the scorer a TOPK=8 funnel scored the TRUE grid negative on 2.png (junk
+// survivors only), flipping row detection to 7 — fg under-extraction on dark
+// icons wrecks IoU ranking in both roles, so both paths score every variant.
 const SCORER_OFFS = [0]
+const SCORER_SLACK = [0]
+// The game renders square cells (§9-G: ~40 native px pitch on both axes at
+// one integer screen scale; the seven fixtures measure pitchY/pitchX of
+// 0.978..1.021). A rect outside this envelope is physically impossible, and
+// the row-count search generates exactly such rects (pitchY pinned to 0.9x
+// pitchX) as aliases that squeeze an extra row in. Refuse to score them.
+const SCORER_PITCH_RATIO_LO = 0.95
+const SCORER_PITCH_RATIO_HI = 1.05
 
 const CELL_PX = CELL * CELL
 const VALID_FROM = TOPCUT * CELL // flat index of the first valid row
 const N_VALID = CELL_PX - VALID_FROM
-
-export const SCALES: number[] = (() => {
-  const out: number[] = []
-  for (let s = 26; s <= 60; s += 2) out.push(s)
-  return out
-})()
 
 /** Border ring sample positions, in the exact concatenation order of the reference. */
 export const CELL_RING_INDICES = (() => {
@@ -104,18 +127,6 @@ function pyRound(x: number): number {
   return f % 2 === 0 ? f : f + 1
 }
 
-/** numpy `percentile(..., interpolation='linear')` on an ascending array. */
-function percentile(sorted: number[], q: number): number {
-  const n = sorted.length
-  if (n === 0) return NaN
-  if (n === 1) return sorted[0]
-  const idx = (q / 100) * (n - 1)
-  const lo = Math.floor(idx)
-  const hi = Math.ceil(idx)
-  if (lo === hi) return sorted[lo]
-  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo)
-}
-
 function medianOf(values: Float64Array, n: number): number {
   const view = values.subarray(0, n)
   view.sort()
@@ -130,7 +141,12 @@ function medianOf(values: Float64Array, n: number): number {
  * lands on the other side of an integer. That off-by-one is visible in the
  * final scores, so the accumulation has to be reproduced literally.
  */
+const nearestTableCache = new Map<string, Int32Array>()
+
 function nearestIndexTable(srcSpan: number, dstSpan: number): Int32Array {
+  const key = srcSpan + ':' + dstSpan
+  const hit = nearestTableCache.get(key)
+  if (hit) return hit
   const table = new Int32Array(dstSpan)
   const scale = srcSpan / dstSpan
   let o = scale * 0.5
@@ -138,6 +154,7 @@ function nearestIndexTable(srcSpan: number, dstSpan: number): Int32Array {
     table[i] = Math.trunc(o)
     o += scale
   }
+  nearestTableCache.set(key, table)
   return table
 }
 
@@ -153,35 +170,68 @@ export function cropCellNearest(
   bottom: number
 ): Float32Array {
   const out = new Float32Array(CELL_PX * 3)
+  cropCellNearestInto(img, left, top, right, bottom, out)
+  return out
+}
+
+function cropCellNearestInto(
+  img: RGBAImage,
+  left: number,
+  top: number,
+  right: number,
+  bottom: number,
+  out: Float32Array
+): void {
   const xs = nearestIndexTable(right - left, CELL)
   const ys = nearestIndexTable(bottom - top, CELL)
-  const maxX = img.width - 1
-  const maxY = img.height - 1
   const d = img.data
+  const iw = img.width
+  const maxX = iw - 1
+  const maxY = img.height - 1
+
+  // PIL's table is strictly inside [0, span), so a crop that sits inside the
+  // image never needs per-pixel clamps. Edge grids still take the slow path.
+  if (left >= 0 && top >= 0 && right <= iw && bottom <= img.height) {
+    for (let y = 0; y < CELL; y++) {
+      const rowBase = (top + ys[y]) * iw
+      const oRow = y * CELL * 3
+      for (let x = 0; x < CELL; x++) {
+        const s = (rowBase + left + xs[x]) * 4
+        const o = oRow + x * 3
+        out[o] = d[s]
+        out[o + 1] = d[s + 1]
+        out[o + 2] = d[s + 2]
+      }
+    }
+    return
+  }
 
   for (let y = 0; y < CELL; y++) {
     let syi = top + ys[y]
     if (syi < 0) syi = 0
     else if (syi > maxY) syi = maxY
-    const rowBase = syi * img.width
+    const rowBase = syi * iw
+    const oRow = y * CELL * 3
     for (let x = 0; x < CELL; x++) {
       let sxi = left + xs[x]
       if (sxi < 0) sxi = 0
       else if (sxi > maxX) sxi = maxX
       const s = (rowBase + sxi) * 4
-      const o = (y * CELL + x) * 3
+      const o = oRow + x * 3
       out[o] = d[s]
       out[o + 1] = d[s + 1]
       out[o + 2] = d[s + 2]
     }
   }
-  return out
 }
+
+const morphTmp = new Uint8Array(CELL_PX)
+const ccStack = new Int32Array(CELL_PX)
 
 /** Rectangular max filter, out-of-bounds ignored (cv2 morphology border default). */
 function dilateRect(src: Uint8Array, k: number): Uint8Array {
   const r = (k - 1) >> 1
-  const tmp = new Uint8Array(CELL_PX)
+  const tmp = morphTmp
   for (let y = 0; y < CELL; y++) {
     const base = y * CELL
     for (let x = 0; x < CELL; x++) {
@@ -218,7 +268,7 @@ function dilateRect(src: Uint8Array, k: number): Uint8Array {
 /** Rectangular min filter, out-of-bounds ignored. */
 function erodeRect(src: Uint8Array, k: number): Uint8Array {
   const r = (k - 1) >> 1
-  const tmp = new Uint8Array(CELL_PX)
+  const tmp = morphTmp
   for (let y = 0; y < CELL; y++) {
     const base = y * CELL
     for (let x = 0; x < CELL; x++) {
@@ -261,7 +311,7 @@ interface Components {
 function connectedComponents(mask: Uint8Array): Components {
   const labels = new Int32Array(CELL_PX)
   const areas: number[] = [0]
-  const stack = new Int32Array(CELL_PX)
+  const stack = ccStack
   let next = 1
 
   for (let seed = 0; seed < CELL_PX; seed++) {
@@ -303,28 +353,138 @@ export interface CellInfo {
   cx: number
   /** max(bbox width, bbox height) of the mask. */
   size: number
+  /** Pixel count of `fg` (unshifted). */
+  n: number
+  /** Overlay-glyph / sparkle mask — excluded from fg AND from match SAD. */
+  nuisance: Uint8Array
+  /** Nuisance pixels in the valid (non-TOPCUT) region. */
+  nMasked: number
+  /** area / bbox area of the kept (grown) blob. */
+  compact: number
+  /** Dominant connected component before hull grow — occupancy gates use this. */
+  ccN: number
+  ccCompact: number
+  ccSize: number
 }
 
 const ringScratch = new Int32Array(1 << 16)
 const ringSeen = new Int32Array(RING_N)
+/** [r,g,b,D] per pixel — reused across matchCell calls (single-threaded). */
+const packedCell = new Float32Array(CELL_PX * 4)
+const packedPlate = new Float32Array(CELL_PX * 4)
+/** Packed cell RGB (r | g<<8 | b<<16) + integer D for the opaque SAD. */
+const cellPack = new Uint32Array(CELL_PX)
+const cellD = new Float32Array(CELL_PX)
+const EMPTY_NUIS = new Uint8Array(CELL_PX)
 
-const fineCellGray = new Float32Array(CELL_PX)
-const fineCellHp = new Float32Array(CELL_PX)
-const fineCellMag = new Float32Array(CELL_PX)
-const fineCellR = new Float32Array(CELL_PX)
-const fineCellG = new Float32Array(CELL_PX)
-const fineCellB = new Float32Array(CELL_PX)
-const fineSprGray = new Float32Array(CELL_PX)
-const fineSprHp = new Float32Array(CELL_PX)
-const fineSprMag = new Float32Array(CELL_PX)
-const fineSprR = new Float32Array(CELL_PX)
-const fineSprG = new Float32Array(CELL_PX)
-const fineSprB = new Float32Array(CELL_PX)
-const fineBlurTmp = new Float32Array(CELL_PX)
-const fineIdx = new Int32Array(CELL_PX)
-const fineCellFg = new Uint8Array(CELL_PX)
-const fineCellHue = new Float32Array(HUE_HIST_LEN)
-const fineSprHue = new Float32Array(HUE_HIST_LEN)
+
+function lowerBoundInt32(arr: Int32Array, n: number, cut: number): number {
+  let lo = 0
+  let hi = n
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1
+    if (arr[mid] < cut) lo = mid + 1
+    else hi = mid
+  }
+  return lo
+}
+
+/**
+ * Opaque SAD against integer cell RGB. Sprite colours are uint8, cell colours
+ * are the same integers the Float32 path stored, so abs-diff is bit-identical
+ * once promoted back into the float64 `delta` accumulator.
+ */
+function opaqueDelta(
+  anchor: number,
+  k0: number,
+  n: number,
+  off: Int32Array,
+  rgb: Uint32Array,
+  pack: Uint32Array,
+  D: Float32Array
+): number {
+  let delta = 0
+  let k = k0
+  const n4 = n - ((n - k0) & 3)
+  for (; k < n4; k += 4) {
+    const p0 = anchor + off[k]
+    const sv0 = rgb[k]
+    const cv0 = pack[p0]
+    const dr0 = (cv0 & 255) - (sv0 & 255)
+    const dg0 = ((cv0 >>> 8) & 255) - ((sv0 >>> 8) & 255)
+    const db0 = ((cv0 >>> 16) & 255) - ((sv0 >>> 16) & 255)
+    const p1 = anchor + off[k + 1]
+    const sv1 = rgb[k + 1]
+    const cv1 = pack[p1]
+    const dr1 = (cv1 & 255) - (sv1 & 255)
+    const dg1 = ((cv1 >>> 8) & 255) - ((sv1 >>> 8) & 255)
+    const db1 = ((cv1 >>> 16) & 255) - ((sv1 >>> 16) & 255)
+    const p2 = anchor + off[k + 2]
+    const sv2 = rgb[k + 2]
+    const cv2 = pack[p2]
+    const dr2 = (cv2 & 255) - (sv2 & 255)
+    const dg2 = ((cv2 >>> 8) & 255) - ((sv2 >>> 8) & 255)
+    const db2 = ((cv2 >>> 16) & 255) - ((sv2 >>> 16) & 255)
+    const p3 = anchor + off[k + 3]
+    const sv3 = rgb[k + 3]
+    const cv3 = pack[p3]
+    const dr3 = (cv3 & 255) - (sv3 & 255)
+    const dg3 = ((cv3 >>> 8) & 255) - ((sv3 >>> 8) & 255)
+    const db3 = ((cv3 >>> 16) & 255) - ((sv3 >>> 16) & 255)
+    delta +=
+      (dr0 < 0 ? -dr0 : dr0) +
+      (dg0 < 0 ? -dg0 : dg0) +
+      (db0 < 0 ? -db0 : db0) -
+      D[p0] +
+      (dr1 < 0 ? -dr1 : dr1) +
+      (dg1 < 0 ? -dg1 : dg1) +
+      (db1 < 0 ? -db1 : db1) -
+      D[p1] +
+      (dr2 < 0 ? -dr2 : dr2) +
+      (dg2 < 0 ? -dg2 : dg2) +
+      (db2 < 0 ? -db2 : db2) -
+      D[p2] +
+      (dr3 < 0 ? -dr3 : dr3) +
+      (dg3 < 0 ? -dg3 : dg3) +
+      (db3 < 0 ? -db3 : db3) -
+      D[p3]
+  }
+  for (; k < n; k++) {
+    const p = anchor + off[k]
+    const sv = rgb[k]
+    const cv = pack[p]
+    const dr = (cv & 255) - (sv & 255)
+    const dg = ((cv >>> 8) & 255) - ((sv >>> 8) & 255)
+    const db = ((cv >>> 16) & 255) - ((sv >>> 16) & 255)
+    delta += (dr < 0 ? -dr : dr) + (dg < 0 ? -dg : dg) + (db < 0 ? -db : db) - D[p]
+  }
+  return delta
+}
+
+/** Same SAD, skipping nuisance pixels (contribution 0 on both sides, §10-2). */
+function opaqueDeltaNuis(
+  anchor: number,
+  k0: number,
+  n: number,
+  off: Int32Array,
+  rgb: Uint32Array,
+  pack: Uint32Array,
+  D: Float32Array,
+  nuis: Uint8Array
+): number {
+  let delta = 0
+  for (let k = k0; k < n; k++) {
+    const p = anchor + off[k]
+    if (nuis[p]) continue
+    const sv = rgb[k]
+    const cv = pack[p]
+    const dr = (cv & 255) - (sv & 255)
+    const dg = ((cv >>> 8) & 255) - ((sv >>> 8) & 255)
+    const db = ((cv >>> 16) & 255) - ((sv >>> 16) & 255)
+    delta += (dr < 0 ? -dr : dr) + (dg < 0 ? -dg : dg) + (db < 0 ? -db : db) - D[p]
+  }
+  return delta
+}
 
 /**
  * Background colours sampled from the border ring, quantised to a 16-level cube.
@@ -379,16 +539,178 @@ function ringMeanAbsDiff(a: Float32Array, b: Float32Array): number {
   return sum / (RING_N * 3)
 }
 
+function isWhiteGlyph(r: number, g: number, b: number): boolean {
+  return r >= 220 && g >= 220 && b >= 220 && Math.max(r, g, b) - Math.min(r, g, b) <= 30
+}
+
+function isRedGlyph(r: number, g: number, b: number): boolean {
+  return r >= 180 && g <= 90 && b <= 90 && r - Math.max(g, b) >= 80
+}
+
+/**
+ * Overlay-glyph / sparkle mask (roadmap 5, §10-2).
+ *
+ * Overlay counters ('N/M', '-N/M') and '+N' badges are near-pure white or red,
+ * short, and sit in the top band just below TOPCUT. Sparkles are tiny isolated
+ * white CCs anywhere. Icon art that happens to be white or red (kaleidoscope
+ * loaf, ruby gem, defect_probe shine) is larger, lower, or less compact — those
+ * CCs are left alone. The mask is applied to BOTH fg extraction and the match
+ * SAD so it cannot bias score the way a one-sided TOPCUT did.
+ */
+function detectNuisance(cell: Float32Array): { mask: Uint8Array; nMasked: number } {
+  const seed = new Uint8Array(CELL_PX)
+  for (let p = 0; p < CELL_PX; p++) {
+    const p3 = p * 3
+    const r = cell[p3]
+    const g = cell[p3 + 1]
+    const b = cell[p3 + 2]
+    if (isWhiteGlyph(r, g, b) || isRedGlyph(r, g, b)) seed[p] = 1
+  }
+  const { labels, areas } = connectedComponents(seed)
+  const keep = new Uint8Array(CELL_PX)
+  if (areas.length > 1) {
+    const nComp = areas.length - 1
+    const minX = new Int32Array(nComp + 1)
+    const maxX = new Int32Array(nComp + 1)
+    const minY = new Int32Array(nComp + 1)
+    const maxY = new Int32Array(nComp + 1)
+    minX.fill(CELL)
+    minY.fill(CELL)
+    maxX.fill(-1)
+    maxY.fill(-1)
+    for (let p = 0; p < CELL_PX; p++) {
+      const lab = labels[p]
+      if (lab === 0) continue
+      const y = (p / CELL) | 0
+      const x = p - y * CELL
+      if (x < minX[lab]) minX[lab] = x
+      if (x > maxX[lab]) maxX[lab] = x
+      if (y < minY[lab]) minY[lab] = y
+      if (y > maxY[lab]) maxY[lab] = y
+    }
+    const outline = new Float32Array(nComp + 1)
+    const borderN = new Int32Array(nComp + 1)
+    for (let p = 0; p < CELL_PX; p++) {
+      const lab = labels[p]
+      if (lab === 0) continue
+      const y = (p / CELL) | 0
+      const x = p - y * CELL
+      const nbr = (nx: number, ny: number) => {
+        if (nx < 0 || ny < 0 || nx >= CELL || ny >= CELL) {
+          borderN[lab]++
+          return
+        }
+        const q = ny * CELL + nx
+        if (labels[q] === lab) return
+        borderN[lab]++
+        const q3 = q * 3
+        if (Math.max(cell[q3], cell[q3 + 1], cell[q3 + 2]) < 90) outline[lab]++
+      }
+      nbr(x - 1, y)
+      nbr(x + 1, y)
+      nbr(x, y - 1)
+      nbr(x, y + 1)
+    }
+    const drop = new Uint8Array(nComp + 1)
+    for (let i = 1; i <= nComp; i++) {
+      const area = areas[i]
+      const h = maxY[i] - minY[i] + 1
+      const w = maxX[i] - minX[i] + 1
+      const compact = area / (w * h)
+      const aspect = w >= h ? w / h : h / w
+      const outlined = borderN[i] > 0 && outline[i] / borderN[i] >= 0.25
+      // Overlay CCs originate in the TOPCUT strip. Icon ice (frozen_bow) is also
+      // near-white but starts lower (minY≥16) or is a 1–2px column — leave it.
+      const fromStrip = minY[i] <= TOPCUT + 2
+      const inTop = fromStrip && maxY[i] <= NUISANCE_TOP && h <= 12
+      const sparkle = inTop && area <= SPARKLE_AREA && compact >= 0.5
+      const counter =
+        inTop &&
+        outlined &&
+        area <= COUNTER_AREA &&
+        maxX[i] <= COUNTER_MAX_X &&
+        w >= 4 &&
+        aspect <= 4 &&
+        compact >= 0.3
+      const badge = inTop && outlined && area <= COUNTER_AREA && minX[i] >= BADGE_MIN_X && aspect <= 4
+      if (sparkle || counter || badge) drop[i] = 1
+    }
+    for (let p = 0; p < CELL_PX; p++) if (drop[labels[p]]) keep[p] = 1
+  }
+  // Dilate-1 pulls in the dark outline without eating 3px of neighbouring art
+  // (dilate-3 zeroed frozen_bow ice and flipped 7.png#4 to charcoal).
+  const grown = dilateRect(keep, 1)
+  let nMasked = 0
+  for (let p = VALID_FROM; p < CELL_PX; p++) if (grown[p]) nMasked++
+  return { mask: grown, nMasked }
+}
+
+function meanAbsValid(a: Float32Array, b: Float32Array, nuis: Uint8Array): number {
+  let s = 0
+  let n = 0
+  for (let p = VALID_FROM; p < CELL_PX; p++) {
+    if (nuis[p]) continue
+    const p3 = p * 3
+    s += Math.abs(a[p3] - b[p3]) + Math.abs(a[p3 + 1] - b[p3 + 1]) + Math.abs(a[p3 + 2] - b[p3 + 2])
+    n++
+  }
+  return n ? s / n : 0
+}
+
+function fgTouchesRing(fg: Uint8Array): number {
+  let n = 0
+  for (let i = 0; i < RING_N; i++) if (fg[CELL_RING_INDICES[i]]) n++
+  return n
+}
+
+interface AnalyzeOpts {
+  /** Quantised palette background (default: the cell's own ring). */
+  bg?: Float32Array
+  fgt?: number
+  minBlob?: number
+  nuisance?: Uint8Array
+  nMasked?: number
+}
+
+function pass2Accept(info: CellInfo): boolean {
+  // Gates use the dominant CC (pre-grow). Dilate-9 hull drops compactness on
+  // thin icons (kunai 0.49 → 0.27) and must not decide occupancy.
+  // Empty-frame leftovers compact 0.06–0.30 or sit on the ring; recovered
+  // items 0.38 (frozen_bow after overlay strip) – 0.91 (amulet).
+  const ring = fgTouchesRing(info.fg)
+  if (ring * 2 > info.n) return false
+  if (info.cx < 10 || info.cx > CELL - 10) return false
+  if (info.cy < 16 || info.cy > CELL - 10) return false
+  // 0.35 rejects kunai (0.29) and 5.png#26 balisong (0.34). Empty leftovers
+  // that pass 0.28 (4.png#17/30 overlay remnants, 7.png#33) prefer the empty
+  // plate by >>10 residual so the closerToOcc trigger normally skips them —
+  // but that trigger is unavailable when plateEmpty is null (<3 empty cells).
+  // The load-bearing defense is THIS function's geometry gates plus the
+  // score<=0 backstop: measured with the trigger force-disabled on all seven
+  // fixtures, output is bit-identical and no empty cell false-occupies.
+  // Insensitive on [0.28, 0.33] for false-occupied.
+  if (info.ccSize > 48 || info.ccCompact < 0.28) return false
+  return info.ccN >= N_VALID * MIN_BLOB_RATIO2
+}
+
 /**
  * Occupancy + foreground extraction for one 64x64 cell.
  * Returns null for an empty cell.
  */
-export function analyzeCell(cell: Float32Array): CellInfo | null {
-  const bg = ringBackground(cell)
+export function analyzeCell(cell: Float32Array, opts?: AnalyzeOpts): CellInfo | null {
+  // Default is the unmasked pass-1 extractor so grid-calibrate's centroid
+  // regression and coverage probes keep the occupancy they were pinned on.
+  // Recognition always passes a per-cell nuisance mask (prepare()).
+  const nuis = opts?.nuisance ?? EMPTY_NUIS
+  const nMasked = opts?.nMasked ?? 0
+  const fgt = opts?.fgt ?? FGT
+  const minBlob = opts?.minBlob ?? N_VALID * MIN_BLOB_RATIO
+  const bg = opts?.bg ?? ringBackground(cell)
   const nbg = bg.length / 3
 
   const fg = new Uint8Array(CELL_PX)
   for (let p = VALID_FROM; p < CELL_PX; p++) {
+    if (nuis[p]) continue
     const p3 = p * 3
     const r = cell[p3]
     const g = cell[p3 + 1]
@@ -399,7 +721,7 @@ export function analyzeCell(cell: Float32Array): CellInfo | null {
       const d = Math.abs(r - bg[k3]) + Math.abs(g - bg[k3 + 1]) + Math.abs(b - bg[k3 + 2])
       if (d < best) best = d
     }
-    if (best > FGT) fg[p] = 1
+    if (best > fgt) fg[p] = 1
   }
 
   const closed = erodeRect(dilateRect(fg, 3), 3)
@@ -408,10 +730,28 @@ export function analyzeCell(cell: Float32Array): CellInfo | null {
 
   let bi = 1
   for (let i = 2; i < areas.length; i++) if (areas[i] > areas[bi]) bi = i
-  if (areas[bi] < N_VALID * MIN_BLOB_RATIO) return null
+  if (areas[bi] < minBlob) return null
 
   const blob = new Uint8Array(CELL_PX)
-  for (let p = 0; p < CELL_PX; p++) if (labels[p] === bi) blob[p] = 1
+  let ccMinX = CELL
+  let ccMaxX = -1
+  let ccMinY = CELL
+  let ccMaxY = -1
+  for (let p = 0; p < CELL_PX; p++) {
+    if (labels[p] !== bi) continue
+    blob[p] = 1
+    const y = (p / CELL) | 0
+    const x = p - y * CELL
+    if (x < ccMinX) ccMinX = x
+    if (x > ccMaxX) ccMaxX = x
+    if (y < ccMinY) ccMinY = y
+    if (y > ccMaxY) ccMaxY = y
+  }
+  const ccW = ccMaxX - ccMinX + 1
+  const ccH = ccMaxY - ccMinY + 1
+  const ccN = areas[bi]
+  const ccCompact = ccN / (ccW * ccH)
+  const ccSize = Math.max(ccW, ccH)
   const grown = dilateRect(blob, 9)
 
   // Pixel-art icons fragment into disconnected pieces; re-attach whatever sits
@@ -439,141 +779,40 @@ export function analyzeCell(cell: Float32Array): CellInfo | null {
   }
   if (n === 0) return null
 
+  const bw = maxX - minX + 1
+  const bh = maxY - minY + 1
   return {
     fg: keep,
     cy: sy / n,
     cx: sx / n,
-    size: Math.max(maxX - minX + 1, maxY - minY + 1),
+    size: Math.max(bw, bh),
+    n,
+    nuisance: nuis,
+    nMasked,
+    compact: n / (bw * bh),
+    ccN,
+    ccCompact,
+    ccSize,
   }
 }
 
-function isLocalInterior(p: number): boolean {
-  const y = (p / CELL) | 0
-  const x = p - y * CELL
-  return x >= 9 && x < CELL - 9 && y >= TOPCUT + 6 && y < CELL - 9
-}
-
-function maskToCellInfo(fg: Uint8Array, minBlob: number): CellInfo | null {
-  const closed = erodeRect(dilateRect(fg, 3), 3)
-  const { labels, areas } = connectedComponents(closed)
-  if (areas.length <= 1) return null
-
-  let bi = 1
-  for (let i = 2; i < areas.length; i++) if (areas[i] > areas[bi]) bi = i
-  if (areas[bi] < minBlob) return null
-
-  const blob = new Uint8Array(CELL_PX)
-  for (let p = 0; p < CELL_PX; p++) if (labels[p] === bi) blob[p] = 1
-  const grown = dilateRect(blob, 9)
-
-  const keep = new Uint8Array(CELL_PX)
-  let sy = 0
-  let sx = 0
+/** Count of fg pixels that remain in-bounds after a (dy, dx) shift. */
+function countShiftedFg(src: Uint8Array, dy: number, dx: number): number {
+  if (dy === 0 && dx === 0) {
+    let n = 0
+    for (let p = 0; p < CELL_PX; p++) n += src[p]
+    return n
+  }
+  const ySrc0 = dy >= 0 ? 0 : -dy
+  const ySrc1 = dy >= 0 ? CELL - dy : CELL
+  const xSrc0 = dx >= 0 ? 0 : -dx
+  const xSrc1 = dx >= 0 ? CELL - dx : CELL
   let n = 0
-  let minX = CELL
-  let maxX = -1
-  let minY = CELL
-  let maxY = -1
-  for (let p = 0; p < CELL_PX; p++) {
-    if (!(blob[p] || (fg[p] && grown[p]))) continue
-    keep[p] = 1
-    const y = (p / CELL) | 0
-    const x = p - y * CELL
-    sy += y
-    sx += x
-    n++
-    if (x < minX) minX = x
-    if (x > maxX) maxX = x
-    if (y < minY) minY = y
-    if (y > maxY) maxY = y
-  }
-  if (n === 0) return null
-  return {
-    fg: keep,
-    cy: sy / n,
-    cx: sx / n,
-    size: Math.max(maxX - minX + 1, maxY - minY + 1),
-  }
-}
-
-/**
- * Second occupancy pass for cells the frozen FGT=45 path calls empty.
- * Gate: interior darker than the ring AND high interior variance.
- * Mask: the same FGT=45 residual, accepted at a lower local blob floor.
- * Measured: 5/5 occupancy-miss cells pass the gate+blob; 0 true empties do.
- * kunai matches; amulet/swaying_eyes/colorless_cube occupy but ID wrong;
- * black_planet still hard-rejects (leftover).
- */
-export function analyzeCellLocal(cell: Float32Array): CellInfo | null {
-  let iSum = 0
-  let iN = 0
-  let iSq = 0
-  let rSum = 0
-  for (let p = VALID_FROM; p < CELL_PX; p++) {
-    if (!isLocalInterior(p)) continue
-    const p3 = p * 3
-    const v = 0.299 * cell[p3] + 0.587 * cell[p3 + 1] + 0.114 * cell[p3 + 2]
-    iSum += v
-    iSq += v * v
-    iN++
-  }
-  if (iN < 32) return null
-  for (let i = 0; i < RING_N; i++) {
-    const p3 = CELL_RING_INDICES[i] * 3
-    rSum += 0.299 * cell[p3] + 0.587 * cell[p3 + 1] + 0.114 * cell[p3 + 2]
-  }
-  const iMean = iSum / iN
-  const rMean = rSum / RING_N
-  const iVar = iSq / iN - iMean * iMean
-  const iStd = iVar > 0 ? Math.sqrt(iVar) : 0
-  if (iMean - rMean >= LOCAL_IVR_CUT) return null
-  if (iStd < LOCAL_LUM_STD) return null
-
-  const bg = ringBackground(cell)
-  const nbg = bg.length / 3
-  const fg = new Uint8Array(CELL_PX)
-  for (let p = VALID_FROM; p < CELL_PX; p++) {
-    const p3 = p * 3
-    const r = cell[p3]
-    const g = cell[p3 + 1]
-    const b = cell[p3 + 2]
-    let best = Infinity
-    for (let k = 0; k < nbg; k++) {
-      const k3 = k * 3
-      const d = Math.abs(r - bg[k3]) + Math.abs(g - bg[k3 + 1]) + Math.abs(b - bg[k3 + 2])
-      if (d < best) best = d
-    }
-    if (best > FGT) fg[p] = 1
-  }
-  return maskToCellInfo(fg, LOCAL_MIN_BLOB)
-}
-
-function shiftToFloat(src: Uint8Array, dy: number, dx: number): Float32Array {
-  const out = new Float32Array(CELL_PX)
-  const ySrc0 = dy >= 0 ? 0 : -dy
-  const ySrc1 = dy >= 0 ? CELL - dy : CELL
-  const xSrc0 = dx >= 0 ? 0 : -dx
-  const xSrc1 = dx >= 0 ? CELL - dx : CELL
   for (let y = ySrc0; y < ySrc1; y++) {
-    const dstRow = (y + dy) * CELL
     const srcRow = y * CELL
-    for (let x = xSrc0; x < xSrc1; x++) out[dstRow + x + dx] = src[srcRow + x]
+    for (let x = xSrc0; x < xSrc1; x++) n += src[srcRow + x]
   }
-  return out
-}
-
-function shiftValidToFloat(dy: number, dx: number): Float32Array {
-  const out = new Float32Array(CELL_PX)
-  const ySrc0 = dy >= 0 ? 0 : -dy
-  const ySrc1 = dy >= 0 ? CELL - dy : CELL
-  const xSrc0 = dx >= 0 ? 0 : -dx
-  const xSrc1 = dx >= 0 ? CELL - dx : CELL
-  for (let y = ySrc0; y < ySrc1; y++) {
-    if (y < TOPCUT) continue
-    const dstRow = (y + dy) * CELL
-    for (let x = xSrc0; x < xSrc1; x++) out[dstRow + x + dx] = 1
-  }
-  return out
+  return n
 }
 
 interface Square {
@@ -586,18 +825,27 @@ interface Variant {
   type: ItemKind
   rotation: 0 | 1 | 2 | 3
   square: Square
+  /** max(nativeW, nativeH) from the sprite-natives catalog — rotation invariant. */
+  nativeSide: number
+  /** Catalog lowConfidence: k was guessed, so the scale window widens. */
+  uncertain: boolean
+  /** Null when native art is unreliable (fallback / failed round-trip). */
+  nativeArt: NativeArt | null
 }
 
 /**
  * A sprite rendered at one scale, reduced to its non-transparent pixels.
  * Fully transparent pixels composite to exactly the plate, so their error is
- * already inside the empty-cell baseline and never needs recomputing.
+ * already inside the empty-cell baseline and never needs recomputing. Fully
+ * OPAQUE pixels — the overwhelming majority in NN-upscaled pixel art — have a
+ * composite that is a constant colour independent of the plate, so they are
+ * split into their own list whose inner loop reads neither plate nor alpha.
  */
 interface Sprite {
-  off: Int32Array // dy*CELL + dx, relative to the sprite's top-left
-  ia: Float32Array // 1 - alpha
-  pm: Float32Array // rgb * alpha, 3 per pixel
-  maskRel: Int32Array // subset of off with alpha > 0.5, for the IoU prefilter
+  offO: Int32Array // opaque pixels: dy*CELL + dx, ascending
+  rgbO: Uint32Array // opaque pixels: r | g<<8 | b<<16 (uint, exact)
+  offB: Int32Array // blended (0 < alpha < 1) pixels, ascending
+  apmB: Float32Array // blended pixels: [1 - alpha, r*alpha, g*alpha, b*alpha], stride 4
 }
 
 /** Tight alpha bbox crop, then centred square padding. */
@@ -658,10 +906,26 @@ function rotateSquare(sq: Square, k: number): Square {
 function buildSprite(sq: Square, s: number): Sprite {
   const S = sq.size
   const table = nearestIndexTable(S, s)
-  const off: number[] = []
-  const ia: number[] = []
-  const pm: number[] = []
-  const maskRel: number[] = []
+  let nO = 0
+  let nB = 0
+  for (let y = 0; y < s; y++) {
+    let syi = table[y]
+    if (syi > S - 1) syi = S - 1
+    for (let x = 0; x < s; x++) {
+      let sxi = table[x]
+      if (sxi > S - 1) sxi = S - 1
+      const a = sq.data[(syi * S + sxi) * 4 + 3]
+      if (a === 255) nO++
+      else if (a !== 0) nB++
+    }
+  }
+
+  const offO = new Int32Array(nO)
+  const rgbO = new Uint32Array(nO)
+  const offB = new Int32Array(nB)
+  const apmB = new Float32Array(nB * 4)
+  let iO = 0
+  let iB = 0
 
   for (let y = 0; y < s; y++) {
     let syi = table[y]
@@ -672,25 +936,35 @@ function buildSprite(sq: Square, s: number): Sprite {
       const src = (syi * S + sxi) * 4
       const a = sq.data[src + 3]
       if (a === 0) continue
-      const alpha = a / 255
-      const rel = y * CELL + x
-      off.push(rel)
-      ia.push(1 - alpha)
-      pm.push(sq.data[src] * alpha, sq.data[src + 1] * alpha, sq.data[src + 2] * alpha)
-      if (alpha > 0.5) maskRel.push(rel)
+      if (a === 255) {
+        offO[iO] = y * CELL + x
+        rgbO[iO] = sq.data[src] | (sq.data[src + 1] << 8) | (sq.data[src + 2] << 16)
+        iO++
+      } else {
+        const alpha = a / 255
+        offB[iB] = y * CELL + x
+        const b4 = iB * 4
+        apmB[b4] = 1 - alpha
+        apmB[b4 + 1] = sq.data[src] * alpha
+        apmB[b4 + 2] = sq.data[src + 1] * alpha
+        apmB[b4 + 3] = sq.data[src + 2] * alpha
+        iB++
+      }
     }
   }
 
-  return {
-    off: Int32Array.from(off),
-    ia: Float32Array.from(ia),
-    pm: Float32Array.from(pm),
-    maskRel: Int32Array.from(maskRel),
-  }
+  return { offO, rgbO, offB, apmB }
 }
 
 function emptyPrediction(slotIndex: number): CellPrediction {
   return { slotIndex, matchedValue: null, type: null, rotation: 0, confidence: 0 }
+}
+
+interface MatchHit {
+  variant: number
+  score: number
+  gain: number
+  top: { variant: number; score: number }[]
 }
 
 interface PreparedGrid {
@@ -698,41 +972,120 @@ interface PreparedGrid {
   infos: (CellInfo | null)[]
   plateOccupied: Float32Array | null
   plateEmpty: Float32Array | null
-  scales: number[]
+  /** Per-variant deterministic render scale for this image's pitch (§9-G). */
+  baseScales: Int32Array
+  sScreen: number
+  originX: number
+  originY: number
+  pitchX: number
+  pitchY: number
+  margin: number
+  cols: number
 }
 
 export class PlateMatcherRecognizer implements Recognizer {
   readonly name = 'plate-matcher'
 
   private variants: Variant[] = []
-  private spriteBank = new Map<number, Sprite[]>()
+  /** Lazy per-(variant, scale) sprite cache — scales differ per variant now. */
+  private spriteCache: Map<number, Sprite>[] = []
+  /** Lazy NN-upscaled native patches for the current S_SCREEN. */
+  private exactCache: (ExactPatch | null)[] = []
+  private exactS = -1
+  /** Per-variant best delta scratch for the exact-pass top-K. */
+  private varDelta = new Float64Array(0)
+  /**
+   * scoreGrid memo. Grid calibration re-evaluates identical rects (the sweep
+   * re-checks its own baseline every round) and scoreGrid is pure, so repeat
+   * calls are answered from here. Keyed weakly by image, exactly by rect.
+   */
+  private scoreMemo = new WeakMap<RGBAImage, Map<string, number>>()
+  private prepMemo = new WeakMap<RGBAImage, Map<string, PreparedGrid>>()
 
   loadTemplates(templates: TemplateSource[]): void {
     const variants: Variant[] = []
     for (const t of templates) {
+      if (!t.native) {
+        throw new Error(
+          `plate-matcher: template "${t.value}" carries no native size — ` +
+            'attach data/sprite-natives.json entries to TemplateSource.native (PLAN §9-G)'
+        )
+      }
       const square = toSquare(t.image)
       if (!square) continue
+      const nativeSide = Math.max(t.native[0], t.native[1])
+      const nativeArt = deriveNativeArt(t.image, t.native)
       const rotations: (0 | 1 | 2 | 3)[] =
         t.type === 'TABLET' && t.rotatable ? [0, 1, 2, 3] : [0]
       for (const r of rotations) {
-        variants.push({ value: t.value, type: t.type, rotation: r, square: rotateSquare(square, r) })
+        variants.push({
+          value: t.value,
+          type: t.type,
+          rotation: r,
+          square: rotateSquare(square, r),
+          nativeSide,
+          uncertain: t.nativeUncertain === true,
+          nativeArt: nativeArt ? rotateNativeArt(nativeArt, r) : null,
+        })
       }
     }
     this.variants = variants
-    this.spriteBank.clear()
+    this.spriteCache = variants.map(() => new Map())
+    this.exactCache = []
+    this.exactS = -1
+    this.varDelta = new Float64Array(variants.length)
+    this.scoreMemo = new WeakMap()
+    this.prepMemo = new WeakMap()
   }
 
-  private spritesAt(scale: number): Sprite[] {
-    let bank = this.spriteBank.get(scale)
-    if (!bank) {
-      bank = this.variants.map((v) => buildSprite(v.square, scale))
-      this.spriteBank.set(scale, bank)
+  private gridKey(opts: RecognizeOptions): string {
+    const g = opts.grid
+    return g
+      ? `${opts.rows}|${opts.cols}|${opts.totalSlots}|${g.originX}|${g.originY}|${g.gridWidth}|${g.gridHeight}`
+      : `${opts.rows}|${opts.cols}|${opts.totalSlots}`
+  }
+
+  private spriteAt(variant: number, scale: number): Sprite {
+    const cache = this.spriteCache[variant]
+    let sprite = cache.get(scale)
+    if (!sprite) {
+      sprite = buildSprite(this.variants[variant].square, scale)
+      cache.set(scale, sprite)
     }
-    return bank
+    return sprite
   }
 
-  /** Cell decomposition, plate learning and scale lock — shared by matching and grid scoring. */
-  private prepare(img: RGBAImage, opts: RecognizeOptions): PreparedGrid {
+  private exactAt(variant: number, s: number): ExactPatch | null {
+    const art = this.variants[variant].nativeArt
+    if (!art) return null
+    if (this.exactS !== s) {
+      this.exactCache = new Array(this.variants.length).fill(null)
+      this.exactS = s
+    }
+    let patch = this.exactCache[variant]
+    if (!patch) {
+      patch = nnUpscale(art, s)
+      this.exactCache[variant] = patch
+    }
+    return patch
+  }
+
+  /**
+   * Cell decomposition, plate learning and per-sprite scales.
+   * `pass2` is recognition-only: a misaligned scorer grid produces garbage plates,
+   * and second-chance occupancy then scores junk blobs as occupied (measured:
+   * 5.png pitchY drifted +15px and auto floors dropped 2 cells).
+   */
+  private prepare(img: RGBAImage, opts: RecognizeOptions, pass2: boolean): PreparedGrid {
+    const key = this.gridKey(opts) + (pass2 ? '|p2' : '|p1')
+    let memo = this.prepMemo.get(img)
+    if (!memo) {
+      memo = new Map()
+      this.prepMemo.set(img, memo)
+    }
+    const hit = memo.get(key)
+    if (hit) return hit
+
     const { rows, cols, totalSlots, grid } = opts
     // The grid rect stays fractional all the way down to the per-cell trunc().
     // Rounding it first shifts cell spans by up to a pixel, and under nearest
@@ -745,8 +1098,8 @@ export class PlateMatcherRecognizer implements Recognizer {
 
     const cells: Float32Array[] = []
     const infos: (CellInfo | null)[] = []
-    const occupied: number[] = []
-    const empty: number[] = []
+    const nuisances: Uint8Array[] = []
+    const nMasked: number[] = []
     for (let i = 0; i < totalSlots; i++) {
       const r = Math.floor(i / cols)
       const c = i % cols
@@ -759,30 +1112,106 @@ export class PlateMatcherRecognizer implements Recognizer {
         Math.trunc(x + pitchX - margin),
         Math.trunc(y + pitchY - margin)
       )
+      const np = detectNuisance(cell)
       cells.push(cell)
-      const primary = analyzeCell(cell)
-      infos.push(primary ?? analyzeCellLocal(cell))
-      // Plates and scale lock stay on the frozen FGT occupancy so a local
-      // recovery cannot shift the global plate or the locked scale.
-      if (primary) occupied.push(i)
-      else empty.push(i)
+      nuisances.push(np.mask)
+      nMasked.push(np.nMasked)
+      infos.push(analyzeCell(cell, { nuisance: np.mask, nMasked: np.nMasked }))
     }
+
+    const occupied: number[] = []
+    const empty: number[] = []
+    for (let i = 0; i < totalSlots; i++) (infos[i] ? occupied : empty).push(i)
 
     const plateOccupied = occupied.length >= 4 ? medianPlate(cells, occupied) : null
     const plateEmpty = empty.length >= 3 ? medianPlate(cells, empty) : null
 
-    const sizes = occupied.map((i) => infos[i]!.size).sort((a, b) => a - b)
-    let lock = sizes.length > 0 ? Math.trunc(percentile(sizes, QP)) : 42
-    lock = SCALES.reduce((best, s) => (Math.abs(s - lock) < Math.abs(best - lock) ? s : best), SCALES[0])
-    const candidateScales = SCALES.filter((s) => Math.abs(s - lock) <= SWIN)
-    const scales = candidateScales.length > 0 ? candidateScales : [lock]
-    for (const s of scales) this.spritesAt(s)
+    // Pass 2 occupancy (roadmap 5, §10-4). Recognition only — see prepare().
+    if (pass2) for (let i = 0; i < totalSlots; i++) {
+      const info = infos[i]
+      const cell = cells[i]
+      const nuis = nuisances[i]
+      const resOcc = plateOccupied ? meanAbsValid(cell, plateOccupied, nuis) : Infinity
+      const resEmp = plateEmpty ? meanAbsValid(cell, plateEmpty, nuis) : Infinity
+      const closerToOcc = !!plateOccupied && resOcc + OCC_PREF_SLACK < resEmp
+      const overlayGrabbed = !!info && info.cy < 20
+      const ringHit = info ? fgTouchesRing(info.fg) : 0
+      const uncertainEmpty = !info && (plateEmpty ? closerToOcc : !!plateOccupied)
+      const uncertainRing = !!info && ringHit >= 24 && info.n < 200
+      if (!uncertainEmpty && !uncertainRing && !overlayGrabbed) continue
 
-    return { cells, infos, plateOccupied, plateEmpty, scales }
+      const opts2 = {
+        fgt: FGT2,
+        minBlob: N_VALID * MIN_BLOB_RATIO2,
+        nuisance: nuis,
+        nMasked: nMasked[i],
+      }
+      // Learned-plate ring first (self-contaminated rings, overlay-stripped
+      // bodies). Own-ring second: tiny dark icons wash against the occupied
+      // plate (amulet/kunai/swaying). Prefer a plate blob that already meets
+      // the pass-1 size floor so a 70px own-ring fragment cannot lock in.
+      const plate = this.plateFor(cell, plateOccupied, plateEmpty)
+      const fromPlate = analyzeCell(cell, { ...opts2, bg: ringBackground(plate) })
+      const fromOwn = analyzeCell(cell, opts2)
+      const plateOk = !!(fromPlate && pass2Accept(fromPlate))
+      const ownOk = !!(fromOwn && pass2Accept(fromOwn))
+      let retry = plateOk && fromPlate!.ccN >= N_VALID * MIN_BLOB_RATIO ? fromPlate : null
+      if (!retry && ownOk) retry = fromOwn
+      if (!retry && plateOk) retry = fromPlate
+      if (!retry) continue
+      if (!info) infos[i] = retry
+      else if (
+        overlayGrabbed &&
+        retry.cy > info.cy + 6 &&
+        retry.ccN >= info.ccN &&
+        retry.ccCompact >= info.ccCompact
+      ) {
+        infos[i] = retry
+      } else if (uncertainRing && retry.ccN > info.ccN && retry.ccCompact >= info.ccCompact) {
+        infos[i] = retry
+      }
+    }
+
+    // Deterministic per-sprite scales (§9-G). The cell canvas maps `span`
+    // source px onto CELL px, so a sprite of native side N rendered at
+    // S_SCREEN px/native px lands on S_SCREEN * N * CELL / span canvas px.
+    // The old per-image scale lock (fg-size percentile) measured "what is in
+    // this inventory", not the render scale, and drifted 42/42/34/40 across
+    // same-pitch fixtures.
+    const span = pitchX * (1 - 2 * TRIM)
+    let sScreen = Math.round(pitchX / NATIVE_PX_PER_PITCH)
+    if (sScreen < 1) sScreen = 1
+    else if (sScreen > MAX_S_SCREEN) sScreen = MAX_S_SCREEN
+    const baseScales = new Int32Array(this.variants.length)
+    for (let j = 0; j < this.variants.length; j++) {
+      let s = Math.round((sScreen * this.variants[j].nativeSide * CELL) / span)
+      if (s < MIN_SCALE) s = MIN_SCALE
+      else if (s > MAX_SCALE) s = MAX_SCALE
+      baseScales[j] = s
+    }
+
+    const prepared: PreparedGrid = {
+      cells,
+      infos,
+      plateOccupied,
+      plateEmpty,
+      baseScales,
+      sScreen,
+      originX,
+      originY,
+      pitchX,
+      pitchY,
+      margin,
+      cols,
+    }
+    memo.set(key, prepared)
+    return prepared
   }
 
   async recognize(img: RGBAImage, opts: RecognizeOptions): Promise<CellPrediction[]> {
-    const { cells, infos, plateOccupied, plateEmpty, scales } = this.prepare(img, opts)
+    const prepared = this.prepare(img, opts, true)
+    const { cells, infos, plateOccupied, plateEmpty, baseScales, sScreen } = prepared
+    const lossless = opts.lossless === true && sScreen >= 1 && sScreen === (sScreen | 0)
 
     const predictions: CellPrediction[] = []
     for (let i = 0; i < opts.totalSlots; i++) {
@@ -791,40 +1220,257 @@ export class PlateMatcherRecognizer implements Recognizer {
         predictions.push(emptyPrediction(i))
         continue
       }
-      const hits = this.matchCell(cells[i], info, plateOccupied, plateEmpty, scales)
-      if (!hits.length) {
+      const best = this.matchCell(cells[i], info, plateOccupied, plateEmpty, baseScales, null, OFFS, true, true)
+      // Model comparison: score <= 0 means the best composite explains the
+      // cell no better than the bare plate, so "no item" is the winning
+      // hypothesis. Without the prefilter this is what keeps junk blobs
+      // (overlay text on empty cells) from matching some tiny sprite — the
+      // old code only escaped those by luck, when every locked-scale sprite
+      // happened to be unplaceable. The boundary is 0 by construction, not a
+      // tuned constant. Applied only here: the grid scorer keeps summing raw
+      // scores so misalignment still shows up as negative contributions.
+      if (!best || best.score <= 0) {
         predictions.push(emptyPrediction(i))
         continue
       }
-      predictions.push(this.postPass(cells[i], info, scales, hits, i))
+
+      let winner = best.variant
+      let confidence = best.score
+      let ranked = best.top
+
+      if (lossless) {
+        const exact = this.exactRerank(img, prepared, i, info, best)
+        // Stage-2 identity/confidence stay byte-identical unless BAR+GAP fires.
+        if (exact?.overrode) {
+          winner = exact.variant
+          ranked = exact.top
+          confidence = exact.frac
+        }
+      }
+
+      const v = this.variants[winner]
+      predictions.push({
+        slotIndex: i,
+        matchedValue: v.value,
+        type: v.type,
+        rotation: v.rotation,
+        confidence,
+        candidates: this.toCandidates(ranked, winner, confidence),
+      })
     }
     return predictions
   }
 
   /**
    * Total analysis-by-synthesis score over the occupied cells, used ONLY as a
-   * grid-calibration objective. Deliberately cheaper than `recognize`: fewer
-   * prefilter candidates and no offset search. It must never feed predictions.
+   * grid-calibration objective. Deliberately cheaper than `recognize`: one
+   * scale per variant and no offset search. It must never feed predictions.
+   * (Summing the raw un-normalized gain instead was measured and rejected: a
+   * misaligned grid borrows fragments of two icons per cell and explains MORE
+   * total deviation than the truth — 765k vs 664k on 5.png.)
    */
   scoreGrid(img: RGBAImage, opts: RecognizeOptions): number {
-    const { cells, infos, plateOccupied, plateEmpty, scales } = this.prepare(img, opts)
+    const g = opts.grid
+    const key = this.gridKey(opts)
+    let memo = this.scoreMemo.get(img)
+    if (!memo) {
+      memo = new Map()
+      this.scoreMemo.set(img, memo)
+    }
+    const hit = memo.get(key)
+    if (hit !== undefined) return hit
+
+    // Square-cell physics guard (§9-G) — see SCORER_PITCH_RATIO_*.
+    if (g) {
+      const ratio = g.gridHeight / opts.rows / (g.gridWidth / opts.cols)
+      if (ratio < SCORER_PITCH_RATIO_LO || ratio > SCORER_PITCH_RATIO_HI) {
+        memo.set(key, -1e9)
+        return -1e9
+      }
+    }
+
+    const { cells, infos, plateOccupied, plateEmpty, baseScales } = this.prepare(img, opts, false)
 
     let total = 0
     for (let i = 0; i < opts.totalSlots; i++) {
       const info = infos[i]
       if (!info) continue
-      const hits = this.matchCell(
+      const best = this.matchCell(
         cells[i],
         info,
         plateOccupied,
         plateEmpty,
-        scales,
-        SCORER_TOPK,
-        SCORER_OFFS
+        baseScales,
+        SCORER_SLACK,
+        SCORER_OFFS,
+        false
       )
-      if (hits.length) total += hits[0].score
+      if (best) total += best.score
     }
+    memo.set(key, total)
     return total
+  }
+
+  private toCandidates(
+    ranked: { variant: number; score: number }[],
+    winner: number,
+    winnerScore: number
+  ): CellPrediction['candidates'] {
+    const out: NonNullable<CellPrediction['candidates']> = []
+    const seen = new Set<string>()
+    const push = (j: number, score: number) => {
+      const v = this.variants[j]
+      const key = v.value + '|' + v.type + '|' + v.rotation
+      if (seen.has(key)) return
+      seen.add(key)
+      out.push({ value: v.value, type: v.type, rotation: v.rotation, score })
+    }
+    push(winner, winnerScore)
+    for (const t of ranked) {
+      if (out.length >= 3) break
+      push(t.variant, t.score)
+    }
+    return out
+  }
+
+  /**
+   * Pixel-exact re-rank in ORIGINAL screenshot space (roadmap 6).
+   * Stage-2 top-K with native art are NN-upscaled by S_SCREEN and scored by
+   * the fraction of opaque pixels that equal the source RGB exactly.
+   */
+  private exactRerank(
+    img: RGBAImage,
+    prep: PreparedGrid,
+    slot: number,
+    info: CellInfo,
+    stage2: MatchHit
+  ): { variant: number; frac: number; top: { variant: number; score: number }[]; overrode: boolean } | null {
+    const { sScreen, originX, originY, pitchX, pitchY, margin, cols } = prep
+    const r = Math.floor(slot / cols)
+    const c = slot % cols
+    const cellX = originX + c * pitchX
+    const cellY = originY + r * pitchY
+    const cellL = Math.trunc(cellX + margin)
+    const cellT = Math.trunc(cellY + margin)
+    const cellR = Math.trunc(cellX + pitchX - margin)
+    const cellB = Math.trunc(cellY + pitchY - margin)
+    if (cellR <= cellL || cellB <= cellT) return null
+
+    const srcH = cellB - cellT
+    const srcW = cellR - cellL
+    const ys = nearestIndexTable(srcH, CELL)
+    let minValid = srcH
+    for (let y = TOPCUT; y < CELL; y++) if (ys[y] < minValid) minValid = ys[y]
+    const validY0 = cellT + minValid
+    const nuis = info.nMasked ? this.nuisanceSourceMask(info.nuisance, srcW, srcH) : null
+
+    const pool: number[] = []
+    const seen = new Uint8Array(this.variants.length)
+    const consider = (j: number) => {
+      if (j < 0 || seen[j] || !this.variants[j].nativeArt) return
+      seen[j] = 1
+      pool.push(j)
+    }
+    consider(stage2.variant)
+    for (const t of stage2.top) consider(t.variant)
+    if (pool.length > 0) {
+      const wanted = new Set<string>()
+      for (const j of pool) wanted.add(this.variants[j].value)
+      for (let j = 0; j < this.variants.length; j++) {
+        if (wanted.has(this.variants[j].value)) consider(j)
+      }
+    }
+
+    const cxSrc = cellL + (info.cx / CELL) * srcW
+    const cySrc = cellT + (info.cy / CELL) * srcH
+    const winnerHasArt = !!this.variants[stage2.variant]?.nativeArt
+    const expand = stage2.score < EXACT_EXPAND_SCORE || !winnerHasArt
+    if (expand) {
+      for (let j = 0; j < this.variants.length; j++) {
+        if (seen[j] || !this.variants[j].nativeArt) continue
+        const patch = this.exactAt(j, sScreen)
+        if (!patch) continue
+        const oxC = Math.round(cxSrc - 0.5 * patch.width)
+        const oyC = Math.round(cySrc - 0.5 * patch.height)
+        const ox0 = Math.round(cellL + (srcW - patch.width) / 2)
+        const oy0 = Math.round(cellT + (srcH - patch.height) / 2)
+        const fC = exactFractionAt(
+          img, patch, oxC, oyC, cellL, cellT, cellR, cellB, validY0, nuis, cellL, cellT, srcW, EXACT_SEED_KEEP
+        )
+        const f0 = exactFractionAt(
+          img, patch, ox0, oy0, cellL, cellT, cellR, cellB, validY0, nuis, cellL, cellT, srcW, EXACT_SEED_KEEP
+        )
+        if (Math.max(fC, f0) >= EXACT_SEED_KEEP) consider(j)
+      }
+    }
+    if (pool.length === 0) return null
+
+    let bestJ = -1
+    let bestF = -1
+    let secondF = -1
+    const fracs = new Float64Array(this.variants.length)
+    fracs.fill(-1)
+    for (const j of pool) {
+      const patch = this.exactAt(j, sScreen)
+      if (!patch) continue
+      const ox = Math.round(cxSrc - 0.5 * patch.width)
+      const oy = Math.round(cySrc - 0.5 * patch.height)
+      const f = searchExact(
+        img,
+        patch,
+        ox,
+        oy,
+        EXACT_WINDOW,
+        cellL,
+        cellT,
+        cellR,
+        cellB,
+        validY0,
+        nuis,
+        cellL,
+        cellT,
+        srcW
+      )
+      fracs[j] = f
+      if (f > bestF) {
+        secondF = bestF
+        bestF = f
+        bestJ = j
+      } else if (f > secondF) {
+        secondF = f
+      }
+    }
+    if (bestJ < 0) return null
+
+    const ranked = pool
+      .filter((j) => fracs[j] >= 0)
+      .sort((a, b) => fracs[b] - fracs[a] || a - b)
+      .map((j) => ({ variant: j, score: fracs[j] }))
+
+    const overrode =
+      bestJ !== stage2.variant && bestF >= EXACT_BAR && bestF - Math.max(secondF, 0) >= EXACT_GAP
+    return {
+      variant: overrode ? bestJ : stage2.variant,
+      frac: bestF,
+      top: ranked,
+      overrode,
+    }
+  }
+
+  /** Map 64×64 CELL nuisance onto source-cell pixels via the same NN table as cropCellNearest. */
+  private nuisanceSourceMask(nuis64: Uint8Array, srcW: number, srcH: number): Uint8Array {
+    const xs = nearestIndexTable(srcW, CELL)
+    const ys = nearestIndexTable(srcH, CELL)
+    const out = new Uint8Array(srcW * srcH)
+    for (let y = 0; y < CELL; y++) {
+      const sy = ys[y]
+      const row = sy * srcW
+      const nRow = y * CELL
+      for (let x = 0; x < CELL; x++) {
+        if (nuis64[nRow + x]) out[row + xs[x]] = 1
+      }
+    }
+    return out
   }
 
   private plateFor(
@@ -852,504 +1498,165 @@ export class PlateMatcherRecognizer implements Recognizer {
     info: CellInfo,
     plateOccupied: Float32Array | null,
     plateEmpty: Float32Array | null,
-    scales: number[],
-    topk: number = TOPK,
-    offs: number[] = OFFS
-  ): { variant: number; score: number }[] {
+    baseScales: Int32Array,
+    slack: readonly number[] | null = null,
+    offs: readonly number[] = OFFS,
+    recenter: boolean = true,
+    collectTop: boolean = false
+  ): MatchHit | null {
     const plate = this.plateFor(cell, plateOccupied, plateEmpty)
-    let dy = pyRound(CELL / 2 - info.cy)
-    let dx = pyRound(CELL / 2 - info.cx)
-    let fgf = shiftToFloat(info.fg, dy, dx)
-    let valf = shiftValidToFloat(dy, dx)
+    // Recognition recentres the foreground on its centroid to absorb sub-cell
+    // misalignment. The grid scorer does not (recenter=false): its whole job
+    // is to measure alignment, and recentring launders a misaligned cell's
+    // borrowed fragment of a neighbour's icon into a clean match (measured on
+    // 5.png — with recentring the scorer ranked a grid ~5px off above truth).
+    const dy = recenter ? pyRound(CELL / 2 - info.cy) : 0
+    const dx = recenter ? pyRound(CELL / 2 - info.cx) : 0
+    const nfg = dy === 0 && dx === 0 ? info.n : countShiftedFg(info.fg, dy, dx)
+    if (nfg < MIN_SHIFTED_FG) return null
 
-    let nfg = 0
-    for (let p = 0; p < CELL_PX; p++) nfg += fgf[p]
-    if (nfg < MIN_SHIFTED_FG) {
-      const local = analyzeCellLocal(cell)
-      if (!local) return []
-      dy = pyRound(CELL / 2 - local.cy)
-      dx = pyRound(CELL / 2 - local.cx)
-      fgf = shiftToFloat(local.fg, dy, dx)
-      valf = shiftValidToFloat(dy, dx)
-      nfg = 0
-      for (let p = 0; p < CELL_PX; p++) nfg += fgf[p]
-      if (nfg < MIN_SHIFTED_FG) return []
-    }
-
-    // --- stage 1: multi-scale IoU prefilter (never single-scale, PLAN §10-2) ---
+    // Every variant is scored — there is no prefilter. The old multi-scale IoU
+    // funnel at locked-window scales was the single largest error source (31
+    // of 50 wrong cells, §9-G), and re-measuring it at each variant's own
+    // deterministic scale still lost 40/140 truths at TOPK=96: fg
+    // under-extraction on dark icons collapses the overlap ranking. The full
+    // sweep costs ~0.15s per cell and is simply correct.
+    // A null `slack` means per-variant: SLACK normally, LOWCONF_SLACK when the
+    // catalog could only guess the sprite's k. The scorer passes an explicit
+    // single-scale slack instead.
     const nv = this.variants.length
-    const iou = new Float64Array(nv)
-    const order = new Int32Array(nv)
-    const candidates = new Set<number>()
-    for (const s of scales) {
-      const bank = this.spritesAt(s)
-      const o65 = ((CELL - s) >> 1) * (CELL + 1)
-      for (let j = 0; j < nv; j++) {
-        const rel = bank[j].maskRel
-        let inter = 0
-        let area = 0
-        for (let k = 0; k < rel.length; k++) {
-          const p = o65 + rel[k]
-          inter += fgf[p]
-          area += valf[p]
-        }
-        const union = area + nfg - inter
-        iou[j] = inter / Math.max(union, 1e-6)
-        order[j] = j
-      }
-      const sorted = Array.from(order).sort((a, b) => iou[b] - iou[a])
-      for (let k = 0; k < Math.min(topk, nv); k++) candidates.add(sorted[k])
-    }
-    if (candidates.size === 0) return []
 
-    // --- stage 2: analysis-by-synthesis against the learned plate ---
-    const D = new Float32Array(CELL_PX)
+    // --- analysis-by-synthesis against the learned plate ---
+    // Integer cell RGB + float64 D for the opaque majority; float packed buffers
+    // remain for the blended minority (alpha composite is not integer).
+    const C = packedCell
+    const P = packedPlate
+    const pack = cellPack
+    const D = cellD
+    const nuis = info.nuisance
+    const nMasked = info.nMasked
     let dsum = 0
+    D.fill(0, 0, VALID_FROM)
     for (let p = VALID_FROM; p < CELL_PX; p++) {
       const p3 = p * 3
-      const d =
-        Math.abs(cell[p3] - plate[p3]) +
-        Math.abs(cell[p3 + 1] - plate[p3 + 1]) +
-        Math.abs(cell[p3 + 2] - plate[p3 + 2])
+      const p4 = p * 4
+      const cr = cell[p3]
+      const cg = cell[p3 + 1]
+      const cb = cell[p3 + 2]
+      const pr = plate[p3]
+      const pg = plate[p3 + 1]
+      const pb = plate[p3 + 2]
+      C[p4] = cr
+      C[p4 + 1] = cg
+      C[p4 + 2] = cb
+      P[p4] = pr
+      P[p4 + 1] = pg
+      P[p4 + 2] = pb
+      if (nuis[p]) {
+        pack[p] = 0
+        C[p4 + 3] = 0
+        D[p] = 0
+        continue
+      }
+      pack[p] = cr | (cg << 8) | (cb << 16)
+      const d = Math.abs(cr - pr) + Math.abs(cg - pg) + Math.abs(cb - pb)
+      C[p4 + 3] = d
       D[p] = d
       dsum += d
     }
-    const base = Math.max(dsum / N_VALID, 1e-6)
+    const nValid = Math.max(N_VALID - nMasked, 1)
+    const base = Math.max(dsum / nValid, 1e-6)
 
     const ccy = -dy
     const ccx = -dx
-    const cset = Array.from(candidates).sort((a, b) => a - b)
-    const bestByVariant = new Map<number, number>()
-    let bestScore = -1e9
+    let bestDelta = Infinity
     let bestVariant = -1
+    const variants = this.variants
+    const varDelta = this.varDelta
+    if (collectTop) varDelta.fill(Infinity)
 
-    for (const s of scales) {
-      const bank = this.spritesAt(s)
-      const o = (CELL - s) >> 1
-      for (const j of cset) {
-        const sp = bank[j]
-        const n = sp.off.length
-        for (const oy of offs) {
-          const y0 = o + ccy + oy
+    for (let j = 0; j < nv; j++) {
+      const baseScale = baseScales[j]
+      const slk = slack ?? (variants[j].uncertain ? LOWCONF_SLACK : SLACK)
+      let prevScale = -1
+      for (let si = 0; si < slk.length; si++) {
+        let s = baseScale + slk[si]
+        if (s < MIN_SCALE) s = MIN_SCALE
+        else if (s > MAX_SCALE) s = MAX_SCALE
+        if (s === prevScale) continue // slack is ascending, so clamps dedup here
+        prevScale = s
+        const sp = this.spriteAt(j, s)
+        const offO = sp.offO
+        const rgbO = sp.rgbO
+        const nO = offO.length
+        const offB = sp.offB
+        const apmB = sp.apmB
+        const nB = offB.length
+        const o = (CELL - s) >> 1
+        for (let oi = 0; oi < offs.length; oi++) {
+          const y0 = o + ccy + offs[oi]
           if (y0 < 0 || y0 + s > CELL) continue
-          for (const ox of offs) {
-            const x0 = o + ccx + ox
+          for (let oxi = 0; oxi < offs.length; oxi++) {
+            const x0 = o + ccx + offs[oxi]
             if (x0 < 0 || x0 + s > CELL) continue
             const anchor = y0 * CELL + x0
+            // Both offset lists are ascending, so pixels landing above the
+            // valid region (composite error and D both 0 there) form a prefix
+            // — binary search past it instead of branching on every pixel.
+            const cut = VALID_FROM - anchor
 
-            let delta = 0
-            for (let k = 0; k < n; k++) {
-              const p = anchor + sp.off[k]
-              if (p < VALID_FROM) continue // invalid region: composite error and D are both 0
-              const a = sp.ia[k]
-              const p3 = p * 3
-              const k3 = k * 3
-              const dr = cell[p3] - (plate[p3] * a + sp.pm[k3])
-              const dg = cell[p3 + 1] - (plate[p3 + 1] * a + sp.pm[k3 + 1])
-              const db = cell[p3 + 2] - (plate[p3 + 2] * a + sp.pm[k3 + 2])
+            const k0 = cut > 0 ? lowerBoundInt32(offO, nO, cut) : 0
+            let delta = nMasked
+              ? opaqueDeltaNuis(anchor, k0, nO, offO, rgbO, pack, D, nuis)
+              : opaqueDelta(anchor, k0, nO, offO, rgbO, pack, D)
+
+            let kB = cut > 0 ? lowerBoundInt32(offB, nB, cut) : 0
+            for (; kB < nB; kB++) {
+              const p = anchor + offB[kB]
+              if (nMasked && nuis[p]) continue
+              const p4 = p * 4
+              const k4 = kB * 4
+              const a = apmB[k4]
+              const dr = C[p4] - (P[p4] * a + apmB[k4 + 1])
+              const dg = C[p4 + 1] - (P[p4 + 1] * a + apmB[k4 + 2])
+              const db = C[p4 + 2] - (P[p4 + 2] * a + apmB[k4 + 3])
               delta +=
-                (dr < 0 ? -dr : dr) + (dg < 0 ? -dg : dg) + (db < 0 ? -db : db) - D[p]
+                (dr < 0 ? -dr : dr) + (dg < 0 ? -dg : dg) + (db < 0 ? -db : db) - C[p4 + 3]
             }
 
-            const score = 1 - (dsum + delta) / N_VALID / base
-            const prev = bestByVariant.get(j)
-            if (prev === undefined || score > prev) bestByVariant.set(j, score)
-            if (score > bestScore) {
-              bestScore = score
+            // score = 1 - (dsum+delta)/(nValid*base) is strictly decreasing in
+            // delta (base > 0), so the argmax-score is the argmin-delta.
+            if (delta < bestDelta) {
+              bestDelta = delta
               bestVariant = j
             }
+            if (collectTop && delta < varDelta[j]) varDelta[j] = delta
           }
         }
       }
     }
 
-    if (bestVariant < 0) return []
-    // Top-1 is unchanged. Return a wider list so postPass can inject type peers.
-    return Array.from(bestByVariant.entries())
-      .map(([variant, score]) => ({ variant, score }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 16)
-  }
-
-  /**
-   * Second pass after the frozen primary matcher: lookalike rerank, then
-   * low-confidence reject. Never used by scoreGrid.
-   */
-  private postPass(
-    cell: Float32Array,
-    info: CellInfo,
-    scales: number[],
-    hits: Hit[],
-    slotIndex: number
-  ): CellPrediction {
-    const headHits = hits.slice(0, 5)
-    const seenVal = new Set<string>()
-    const voteTypes: ItemTypeVote[] = []
-    for (const h of headHits) {
-      const tv = this.variants[h.variant]
-      if (seenVal.has(tv.value)) continue
-      seenVal.add(tv.value)
-      voteTypes.push(tv.type)
-    }
-    const vote = majorityType(voteTypes)
-
-    // Never promote before the fine cue: that replaced correct weak artifacts
-    // (six_leaf_clover, black_planet) with a tablet, then a small in-group
-    // delta locked the wrong slab in.
-    const top = hits[0]
-    const topV = this.variants[top.variant]
-    const peer = this.peerForInject(headHits, topV.type, vote)
-    const group = pickInjectGroup(topV.value, topV.type, top.score, peer, vote)
-    const ownGroup = pickRerankGroup(topV.value, null, 1)
-    const useGroup = group ?? ownGroup
-
-    // IoU peers only when the type vote actually disagrees. Doing this for
-    // every weak artifact dragged six_leaf_clover into the slab family.
-    const iouType: ItemTypeVote | null =
-      vote && vote !== topV.type ? vote : null
-    let extra = iouType ? this.topIouOfType(info, scales, iouType, 8) : []
-    // Compactness / bbox-fill says "maybe tablet": inject the small slab set
-    // into the second pass. Clover is fill=0.676 / compact=0.310 so it does
-    // not fire (measured). These winners are already weak artifacts — use
-    // FINE_SWAP_DELTA, not the outsider 0.08 (that left exit/flag stuck).
-    const compactInject = shouldInjectSmallSlabs(
-      topV.type,
-      top.score,
-      isTabletLikeShape(fgShape(info.fg))
-    )
-    if (compactInject) {
-      extra = extra.concat(this.bestIouPerValue(info, scales, SMALL_SLAB_SET))
-    }
-
-    let ordered = hits.slice(0, 5)
-    let skipReject = false
-    if (useGroup || extra.length) {
-      const outsider = !ownGroup && !compactInject
-      const reranked = this.rerankGroup(
-        cell,
-        info,
-        scales,
-        hits,
-        useGroup ?? new Set<string>(),
-        extra,
-        outsider
-      )
-      ordered = reranked.hits
-      // A foreign-family swap on junk (balisong→honor) must still be rejectable.
-      skipReject = reranked.swapped && !outsider
-    }
-
-    const best = ordered[0]
-    const v = this.variants[best.variant]
-    const candidates = ordered.map((h) => {
-      const tv = this.variants[h.variant]
-      return { value: tv.value, type: tv.type, rotation: tv.rotation, confidence: h.score }
-    })
-    if (shouldReject(best.score, ordered[1]?.score, skipReject, v.value)) {
-      return emptyRejected(slotIndex, best.score, candidates)
-    }
-    return {
-      slotIndex,
-      matchedValue: v.value,
-      type: v.type,
-      rotation: v.rotation,
-      confidence: best.score,
-      candidates,
-    }
-  }
-
-  /** Best opposite-type (or same-type lookalike) value already in the hit list. */
-  private peerForInject(
-    hits: Hit[],
-    winnerType: ItemTypeVote,
-    vote: ItemTypeVote | null
-  ): string | null {
-    if (vote && vote !== winnerType) {
-      for (const h of hits) {
-        const v = this.variants[h.variant]
-        if (v.type === vote) return v.value
-      }
-    }
-    // Weak artifact with a lookalike tablet already in the top-5 (exit @ 5th).
-    if (winnerType === 'ARTIFACT') {
-      for (const h of hits) {
-        const v = this.variants[h.variant]
-        if (v.type === 'TABLET' && confusableSet(v.value)) return v.value
-      }
-    }
-    return null
-  }
-
-  /** Top-k IoU variants of one type. Cheap mask overlap; does not change primary scores. */
-  private topIouOfType(
-    info: CellInfo,
-    scales: number[],
-    type: ItemTypeVote | null,
-    k: number
-  ): number[] {
-    if (!type) return []
-    const dy = pyRound(CELL / 2 - info.cy)
-    const dx = pyRound(CELL / 2 - info.cx)
-    const fgf = shiftToFloat(info.fg, dy, dx)
-    const valf = shiftValidToFloat(dy, dx)
-    let nfg = 0
-    for (let p = 0; p < CELL_PX; p++) nfg += fgf[p]
-    if (nfg < 8) return []
-
-    const best = new Map<number, number>()
-    const nv = this.variants.length
-    for (const s of scales) {
-      const bank = this.spritesAt(s)
-      const o65 = ((CELL - s) >> 1) * (CELL + 1)
-      for (let j = 0; j < nv; j++) {
-        if (this.variants[j].type !== type) continue
-        const rel = bank[j].maskRel
-        let inter = 0
-        let area = 0
-        for (let t = 0; t < rel.length; t++) {
-          const p = o65 + rel[t]
-          inter += fgf[p]
-          area += valf[p]
+    if (bestVariant < 0) return null
+    const bestScore = 1 - (dsum + bestDelta) / nValid / base
+    const top: { variant: number; score: number }[] = []
+    if (collectTop) {
+      const nvTop = variants.length
+      const taken = new Uint8Array(nvTop)
+      const kMax = Math.min(EXACT_TOPK, nvTop)
+      for (let t = 0; t < kMax; t++) {
+        let bj = -1
+        let bd = Infinity
+        for (let j = 0; j < nvTop; j++) {
+          if (taken[j] || varDelta[j] >= bd) continue
+          bd = varDelta[j]
+          bj = j
         }
-        const union = area + nfg - inter
-        const iou = inter / Math.max(union, 1e-6)
-        const prev = best.get(j)
-        if (prev === undefined || iou > prev) best.set(j, iou)
+        if (bj < 0 || bd === Infinity) break
+        taken[bj] = 1
+        top.push({ variant: bj, score: 1 - (dsum + bd) / nValid / base })
       }
     }
-    return Array.from(best.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, k)
-      .map(([j]) => j)
-  }
-
-  /** Best-IoU rotation of each value. Guarantees every small slab is scored. */
-  private bestIouPerValue(info: CellInfo, scales: number[], values: Set<string>): number[] {
-    if (values.size === 0) return []
-    const dy = pyRound(CELL / 2 - info.cy)
-    const dx = pyRound(CELL / 2 - info.cx)
-    const fgf = shiftToFloat(info.fg, dy, dx)
-    const valf = shiftValidToFloat(dy, dx)
-    let nfg = 0
-    for (let p = 0; p < CELL_PX; p++) nfg += fgf[p]
-    if (nfg < 8) return []
-
-    const bestIou = new Map<string, { j: number; iou: number }>()
-    const nv = this.variants.length
-    for (const s of scales) {
-      const bank = this.spritesAt(s)
-      const o65 = ((CELL - s) >> 1) * (CELL + 1)
-      for (let j = 0; j < nv; j++) {
-        const val = this.variants[j].value
-        if (!values.has(val)) continue
-        const rel = bank[j].maskRel
-        let inter = 0
-        let area = 0
-        for (let t = 0; t < rel.length; t++) {
-          const p = o65 + rel[t]
-          inter += fgf[p]
-          area += valf[p]
-        }
-        const iou = inter / Math.max(area + nfg - inter, 1e-6)
-        const prev = bestIou.get(val)
-        if (!prev || iou > prev.iou) bestIou.set(val, { j, iou })
-      }
-    }
-    return Array.from(bestIou.values()).map((x) => x.j)
-  }
-
-  private iouByVariant(info: CellInfo, scales: number[], idxs: number[]): Map<number, number> {
-    const dy = pyRound(CELL / 2 - info.cy)
-    const dx = pyRound(CELL / 2 - info.cx)
-    const fgf = shiftToFloat(info.fg, dy, dx)
-    const valf = shiftValidToFloat(dy, dx)
-    let nfg = 0
-    for (let p = 0; p < CELL_PX; p++) nfg += fgf[p]
-    const out = new Map<number, number>()
-    if (nfg < 8) {
-      for (const j of idxs) out.set(j, 0)
-      return out
-    }
-    for (const s of scales) {
-      const bank = this.spritesAt(s)
-      const o65 = ((CELL - s) >> 1) * (CELL + 1)
-      for (const j of idxs) {
-        const rel = bank[j].maskRel
-        let inter = 0
-        let area = 0
-        for (let t = 0; t < rel.length; t++) {
-          const p = o65 + rel[t]
-          inter += fgf[p]
-          area += valf[p]
-        }
-        const iou = inter / Math.max(area + nfg - inter, 1e-6)
-        const prev = out.get(j)
-        if (prev === undefined || iou > prev) out.set(j, iou)
-      }
-    }
-    return out
-  }
-
-  private rerankGroup(
-    cell: Float32Array,
-    info: CellInfo,
-    scales: number[],
-    hits: Hit[],
-    group: Set<string>,
-    extraIdxs: number[] = [],
-    outsider = false
-  ): { hits: Hit[]; swapped: boolean } {
-    this.prepareCellFine(cell, info)
-    const dy = pyRound(CELL / 2 - info.cy)
-    const dx = pyRound(CELL / 2 - info.cx)
-    const family = isFamilyGroup(group)
-
-    const groupIdxs: number[] = []
-    for (let j = 0; j < this.variants.length; j++) {
-      if (group.has(this.variants[j].value)) groupIdxs.push(j)
-    }
-    const groupSet = new Set(groupIdxs)
-    for (const j of extraIdxs) groupSet.add(j)
-
-    const fine = new Map<number, number>()
-    const scoreOne = (j: number) => {
-      if (!fine.has(j)) fine.set(j, this.fineScoreVariant(j, scales, dy, dx, family))
-    }
-    scoreOne(hits[0].variant)
-    for (const j of groupIdxs) scoreOne(j)
-    for (const j of extraIdxs) scoreOne(j)
-
-    const winnerFine = fine.get(hits[0].variant) ?? -1
-    const iou = outsider ? this.iouByVariant(info, scales, [...groupSet, hits[0].variant]) : null
-    const rankOf = (j: number) => {
-      const f = fine.get(j) ?? -1
-      if (!iou) return f
-      return 0.7 * f + 0.3 * (iou.get(j) ?? 0)
-    }
-    let bestJ = hits[0].variant
-    let bestR = rankOf(bestJ)
-    for (const j of groupSet) {
-      const r = rankOf(j)
-      if (r > bestR) {
-        bestR = r
-        bestJ = j
-      }
-    }
-
-    const delta = outsider ? FINE_OUTSIDER_DELTA : family ? FINE_FAMILY_DELTA : FINE_SWAP_DELTA
-    const swapped = bestJ !== hits[0].variant && shouldSwap(winnerFine, fine.get(bestJ) ?? -1, delta)
-    const winnerVariant = swapped ? bestJ : hits[0].variant
-    const ordered = orderAfterRerank(hits, winnerVariant, groupSet, (j) => rankOf(j))
-    return { hits: ordered, swapped }
-  }
-
-  private prepareCellFine(cell: Float32Array, info?: CellInfo): void {
-    for (let p = 0; p < CELL_PX; p++) {
-      const p3 = p * 3
-      const r = cell[p3]
-      const g = cell[p3 + 1]
-      const b = cell[p3 + 2]
-      fineCellR[p] = r
-      fineCellG[p] = g
-      fineCellB[p] = b
-      fineCellGray[p] = 0.299 * r + 0.587 * g + 0.114 * b
-    }
-    boxBlur3(fineCellGray, fineBlurTmp, fineSprGray, CELL, CELL)
-    // fineSprGray is scratch for the blur tmp-tmp; write hp from gray - blur
-    // boxBlur3 wrote the blur into fineBlurTmp using fineSprGray as its tmp.
-    for (let p = 0; p < CELL_PX; p++) fineCellHp[p] = fineCellGray[p] - fineBlurTmp[p]
-    sobelMag(fineCellGray, fineCellMag, CELL, CELL)
-
-    fineCellFg.fill(0)
-    if (info) {
-      const dy = pyRound(CELL / 2 - info.cy)
-      const dx = pyRound(CELL / 2 - info.cx)
-      for (let p = 0; p < CELL_PX; p++) {
-        if (!info.fg[p]) continue
-        const y = (p / CELL) | 0
-        const x = p - y * CELL
-        const ny = y + dy
-        const nx = x + dx
-        if (ny < 0 || ny >= CELL || nx < 0 || nx >= CELL) continue
-        fineCellFg[ny * CELL + nx] = 1
-      }
-    }
-  }
-
-  private fineScoreVariant(
-    variant: number,
-    scales: number[],
-    dy: number,
-    dx: number,
-    family = false
-  ): number {
-    let best = -1
-    for (const s of scales) {
-      const sp = this.spritesAt(s)[variant]
-      const o = (CELL - s) >> 1
-      for (const oy of OFFS) {
-        const y0 = o - dy + oy
-        if (y0 < 0 || y0 + s > CELL) continue
-        for (const ox of OFFS) {
-          const x0 = o - dx + ox
-          if (x0 < 0 || x0 + s > CELL) continue
-          const score = this.fineScoreAt(sp, y0 * CELL + x0, family)
-          if (score > best) best = score
-        }
-      }
-    }
-    return best
-  }
-
-  private fineScoreAt(sp: Sprite, anchor: number, family = false): number {
-    fineSprGray.fill(0)
-    fineSprR.fill(0)
-    fineSprG.fill(0)
-    fineSprB.fill(0)
-    let n = 0
-    let nFg = 0
-    const nPix = sp.off.length
-    for (let k = 0; k < nPix; k++) {
-      const p = anchor + sp.off[k]
-      if (p < VALID_FROM || p >= CELL_PX) continue
-      const a = 1 - sp.ia[k]
-      if (a <= 0.5) continue
-      const k3 = k * 3
-      const r = sp.pm[k3] / a
-      const g = sp.pm[k3 + 1] / a
-      const b = sp.pm[k3 + 2] / a
-      fineSprR[p] = r
-      fineSprG[p] = g
-      fineSprB[p] = b
-      fineSprGray[p] = 0.299 * r + 0.587 * g + 0.114 * b
-      fineIdx[n++] = p
-      if (fineCellFg[p]) nFg++
-    }
-    if (n < 8) return -1
-    // Prefer FG∩sprite pixels when there are enough; else keep the sprite mask.
-    let useN = n
-    if (nFg >= 8) {
-      let w = 0
-      for (let i = 0; i < n; i++) {
-        const p = fineIdx[i]
-        if (fineCellFg[p]) fineIdx[w++] = p
-      }
-      useN = w
-    }
-    boxBlur3(fineSprGray, fineBlurTmp, fineSprHp, CELL, CELL)
-    for (let p = 0; p < CELL_PX; p++) fineSprHp[p] = fineSprGray[p] - fineBlurTmp[p]
-    sobelMag(fineSprGray, fineSprMag, CELL, CELL)
-    const color =
-      (nccMasked(fineCellR, fineSprR, fineIdx, useN) +
-        nccMasked(fineCellG, fineSprG, fineIdx, useN) +
-        nccMasked(fineCellB, fineSprB, fineIdx, useN)) /
-      3
-    const hp = nccMasked(fineCellHp, fineSprHp, fineIdx, useN)
-    const edge = nccMasked(fineCellMag, fineSprMag, fineIdx, useN)
-    spatialHueHist(fineCellR, fineCellG, fineCellB, fineIdx, useN, CELL, fineCellHue)
-    spatialHueHist(fineSprR, fineSprG, fineSprB, fineIdx, useN, CELL, fineSprHue)
-    const hue = histIntersection(fineCellHue, fineSprHue)
-    return family ? combineFamilyCues(color, hp, edge, hue) : combineFineCues(color, hp, edge, hue)
+    return { variant: bestVariant, score: bestScore, gain: -bestDelta, top }
   }
 }
 

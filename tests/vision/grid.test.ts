@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { calibrateGrid, type GridRect, type GridScorer } from '@/lib/vision/grid-calibrate'
-import { makeMatchScorer, PlateMatcherRecognizer } from '@/lib/vision/plate-matcher'
+import { PlateMatcherRecognizer } from '@/lib/vision/plate-matcher'
 import type { TemplateSource } from '@/lib/vision/types'
 import {
   aggregateCounts,
@@ -22,13 +22,24 @@ const FIXTURES = ['1.jpeg', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png'
  * at 156 because 7.png gained 5 and 5.png gained 4.
  */
 const AUTO_PER_FIXTURE: Record<string, { top1: number; overall: number }> = {
-  '1.jpeg': { top1: 5, overall: 5 },
-  '2.png': { top1: 14, overall: 30 },
-  '3.png': { top1: 11, overall: 28 },
-  '4.png': { top1: 7, overall: 25 },
-  '5.png': { top1: 17, overall: 22 },
-  '6.png': { top1: 17, overall: 18 },
-  '7.png': { top1: 22, overall: 28 },
+  // Raised to the numbers measured after the §9-G rework (per-sprite
+  // deterministic scales, prefilter removed, recenter-free grid scorer),
+  // then re-pinned after the round-3 label corrections (user-confirmed
+  // relabels of 10 cells in 3.png/5.png changed the yardstick itself).
+  // Raised after roadmap 4 (rendered-sprite harvest / depleted extras).
+  // 6.png auto 29/30 -> 28/29: roadmap 4 fix: contaminated-template flip removed
+  // (eternal_winter depleted no longer matches via baked-in red '-1/2' glyph
+  // on the auto-detected grid; hand grid still holds 28/29).
+  // roadmap 5: auto per-fixture floors held (140/201); fallback rose 176 -> 184.
+  // roadmap 6: exact re-rank on auto rects. 4.png 14/32 -> 15/33 (frozen_bow;
+  // defender still a transfer-margin miss on the auto crop). 6.png 28/29 -> 29/30.
+  '1.jpeg': { top1: 8, overall: 8 },
+  '2.png': { top1: 19, overall: 35 },
+  '3.png': { top1: 17, overall: 33 },
+  '4.png': { top1: 15, overall: 33 },
+  '5.png': { top1: 25, overall: 29 },
+  '6.png': { top1: 29, overall: 30 },
+  '7.png': { top1: 29, overall: 35 },
 }
 
 interface Row {
@@ -51,6 +62,20 @@ let templates: TemplateSource[] = []
 let recognizer: PlateMatcherRecognizer
 let scorer: GridScorer
 
+function sameRect(
+  a: { originX: number; originY: number; gridWidth: number; gridHeight: number } | null | undefined,
+  b: { originX: number; originY: number; gridWidth: number; gridHeight: number } | null | undefined
+): boolean {
+  return (
+    !!a &&
+    !!b &&
+    a.originX === b.originX &&
+    a.originY === b.originY &&
+    a.gridWidth === b.gridWidth &&
+    a.gridHeight === b.gridHeight
+  )
+}
+
 /**
  * The fixtures' `grid` values were themselves produced by centroid regression
  * plus a score sweep, so "distance to the fixture grid" is a circular metric.
@@ -62,7 +87,15 @@ describe('grid calibration', () => {
     templates = await loadAllTemplates()
     recognizer = new PlateMatcherRecognizer()
     await recognizer.loadTemplates(templates)
-    scorer = makeMatchScorer(templates, { rows: 6, cols: 6 })
+    // Same instance as the predictor: sprite cache + scoreGrid memo are shared,
+    // and the scorer lambda is exactly makeMatchScorer's body (rect.rows wins).
+    scorer = (img, rect) =>
+      recognizer.scoreGrid(img, {
+        rows: rect.rows,
+        cols: rect.cols,
+        totalSlots: rect.rows * rect.cols,
+        grid: rect,
+      })
   })
 
   for (const name of FIXTURES) {
@@ -70,7 +103,12 @@ describe('grid calibration', () => {
       const fixture = loadFixture(name)
       const img = await loadImage(resolveFixtureImage(fixture))
 
-      const base = { rows: fixture.rows, cols: fixture.cols, totalSlots: fixture.totalSlots }
+      const base = {
+        rows: fixture.rows,
+        cols: fixture.cols,
+        totalSlots: fixture.totalSlots,
+        lossless: name.endsWith('.png'),
+      }
 
       const handLabelled = score(
         await recognizer.recognize(img, { ...base, grid: fixture.grid }),
@@ -79,7 +117,9 @@ describe('grid calibration', () => {
 
       const detected = calibrateGrid(img, { cols: fixture.cols, rows: fixture.rows, scorer })
       expect(detected).not.toBeNull()
-      const auto = score(await recognizer.recognize(img, { ...base, grid: detected! }), fixture)
+      const auto = sameRect(detected, fixture.grid)
+        ? handLabelled
+        : score(await recognizer.recognize(img, { ...base, grid: detected! }), fixture)
       const min = AUTO_PER_FIXTURE[name]
       expect(auto.counts.top1Correct, `${name} auto top1`).toBeGreaterThanOrEqual(min.top1)
       expect(auto.counts.overallCorrect, `${name} auto overall`).toBeGreaterThanOrEqual(min.overall)
@@ -88,10 +128,11 @@ describe('grid calibration', () => {
       // isolates how much the match score is actually worth.
       const fallbackGrid = calibrateGrid(img, { cols: fixture.cols, rows: fixture.rows })
       expect(fallbackGrid).not.toBeNull()
-      const fallback = score(
-        await recognizer.recognize(img, { ...base, grid: fallbackGrid! }),
-        fixture
-      )
+      const fallback = sameRect(fallbackGrid, detected)
+        ? auto
+        : sameRect(fallbackGrid, fixture.grid)
+          ? handLabelled
+          : score(await recognizer.recognize(img, { ...base, grid: fallbackGrid! }), fixture)
 
       // The production call: the user never tells us the row count.
       const autoRows = calibrateGrid(img, { cols: fixture.cols, scorer })
@@ -117,12 +158,20 @@ describe('grid calibration', () => {
   })
 
   it('holds the end-to-end accuracy floor', () => {
+    // Measured after the §9-G rework + round-3 label corrections, then
+    // raised after roadmap 4: auto 141/202, fallback 177.
+    // Re-pinned after glyph-clean: auto 140/201, fallback 176.
+    // roadmap 4 fix: contaminated-template flip removed (6.png#12
+    // eternal_winter depleted on auto/fallback grids).
+    // roadmap 5: auto held 140/201; fallback 176 -> 184.
+    // roadmap 6: auto 140/201 -> 142/203 (4.png frozen_bow + 6.png);
+    // fallback 184 -> 195.
     const auto = aggregateCounts(rows.map((r) => r.auto.counts))
-    expect(auto.counts.overallCorrect).toBeGreaterThanOrEqual(156)
-    expect(auto.counts.top1Correct).toBeGreaterThanOrEqual(93)
+    expect(auto.counts.overallCorrect).toBeGreaterThanOrEqual(203)
+    expect(auto.counts.top1Correct).toBeGreaterThanOrEqual(142)
 
     const fallback = aggregateCounts(rows.map((r) => r.fallback.counts))
-    expect(fallback.counts.overallCorrect).toBeGreaterThanOrEqual(140)
+    expect(fallback.counts.overallCorrect).toBeGreaterThanOrEqual(195)
   })
 
   afterAll(() => {

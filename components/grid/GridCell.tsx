@@ -13,6 +13,8 @@ interface GridCellProps {
   effectValue: number | 'ignore' | undefined
   onDoubleClick: (slotIndex: number) => void
   onContextMenu: (e: React.MouseEvent, slotIndex: number) => void
+  onClick?: (slotIndex: number) => void
+  lowConfidence?: boolean
 }
 
 export default function GridCell({
@@ -21,6 +23,8 @@ export default function GridCell({
   effectValue,
   onDoubleClick,
   onContextMenu,
+  onClick,
+  lowConfidence,
 }: GridCellProps) {
   const { setNodeRef: setDropRef, isOver } = useDroppable({
     id: `cell-${slotIndex}`,
@@ -52,6 +56,7 @@ export default function GridCell({
         isDragging && 'opacity-40',
         !item && 'hover:bg-sephiria-grid',
       )}
+      onClick={() => onClick?.(slotIndex)}
       onDoubleClick={() => onDoubleClick(slotIndex)}
       onContextMenu={(e) => onContextMenu(e, slotIndex)}
     >
@@ -68,6 +73,12 @@ export default function GridCell({
         <div className="w-full h-full flex items-center justify-center">
           <span className="text-sephiria-border/40 text-xs select-none">{slotIndex + 1}</span>
         </div>
+      )}
+
+      {lowConfidence && (
+        <span className="absolute top-0.5 right-0.5 z-10 rounded bg-yellow-500 px-1 py-px text-[9px] font-bold leading-tight text-black pointer-events-none">
+          확인
+        </span>
       )}
 
       {/* Effect overlay */}

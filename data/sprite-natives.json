@@ -1,0 +1,6002 @@
+{
+  "generated": "2026-08-15",
+  "method": "phase-free lattice fit (PLAN 06 §9-G)",
+  "sprites": {
+    "absolute_ring": {
+      "file": "public/images/artifacts/absolute_ring.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        40
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        16,
+        16
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "academy_brigendin": {
+      "file": "public/images/artifacts/academy_brigendin.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "academy_fountain_pen": {
+      "file": "public/images/artifacts/academy_fountain_pen.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        26,
+        59
+      ],
+      "k": 2.4583,
+      "kResidual": null,
+      "native": [
+        11,
+        24
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "agbae_tree_fruit": {
+      "file": "public/images/artifacts/agbae_tree_fruit.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        46
+      ],
+      "k": 2.4948,
+      "kResidual": 0.5944,
+      "native": [
+        16,
+        18
+      ],
+      "method": "lattice"
+    },
+    "agma_projection_sword": {
+      "file": "public/images/artifacts/agma_projection_sword.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        63,
+        53
+      ],
+      "k": 2.5039,
+      "kResidual": 0.5697,
+      "native": [
+        25,
+        21
+      ],
+      "method": "lattice"
+    },
+    "ahmads_soul_powder": {
+      "file": "public/images/artifacts/ahmads_soul_powder.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        34,
+        41
+      ],
+      "k": 2.456,
+      "kResidual": 0.9273,
+      "native": [
+        14,
+        17
+      ],
+      "method": "lattice"
+    },
+    "alchemist_flask": {
+      "file": "public/images/artifacts/alchemist_flask.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        60,
+        54
+      ],
+      "k": 3.1695,
+      "kResidual": 0.9278,
+      "native": [
+        19,
+        17
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "alfonsos_horn": {
+      "file": "public/images/artifacts/alfonsos_horn.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        58,
+        43
+      ],
+      "k": 2.5217,
+      "kResidual": null,
+      "native": [
+        23,
+        17
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "amber": {
+      "file": "public/images/artifacts/amber.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        51
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "ambergris": {
+      "file": "public/images/artifacts/ambergris.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        36
+      ],
+      "k": 2.5625,
+      "kResidual": null,
+      "native": [
+        16,
+        14
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "amulet": {
+      "file": "public/images/artifacts/amulet.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        17,
+        27
+      ],
+      "k": 2.4545,
+      "kResidual": null,
+      "native": [
+        7,
+        11
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "amulet_of_aspiration": {
+      "file": "public/images/artifacts/amulet_of_aspiration.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        22
+      ],
+      "method": "lattice"
+    },
+    "amulet_of_power": {
+      "file": "public/images/artifacts/amulet_of_power.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        18,
+        30
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        7,
+        12
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "ancient_anvil": {
+      "file": "public/images/artifacts/ancient_anvil.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        46
+      ],
+      "k": 2.4422,
+      "kResidual": 0.9529,
+      "native": [
+        22,
+        19
+      ],
+      "method": "lattice"
+    },
+    "angry_potato": {
+      "file": "public/images/artifacts/angry_potato.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        34
+      ],
+      "k": 2.5714,
+      "kResidual": null,
+      "native": [
+        14,
+        13
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "archive_sun": {
+      "file": "public/images/artifacts/archive_sun.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        53
+      ],
+      "k": 2.4487,
+      "kResidual": 0.9404,
+      "native": [
+        17,
+        22
+      ],
+      "method": "lattice"
+    },
+    "arrow_lane": {
+      "file": "public/images/artifacts/arrow_lane.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "artificial_spirit": {
+      "file": "public/images/artifacts/artificial_spirit.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        66,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        26,
+        18
+      ],
+      "method": "lattice"
+    },
+    "ashen_planet": {
+      "file": "public/images/artifacts/ashen_planet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        24,
+        25
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        10,
+        10
+      ],
+      "method": "lattice"
+    },
+    "badge_of_devotion": {
+      "file": "public/images/artifacts/badge_of_devotion.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        34,
+        57
+      ],
+      "k": 2.4358,
+      "kResidual": 0.8895,
+      "native": [
+        14,
+        23
+      ],
+      "method": "lattice"
+    },
+    "balisong": {
+      "file": "public/images/artifacts/balisong.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        54
+      ],
+      "k": 2.4973,
+      "kResidual": 0.5824,
+      "native": [
+        12,
+        22
+      ],
+      "method": "lattice"
+    },
+    "begonia_flavor_pocket": {
+      "file": "public/images/artifacts/begonia_flavor_pocket.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        47
+      ],
+      "k": 2.4941,
+      "kResidual": 0.5765,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "bento": {
+      "file": "public/images/artifacts/bento.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        60,
+        44
+      ],
+      "k": 2.7273,
+      "kResidual": 0.9614,
+      "native": [
+        22,
+        16
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "berut_sickle": {
+      "file": "public/images/artifacts/berut_sickle.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        59,
+        61
+      ],
+      "k": 2.4981,
+      "kResidual": 0.5639,
+      "native": [
+        24,
+        24
+      ],
+      "method": "lattice"
+    },
+    "bishopric": {
+      "file": "public/images/artifacts/bishopric.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        16
+      ],
+      "method": "lattice"
+    },
+    "black_planet": {
+      "file": "public/images/artifacts/black_planet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        30,
+        29
+      ],
+      "k": 2.4417,
+      "kResidual": 0.9,
+      "native": [
+        12,
+        12
+      ],
+      "method": "lattice"
+    },
+    "black_scales": {
+      "file": "public/images/artifacts/black_scales.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        63,
+        43
+      ],
+      "k": 2.5054,
+      "kResidual": 0.5846,
+      "native": [
+        25,
+        17
+      ],
+      "method": "lattice"
+    },
+    "black_tea": {
+      "file": "public/images/artifacts/black_tea.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        18
+      ],
+      "method": "lattice"
+    },
+    "blessing": {
+      "file": "public/images/artifacts/blessing.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.4995,
+      "kResidual": 0.5432,
+      "native": [
+        22,
+        25
+      ],
+      "method": "lattice"
+    },
+    "bloodstone_earrings": {
+      "file": "public/images/artifacts/bloodstone_earrings.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        28,
+        53
+      ],
+      "k": 2.5142,
+      "kResidual": 0.619,
+      "native": [
+        11,
+        21
+      ],
+      "method": "lattice"
+    },
+    "bloodstone_ring": {
+      "file": "public/images/artifacts/bloodstone_ring.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        16
+      ],
+      "method": "lattice"
+    },
+    "blue_claws": {
+      "file": "public/images/artifacts/blue_claws.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        12,
+        16
+      ],
+      "method": "lattice"
+    },
+    "blue_pearl": {
+      "file": "public/images/artifacts/blue_pearl.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        18
+      ],
+      "method": "lattice"
+    },
+    "blue_planet": {
+      "file": "public/images/artifacts/blue_planet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        30
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        12
+      ],
+      "method": "lattice"
+    },
+    "blue_ring": {
+      "file": "public/images/artifacts/blue_ring.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        49
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "blue_wrist_guard": {
+      "file": "public/images/artifacts/blue_wrist_guard.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        53,
+        55
+      ],
+      "k": 2.5023,
+      "kResidual": 0.5697,
+      "native": [
+        21,
+        22
+      ],
+      "method": "lattice"
+    },
+    "brain": {
+      "file": "public/images/artifacts/brain.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        53
+      ],
+      "k": 2.5076,
+      "kResidual": 0.5944,
+      "native": [
+        15,
+        21
+      ],
+      "method": "lattice"
+    },
+    "brass_mirror_fragments": {
+      "file": "public/images/artifacts/brass_mirror_fragments.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        42
+      ],
+      "k": 2.439,
+      "kResidual": 0.8923,
+      "native": [
+        16,
+        17
+      ],
+      "method": "lattice"
+    },
+    "broken": {
+      "file": "public/images/artifacts/broken.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        50,
+        55
+      ],
+      "k": 2.5028,
+      "kResidual": 0.5719,
+      "native": [
+        20,
+        22
+      ],
+      "method": "lattice"
+    },
+    "broken_mirror": {
+      "file": "public/images/artifacts/broken_mirror.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        59,
+        71
+      ],
+      "k": 2.4981,
+      "kResidual": 0.5639,
+      "native": [
+        24,
+        28
+      ],
+      "method": "lattice"
+    },
+    "broken_sapphire": {
+      "file": "public/images/artifacts/broken_sapphire.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        40
+      ],
+      "k": 2.4507,
+      "kResidual": 0.9121,
+      "native": [
+        14,
+        16
+      ],
+      "method": "lattice"
+    },
+    "bronze_mirror": {
+      "file": "public/images/artifacts/bronze_mirror.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        48,
+        48
+      ],
+      "k": 2.5059,
+      "kResidual": 0.5765,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "calges_2": {
+      "file": "public/images/artifacts/calges_2.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        56
+      ],
+      "k": 2.5455,
+      "kResidual": null,
+      "native": [
+        14,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "chakram": {
+      "file": "public/images/artifacts/chakram.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        45,
+        45
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        18
+      ],
+      "method": "lattice"
+    },
+    "chintamani_stone": {
+      "file": "public/images/artifacts/chintamani_stone.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        47
+      ],
+      "k": 2.4941,
+      "kResidual": 0.5765,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "chiri": {
+      "file": "public/images/artifacts/chiri.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        38
+      ],
+      "k": 2.5091,
+      "kResidual": 0.5944,
+      "native": [
+        17,
+        15
+      ],
+      "method": "lattice"
+    },
+    "clay_tablet": {
+      "file": "public/images/artifacts/clay_tablet.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        46
+      ],
+      "k": 2.5556,
+      "kResidual": null,
+      "native": [
+        17,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "cloak_of_the_green": {
+      "file": "public/images/artifacts/cloak_of_the_green.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        53,
+        54
+      ],
+      "k": 2.4535,
+      "kResidual": 0.9404,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "cloth_armor": {
+      "file": "public/images/artifacts/cloth_armor.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        51
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "cloud_bottle": {
+      "file": "public/images/artifacts/cloud_bottle.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        41
+      ],
+      "k": 2.4986,
+      "kResidual": 0.531,
+      "native": [
+        14,
+        16
+      ],
+      "method": "lattice"
+    },
+    "cloud_iron_earrings": {
+      "file": "public/images/artifacts/cloud_iron_earrings.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        52
+      ],
+      "k": 2.4501,
+      "kResidual": 0.9088,
+      "native": [
+        19,
+        21
+      ],
+      "method": "lattice"
+    },
+    "cloud_seed_arrowhead": {
+      "file": "public/images/artifacts/cloud_seed_arrowhead.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        39
+      ],
+      "k": 2.4948,
+      "kResidual": 0.5944,
+      "native": [
+        12,
+        16
+      ],
+      "method": "lattice"
+    },
+    "cloud_shoulder_ornament": {
+      "file": "public/images/artifacts/cloud_shoulder_ornament.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        44
+      ],
+      "k": 2.4504,
+      "kResidual": 0.9088,
+      "native": [
+        19,
+        18
+      ],
+      "method": "lattice"
+    },
+    "cold_lock": {
+      "file": "public/images/artifacts/cold_lock.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        47
+      ],
+      "k": 2.447,
+      "kResidual": 0.9231,
+      "native": [
+        16,
+        19
+      ],
+      "method": "lattice"
+    },
+    "colorless_cube": {
+      "file": "public/images/artifacts/colorless_cube.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        34,
+        36
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        14
+      ],
+      "method": "lattice"
+    },
+    "combat_wizard_gloves": {
+      "file": "public/images/artifacts/combat_wizard_gloves.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        20,
+        22
+      ],
+      "method": "lattice"
+    },
+    "compression_band": {
+      "file": "public/images/artifacts/compression_band.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        61,
+        44
+      ],
+      "k": 2.4962,
+      "kResidual": 0.5846,
+      "native": [
+        24,
+        18
+      ],
+      "method": "lattice"
+    },
+    "courage_amulet": {
+      "file": "public/images/artifacts/courage_amulet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        50
+      ],
+      "k": 3.3685,
+      "kResidual": 0.958,
+      "native": [
+        13,
+        15
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "craving": {
+      "file": "public/images/artifacts/craving.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        58
+      ],
+      "k": 2.5071,
+      "kResidual": 0.5944,
+      "native": [
+        15,
+        23
+      ],
+      "method": "lattice"
+    },
+    "criton": {
+      "file": "public/images/artifacts/criton.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        18
+      ],
+      "method": "lattice"
+    },
+    "crossbow_quiver": {
+      "file": "public/images/artifacts/crossbow_quiver.webp",
+      "canvas": [
+        80,
+        82
+      ],
+      "bbox": [
+        54,
+        57
+      ],
+      "k": 2.4783,
+      "kResidual": null,
+      "native": [
+        22,
+        23
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "crystal_of_harmony": {
+      "file": "public/images/artifacts/crystal_of_harmony.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        45
+      ],
+      "k": 2.4737,
+      "kResidual": null,
+      "native": [
+        19,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "cursed_letter": {
+      "file": "public/images/artifacts/cursed_letter.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        42
+      ],
+      "k": 2.3214,
+      "kResidual": 0.7857,
+      "native": [
+        18,
+        18
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "defect_probe": {
+      "file": "public/images/artifacts/defect_probe.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        57,
+        57
+      ],
+      "k": 2.4783,
+      "kResidual": null,
+      "native": [
+        23,
+        23
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "diamond_badge": {
+      "file": "public/images/artifacts/diamond_badge.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        50,
+        36
+      ],
+      "k": 2.7268,
+      "kResidual": 0.8571,
+      "native": [
+        18,
+        13
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "discarded_gold_ring": {
+      "file": "public/images/artifacts/discarded_gold_ring.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        16
+      ],
+      "method": "lattice"
+    },
+    "dried_flower": {
+      "file": "public/images/artifacts/dried_flower.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        30,
+        43
+      ],
+      "k": 2.5048,
+      "kResidual": 0.6053,
+      "native": [
+        12,
+        17
+      ],
+      "method": "lattice"
+    },
+    "dull_drop": {
+      "file": "public/images/artifacts/dull_drop.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        46
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        18
+      ],
+      "method": "lattice"
+    },
+    "elastic_band": {
+      "file": "public/images/artifacts/elastic_band.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        37,
+        48
+      ],
+      "k": 2.5263,
+      "kResidual": null,
+      "native": [
+        15,
+        19
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "employment_sentence_coline": {
+      "file": "public/images/artifacts/employment_sentence_coline.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        53
+      ],
+      "k": 2.5062,
+      "kResidual": 0.5846,
+      "native": [
+        17,
+        21
+      ],
+      "method": "lattice"
+    },
+    "empty_handle": {
+      "file": "public/images/artifacts/empty_handle.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        49
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        18,
+        20
+      ],
+      "method": "lattice"
+    },
+    "endodits_questionnaire": {
+      "file": "public/images/artifacts/endodits_questionnaire.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        50,
+        40
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        16
+      ],
+      "method": "lattice"
+    },
+    "eternal_brazier": {
+      "file": "public/images/artifacts/eternal_brazier.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        58
+      ],
+      "k": 2.4559,
+      "kResidual": 0.9265,
+      "native": [
+        19,
+        24
+      ],
+      "method": "lattice"
+    },
+    "eternal_sun": {
+      "file": "public/images/artifacts/eternal_sun.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        39
+      ],
+      "k": 2.4505,
+      "kResidual": 0.9121,
+      "native": [
+        16,
+        16
+      ],
+      "method": "lattice"
+    },
+    "eternal_winter": {
+      "file": "public/images/artifacts/eternal_winter.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        32,
+        55
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        13,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "eye_crystal_necklace": {
+      "file": "public/images/artifacts/eye_crystal_necklace.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        48,
+        43
+      ],
+      "k": 2.5068,
+      "kResidual": 0.5846,
+      "native": [
+        19,
+        17
+      ],
+      "method": "lattice"
+    },
+    "fascinating_lure": {
+      "file": "public/images/artifacts/fascinating_lure.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        24,
+        41
+      ],
+      "k": 2.5625,
+      "kResidual": null,
+      "native": [
+        9,
+        16
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "firefly": {
+      "file": "public/images/artifacts/firefly.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        29,
+        36
+      ],
+      "k": 2.5714,
+      "kResidual": null,
+      "native": [
+        11,
+        14
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "fire_arrow": {
+      "file": "public/images/artifacts/fire_arrow.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "fire_bolt": {
+      "file": "public/images/artifacts/fire_bolt.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "fire_circus": {
+      "file": "public/images/artifacts/fire_circus.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "flag_of_encouragement": {
+      "file": "public/images/artifacts/flag_of_encouragement.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        37,
+        47
+      ],
+      "k": 2.4884,
+      "kResidual": 0.6392,
+      "native": [
+        15,
+        19
+      ],
+      "method": "lattice"
+    },
+    "flame": {
+      "file": "public/images/artifacts/flame.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        37
+      ],
+      "k": 2.4986,
+      "kResidual": 0.5944,
+      "native": [
+        17,
+        15
+      ],
+      "method": "lattice"
+    },
+    "flame_insect": {
+      "file": "public/images/artifacts/flame_insect.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        33
+      ],
+      "k": 2.5114,
+      "kResidual": 0.6061,
+      "native": [
+        17,
+        13
+      ],
+      "method": "lattice"
+    },
+    "flame_root": {
+      "file": "public/images/artifacts/flame_root.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        12,
+        16
+      ],
+      "method": "lattice"
+    },
+    "flame_sword": {
+      "file": "public/images/artifacts/flame_sword.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        64
+      ],
+      "k": 2.496,
+      "kResidual": 0.652,
+      "native": [
+        14,
+        26
+      ],
+      "method": "lattice"
+    },
+    "fluffy": {
+      "file": "public/images/artifacts/fluffy.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        51
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        20
+      ],
+      "method": "lattice"
+    },
+    "fluorescence": {
+      "file": "public/images/artifacts/fluorescence.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        51
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        20
+      ],
+      "method": "lattice"
+    },
+    "flux_mk2": {
+      "file": "public/images/artifacts/flux_mk2.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        52,
+        51
+      ],
+      "k": 2.452,
+      "kResidual": 0.9164,
+      "native": [
+        21,
+        21
+      ],
+      "method": "lattice"
+    },
+    "freezing_bug": {
+      "file": "public/images/artifacts/freezing_bug.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        28
+      ],
+      "k": 2.5171,
+      "kResidual": 0.619,
+      "native": [
+        15,
+        11
+      ],
+      "method": "lattice"
+    },
+    "frost_dagger": {
+      "file": "public/images/artifacts/frost_dagger.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "frost_guillotine": {
+      "file": "public/images/artifacts/frost_guillotine.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        53
+      ],
+      "k": 2.4518,
+      "kResidual": 0.9404,
+      "native": [
+        19,
+        22
+      ],
+      "method": "lattice"
+    },
+    "frozen_bow": {
+      "file": "public/images/artifacts/frozen_bow.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        51
+      ],
+      "k": 2.451,
+      "kResidual": 0.9205,
+      "native": [
+        21,
+        21
+      ],
+      "method": "lattice"
+    },
+    "frozen_egg": {
+      "file": "public/images/artifacts/frozen_egg.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        48
+      ],
+      "k": 2.5029,
+      "kResidual": 0.5765,
+      "native": [
+        16,
+        19
+      ],
+      "method": "lattice"
+    },
+    "frozen_heart": {
+      "file": "public/images/artifacts/frozen_heart.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        22
+      ],
+      "method": "lattice"
+    },
+    "gap": {
+      "file": "public/images/artifacts/gap.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        57,
+        52
+      ],
+      "k": 2.4958,
+      "kResidual": 0.5697,
+      "native": [
+        23,
+        21
+      ],
+      "method": "lattice"
+    },
+    "garnet_badge": {
+      "file": "public/images/artifacts/garnet_badge.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        50,
+        36
+      ],
+      "k": 2.7268,
+      "kResidual": 0.8571,
+      "native": [
+        18,
+        13
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "giant_telescope": {
+      "file": "public/images/artifacts/giant_telescope.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        48
+      ],
+      "k": 2.5,
+      "kResidual": 0.5765,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "giraffe_horns": {
+      "file": "public/images/artifacts/giraffe_horns.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        40
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        14,
+        16
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "glacier": {
+      "file": "public/images/artifacts/glacier.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        59,
+        46
+      ],
+      "k": 2.4981,
+      "kResidual": 0.5639,
+      "native": [
+        24,
+        18
+      ],
+      "method": "lattice"
+    },
+    "glass_hammer": {
+      "file": "public/images/artifacts/glass_hammer.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        53,
+        53
+      ],
+      "k": 2.5046,
+      "kResidual": 0.5697,
+      "native": [
+        21,
+        21
+      ],
+      "method": "lattice"
+    },
+    "golden_hand_bell": {
+      "file": "public/images/artifacts/golden_hand_bell.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        30,
+        50
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        12,
+        20
+      ],
+      "method": "lattice"
+    },
+    "golden_leaf": {
+      "file": "public/images/artifacts/golden_leaf.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        34,
+        36
+      ],
+      "k": 2.4859,
+      "kResidual": 0.6061,
+      "native": [
+        14,
+        14
+      ],
+      "method": "lattice"
+    },
+    "gold_cloak": {
+      "file": "public/images/artifacts/gold_cloak.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        18
+      ],
+      "method": "lattice"
+    },
+    "great_blessing": {
+      "file": "public/images/artifacts/great_blessing.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.4984,
+      "kResidual": 0.559,
+      "native": [
+        22,
+        25
+      ],
+      "method": "lattice"
+    },
+    "green_clothes": {
+      "file": "public/images/artifacts/green_clothes.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        51
+      ],
+      "k": 2.4986,
+      "kResidual": 0.5846,
+      "native": [
+        18,
+        20
+      ],
+      "method": "lattice"
+    },
+    "green_ink_bottle": {
+      "file": "public/images/artifacts/green_ink_bottle.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        16
+      ],
+      "method": "lattice"
+    },
+    "green_tooth": {
+      "file": "public/images/artifacts/green_tooth.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        59
+      ],
+      "k": 2.4981,
+      "kResidual": 0.5639,
+      "native": [
+        20,
+        24
+      ],
+      "method": "lattice"
+    },
+    "hand_mirror": {
+      "file": "public/images/artifacts/hand_mirror.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        69
+      ],
+      "k": 2.4444,
+      "kResidual": 0.9331,
+      "native": [
+        22,
+        28
+      ],
+      "method": "lattice"
+    },
+    "haste": {
+      "file": "public/images/artifacts/haste.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.4992,
+      "kResidual": 0.5237,
+      "native": [
+        22,
+        25
+      ],
+      "method": "lattice"
+    },
+    "heart_of_the_beast": {
+      "file": "public/images/artifacts/heart_of_the_beast.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        58,
+        53
+      ],
+      "k": 3.8667,
+      "kResidual": null,
+      "native": [
+        15,
+        14
+      ],
+      "method": "pinned"
+    },
+    "heart_shaped_carrot": {
+      "file": "public/images/artifacts/heart_shaped_carrot.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        43
+      ],
+      "k": 2.5294,
+      "kResidual": null,
+      "native": [
+        15,
+        17
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "heitas_soul_powder": {
+      "file": "public/images/artifacts/heitas_soul_powder.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        46
+      ],
+      "k": 2.5556,
+      "kResidual": null,
+      "native": [
+        15,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "helenas_staircase": {
+      "file": "public/images/artifacts/helenas_staircase.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        18
+      ],
+      "method": "lattice"
+    },
+    "humility_crown": {
+      "file": "public/images/artifacts/humility_crown.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        26
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        10
+      ],
+      "method": "lattice"
+    },
+    "ice_bolt": {
+      "file": "public/images/artifacts/ice_bolt.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.4984,
+      "kResidual": 0.559,
+      "native": [
+        22,
+        25
+      ],
+      "method": "lattice"
+    },
+    "ice_cloud_butterfly": {
+      "file": "public/images/artifacts/ice_cloud_butterfly.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        42
+      ],
+      "k": 2.4418,
+      "kResidual": 0.9846,
+      "native": [
+        17,
+        17
+      ],
+      "method": "lattice"
+    },
+    "ice_seagull": {
+      "file": "public/images/artifacts/ice_seagull.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        60,
+        57
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        24,
+        23
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "ice_snow": {
+      "file": "public/images/artifacts/ice_snow.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        16,
+        22
+      ],
+      "method": "lattice"
+    },
+    "ice_star": {
+      "file": "public/images/artifacts/ice_star.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        51
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "ice_wings": {
+      "file": "public/images/artifacts/ice_wings.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        59,
+        41
+      ],
+      "k": 2.4981,
+      "kResidual": 0.5639,
+      "native": [
+        24,
+        16
+      ],
+      "method": "lattice"
+    },
+    "ignition": {
+      "file": "public/images/artifacts/ignition.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        40
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        14,
+        16
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "iridescent_feathers": {
+      "file": "public/images/artifacts/iridescent_feathers.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        45
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        16,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "jewelry_armor": {
+      "file": "public/images/artifacts/jewelry_armor.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        59
+      ],
+      "k": 2.4981,
+      "kResidual": 0.5639,
+      "native": [
+        18,
+        24
+      ],
+      "method": "lattice"
+    },
+    "kaleidoscope": {
+      "file": "public/images/artifacts/kaleidoscope.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        34
+      ],
+      "k": 2.4924,
+      "kResidual": 0.6061,
+      "native": [
+        18,
+        14
+      ],
+      "method": "lattice"
+    },
+    "keel_fragment": {
+      "file": "public/images/artifacts/keel_fragment.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        60,
+        45
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        24,
+        18
+      ],
+      "method": "lattice",
+      "artMismatch": true
+    },
+    "kunai": {
+      "file": "public/images/artifacts/kunai.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        47
+      ],
+      "k": 2.4941,
+      "kResidual": 0.5765,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "leafy_leather": {
+      "file": "public/images/artifacts/leafy_leather.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        41
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        22,
+        16
+      ],
+      "method": "lattice"
+    },
+    "lerids_battleb_racelet": {
+      "file": "public/images/artifacts/lerids_battleb_racelet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        48,
+        48
+      ],
+      "k": 2.5263,
+      "kResidual": null,
+      "native": [
+        19,
+        19
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "libra": {
+      "file": "public/images/artifacts/libra.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        63,
+        53
+      ],
+      "k": 2.5039,
+      "kResidual": 0.5697,
+      "native": [
+        25,
+        21
+      ],
+      "method": "lattice"
+    },
+    "library_miniature": {
+      "file": "public/images/artifacts/library_miniature.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        43
+      ],
+      "k": 2.5077,
+      "kResidual": 0.5846,
+      "native": [
+        17,
+        17
+      ],
+      "method": "lattice"
+    },
+    "lightningboomerang": {
+      "file": "public/images/artifacts/lightningboomerang.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "lightning_amulet": {
+      "file": "public/images/artifacts/lightning_amulet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        53
+      ],
+      "k": 2.5238,
+      "kResidual": null,
+      "native": [
+        15,
+        21
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "lightning_bolt": {
+      "file": "public/images/artifacts/lightning_bolt.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "lightning_chakram": {
+      "file": "public/images/artifacts/lightning_chakram.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        54
+      ],
+      "k": 2.4611,
+      "kResidual": 0.9286,
+      "native": [
+        18,
+        22
+      ],
+      "method": "lattice"
+    },
+    "lightning_rod": {
+      "file": "public/images/artifacts/lightning_rod.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        63
+      ],
+      "k": 2.5054,
+      "kResidual": 0.5846,
+      "native": [
+        17,
+        25
+      ],
+      "method": "lattice"
+    },
+    "lightning_struck_tree_branch": {
+      "file": "public/images/artifacts/lightning_struck_tree_branch.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        32,
+        47
+      ],
+      "k": 2.4484,
+      "kResidual": 0.9088,
+      "native": [
+        13,
+        19
+      ],
+      "method": "lattice"
+    },
+    "lightstone": {
+      "file": "public/images/artifacts/lightstone.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        48
+      ],
+      "k": 2.5082,
+      "kResidual": 0.5944,
+      "native": [
+        15,
+        19
+      ],
+      "method": "lattice"
+    },
+    "lip": {
+      "file": "public/images/artifacts/lip.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        56
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        22
+      ],
+      "method": "lattice"
+    },
+    "lizard_sheet": {
+      "file": "public/images/artifacts/lizard_sheet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "lucky_medal": {
+      "file": "public/images/artifacts/lucky_medal.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        49
+      ],
+      "k": 2.4412,
+      "kResidual": 0.9289,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "magic_carrot": {
+      "file": "public/images/artifacts/magic_carrot.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        54
+      ],
+      "k": 2.4966,
+      "kResidual": 0.601,
+      "native": [
+        12,
+        22
+      ],
+      "method": "lattice"
+    },
+    "magic_gem": {
+      "file": "public/images/artifacts/magic_gem.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        61
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        24
+      ],
+      "method": "lattice"
+    },
+    "magic_glasses": {
+      "file": "public/images/artifacts/magic_glasses.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        36
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        14
+      ],
+      "method": "lattice"
+    },
+    "magma_bead": {
+      "file": "public/images/artifacts/magma_bead.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        32,
+        32
+      ],
+      "k": 2.4848,
+      "kResidual": 0.6061,
+      "native": [
+        13,
+        13
+      ],
+      "method": "lattice"
+    },
+    "mark_of_warrior": {
+      "file": "public/images/artifacts/mark_of_warrior.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        55
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        16,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "mast_model": {
+      "file": "public/images/artifacts/mast_model.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        18
+      ],
+      "method": "lattice"
+    },
+    "meditation_books": {
+      "file": "public/images/artifacts/meditation_books.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        34
+      ],
+      "k": 2.4706,
+      "kResidual": null,
+      "native": [
+        17,
+        14
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "meteor_shower": {
+      "file": "public/images/artifacts/meteor_shower.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "mini_balista": {
+      "file": "public/images/artifacts/mini_balista.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        51
+      ],
+      "k": 2.4958,
+      "kResidual": 0.5944,
+      "native": [
+        16,
+        20
+      ],
+      "method": "lattice"
+    },
+    "model_beak": {
+      "file": "public/images/artifacts/model_beak.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        48,
+        33
+      ],
+      "k": 2.5105,
+      "kResidual": 0.6061,
+      "native": [
+        19,
+        13
+      ],
+      "method": "lattice"
+    },
+    "multicolored_candy_jar": {
+      "file": "public/images/artifacts/multicolored_candy_jar.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        60
+      ],
+      "k": 2.3374,
+      "kResidual": 0.6936,
+      "native": [
+        19,
+        26
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "multi_use_belt": {
+      "file": "public/images/artifacts/multi_use_belt.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        39
+      ],
+      "k": 2.4948,
+      "kResidual": 0.5944,
+      "native": [
+        22,
+        16
+      ],
+      "method": "lattice"
+    },
+    "mysterious_weight": {
+      "file": "public/images/artifacts/mysterious_weight.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        53,
+        56
+      ],
+      "k": 2.5455,
+      "kResidual": null,
+      "native": [
+        21,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "neutralizer_black": {
+      "file": "public/images/artifacts/neutralizer_black.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        34,
+        44
+      ],
+      "k": 2.4493,
+      "kResidual": 0.9273,
+      "native": [
+        14,
+        18
+      ],
+      "method": "lattice"
+    },
+    "obruss_blood": {
+      "file": "public/images/artifacts/obruss_blood.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        34,
+        51
+      ],
+      "k": 2.5029,
+      "kResidual": 0.5944,
+      "native": [
+        14,
+        20
+      ],
+      "method": "lattice"
+    },
+    "ohia_lehua": {
+      "file": "public/images/artifacts/ohia_lehua.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        29,
+        46
+      ],
+      "k": 2.5556,
+      "kResidual": null,
+      "native": [
+        11,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "oink_shaman_necklace": {
+      "file": "public/images/artifacts/oink_shaman_necklace.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        48,
+        43
+      ],
+      "k": 2.5068,
+      "kResidual": 0.5846,
+      "native": [
+        19,
+        17
+      ],
+      "method": "lattice"
+    },
+    "overall_armband": {
+      "file": "public/images/artifacts/overall_armband.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        44
+      ],
+      "k": 2.4602,
+      "kResidual": 0.9286,
+      "native": [
+        16,
+        18
+      ],
+      "method": "lattice"
+    },
+    "palas_card": {
+      "file": "public/images/artifacts/palas_card.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        40
+      ],
+      "k": 2.5038,
+      "kResidual": 0.5846,
+      "native": [
+        17,
+        16
+      ],
+      "method": "lattice"
+    },
+    "pearl_powder": {
+      "file": "public/images/artifacts/pearl_powder.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        36
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        22,
+        14
+      ],
+      "method": "lattice"
+    },
+    "petrification": {
+      "file": "public/images/artifacts/petrification.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        39
+      ],
+      "k": 2.4505,
+      "kResidual": 0.9121,
+      "native": [
+        16,
+        16
+      ],
+      "method": "lattice"
+    },
+    "phoenix": {
+      "file": "public/images/artifacts/phoenix.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        20,
+        22
+      ],
+      "method": "lattice"
+    },
+    "piece_of_red_cloth": {
+      "file": "public/images/artifacts/piece_of_red_cloth.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        39
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        16,
+        16
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "plasma_helmet": {
+      "file": "public/images/artifacts/plasma_helmet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        45
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        22,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "plump_fruits": {
+      "file": "public/images/artifacts/plump_fruits.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        61,
+        60
+      ],
+      "k": 2.5417,
+      "kResidual": null,
+      "native": [
+        24,
+        24
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "point": {
+      "file": "public/images/artifacts/point.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        28,
+        43
+      ],
+      "k": 2.5294,
+      "kResidual": null,
+      "native": [
+        11,
+        17
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "pointed_bat": {
+      "file": "public/images/artifacts/pointed_bat.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        55
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "pot_lid": {
+      "file": "public/images/artifacts/pot_lid.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        43
+      ],
+      "k": 2.5077,
+      "kResidual": 0.5846,
+      "native": [
+        17,
+        17
+      ],
+      "method": "lattice"
+    },
+    "pride": {
+      "file": "public/images/artifacts/pride.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        50,
+        35
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        14
+      ],
+      "method": "lattice"
+    },
+    "pro": {
+      "file": "public/images/artifacts/pro.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        48
+      ],
+      "k": 2.5082,
+      "kResidual": 0.5944,
+      "native": [
+        15,
+        19
+      ],
+      "method": "lattice"
+    },
+    "pure_cloak": {
+      "file": "public/images/artifacts/pure_cloak.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "rabbit_village_guard_helm": {
+      "file": "public/images/artifacts/rabbit_village_guard_helm.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        31
+      ],
+      "k": 2.4545,
+      "kResidual": null,
+      "native": [
+        22,
+        13
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "rat_pendant": {
+      "file": "public/images/artifacts/rat_pendant.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        20,
+        22
+      ],
+      "method": "lattice"
+    },
+    "ray_known": {
+      "file": "public/images/artifacts/ray_known.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        34
+      ],
+      "k": 2.4924,
+      "kResidual": 0.6061,
+      "native": [
+        16,
+        14
+      ],
+      "method": "lattice"
+    },
+    "red_dew": {
+      "file": "public/images/artifacts/red_dew.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        25,
+        23
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        10,
+        9
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "red_mushroom": {
+      "file": "public/images/artifacts/red_mushroom.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        52
+      ],
+      "k": 2.5771,
+      "kResidual": 0.9412,
+      "native": [
+        21,
+        20
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "red_planet": {
+      "file": "public/images/artifacts/red_planet.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        31
+      ],
+      "k": 2.5833,
+      "kResidual": null,
+      "native": [
+        12,
+        12
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "red_planet_observation_log": {
+      "file": "public/images/artifacts/red_planet_observation_log.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        54
+      ],
+      "k": 2.4545,
+      "kResidual": null,
+      "native": [
+        18,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "red_snake_eye": {
+      "file": "public/images/artifacts/red_snake_eye.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        33,
+        33
+      ],
+      "k": 2.5152,
+      "kResidual": 0.6061,
+      "native": [
+        13,
+        13
+      ],
+      "method": "lattice"
+    },
+    "red_thread": {
+      "file": "public/images/artifacts/red_thread.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        18
+      ],
+      "method": "lattice"
+    },
+    "reinforced_potion_lid": {
+      "file": "public/images/artifacts/reinforced_potion_lid.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        29,
+        36
+      ],
+      "k": 2.5714,
+      "kResidual": null,
+      "native": [
+        11,
+        14
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "reloaded_wooden_box": {
+      "file": "public/images/artifacts/reloaded_wooden_box.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        57
+      ],
+      "k": 2.7368,
+      "kResidual": 0.902,
+      "native": [
+        20,
+        21
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "riley_congregation_clock": {
+      "file": "public/images/artifacts/riley_congregation_clock.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        56
+      ],
+      "k": 2.4948,
+      "kResidual": 0.5944,
+      "native": [
+        16,
+        22
+      ],
+      "method": "lattice"
+    },
+    "rock_elephant": {
+      "file": "public/images/artifacts/rock_elephant.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        57,
+        46
+      ],
+      "k": 2.448,
+      "kResidual": 0.9897,
+      "native": [
+        23,
+        19
+      ],
+      "method": "lattice"
+    },
+    "ruby_brooch": {
+      "file": "public/images/artifacts/ruby_brooch.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        45
+      ],
+      "k": 2.4541,
+      "kResidual": 0.9143,
+      "native": [
+        20,
+        18
+      ],
+      "method": "lattice"
+    },
+    "sapote": {
+      "file": "public/images/artifacts/sapote.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        36
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        14
+      ],
+      "method": "lattice"
+    },
+    "sealed_tejas": {
+      "file": "public/images/artifacts/sealed_tejas.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        39
+      ],
+      "k": 2.4451,
+      "kResidual": 0.9121,
+      "native": [
+        16,
+        16
+      ],
+      "method": "lattice"
+    },
+    "serens_wanging_letter": {
+      "file": "public/images/artifacts/serens_wanging_letter.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        51
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "sharp_eye": {
+      "file": "public/images/artifacts/sharp_eye.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "sheet_music_bree": {
+      "file": "public/images/artifacts/sheet_music_bree.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        50,
+        45
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        18
+      ],
+      "method": "lattice"
+    },
+    "sheet_music_galaxy": {
+      "file": "public/images/artifacts/sheet_music_galaxy.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        46
+      ],
+      "k": 2.4462,
+      "kResidual": 0.9897,
+      "native": [
+        21,
+        19
+      ],
+      "method": "lattice"
+    },
+    "sheet_music_storm": {
+      "file": "public/images/artifacts/sheet_music_storm.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        46
+      ],
+      "k": 2.4485,
+      "kResidual": 0.9529,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "shield": {
+      "file": "public/images/artifacts/shield.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.4986,
+      "kResidual": 0.5542,
+      "native": [
+        22,
+        25
+      ],
+      "method": "lattice"
+    },
+    "shield_bag": {
+      "file": "public/images/artifacts/shield_bag.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        51
+      ],
+      "k": 2.4546,
+      "kResidual": 0.9783,
+      "native": [
+        23,
+        21
+      ],
+      "method": "lattice"
+    },
+    "shield_earring": {
+      "file": "public/images/artifacts/shield_earring.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        56
+      ],
+      "k": 2.5455,
+      "kResidual": null,
+      "native": [
+        12,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "shield_mate": {
+      "file": "public/images/artifacts/shield_mate.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        22
+      ],
+      "method": "lattice"
+    },
+    "shield_technique_manual": {
+      "file": "public/images/artifacts/shield_technique_manual.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        45
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        18
+      ],
+      "method": "lattice"
+    },
+    "shining_hourglass": {
+      "file": "public/images/artifacts/shining_hourglass.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        43,
+        53
+      ],
+      "k": 2.5062,
+      "kResidual": 0.5846,
+      "native": [
+        17,
+        21
+      ],
+      "method": "lattice"
+    },
+    "shock_amplifier": {
+      "file": "public/images/artifacts/shock_amplifier.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        48
+      ],
+      "k": 2.5263,
+      "kResidual": null,
+      "native": [
+        19,
+        19
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "silver_bracelet": {
+      "file": "public/images/artifacts/silver_bracelet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        18
+      ],
+      "method": "lattice"
+    },
+    "silver_plate": {
+      "file": "public/images/artifacts/silver_plate.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        61,
+        39
+      ],
+      "k": 2.4948,
+      "kResidual": 0.5944,
+      "native": [
+        24,
+        16
+      ],
+      "method": "lattice"
+    },
+    "simple_contract": {
+      "file": "public/images/artifacts/simple_contract.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        44
+      ],
+      "k": 2.4979,
+      "kResidual": 0.5846,
+      "native": [
+        14,
+        18
+      ],
+      "method": "lattice"
+    },
+    "single_tree_charcoal": {
+      "file": "public/images/artifacts/single_tree_charcoal.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        36
+      ],
+      "k": 2.5556,
+      "kResidual": null,
+      "native": [
+        18,
+        14
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "six_leaf_clover": {
+      "file": "public/images/artifacts/six_leaf_clover.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        50
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        14,
+        20
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "sky_blue_planet": {
+      "file": "public/images/artifacts/sky_blue_planet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        33,
+        30
+      ],
+      "k": 2.5078,
+      "kResidual": 0.6458,
+      "native": [
+        13,
+        12
+      ],
+      "method": "lattice"
+    },
+    "small_magic": {
+      "file": "public/images/artifacts/small_magic.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        58,
+        43
+      ],
+      "k": 2.5057,
+      "kResidual": 0.5846,
+      "native": [
+        23,
+        17
+      ],
+      "method": "lattice"
+    },
+    "smoke_screen": {
+      "file": "public/images/artifacts/smoke_screen.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.4972,
+      "kResidual": 0.559,
+      "native": [
+        22,
+        25
+      ],
+      "method": "lattice"
+    },
+    "snowborne": {
+      "file": "public/images/artifacts/snowborne.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        56
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "snow_mountain_big_eared_bat": {
+      "file": "public/images/artifacts/snow_mountain_big_eared_bat.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        50,
+        57
+      ],
+      "k": 2.4783,
+      "kResidual": null,
+      "native": [
+        20,
+        23
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "solis_decree": {
+      "file": "public/images/artifacts/solis_decree.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        52
+      ],
+      "k": 2.4501,
+      "kResidual": 0.9088,
+      "native": [
+        19,
+        21
+      ],
+      "method": "lattice"
+    },
+    "solis_decusa": {
+      "file": "public/images/artifacts/solis_decusa.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        46
+      ],
+      "k": 2.4485,
+      "kResidual": 0.9529,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "solis_parvo": {
+      "file": "public/images/artifacts/solis_parvo.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        27,
+        56
+      ],
+      "k": 2.4572,
+      "kResidual": 0.9327,
+      "native": [
+        11,
+        23
+      ],
+      "method": "lattice"
+    },
+    "solis_pratu": {
+      "file": "public/images/artifacts/solis_pratu.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        62
+      ],
+      "k": 2.4588,
+      "kResidual": 0.9946,
+      "native": [
+        14,
+        25
+      ],
+      "method": "lattice"
+    },
+    "stabbing_textbook": {
+      "file": "public/images/artifacts/stabbing_textbook.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        59,
+        42
+      ],
+      "k": 2.4467,
+      "kResidual": 0.9429,
+      "native": [
+        24,
+        17
+      ],
+      "method": "lattice"
+    },
+    "star_aqua_marine": {
+      "file": "public/images/artifacts/star_aqua_marine.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        33,
+        38
+      ],
+      "k": 2.5128,
+      "kResidual": 0.6061,
+      "native": [
+        13,
+        15
+      ],
+      "method": "lattice"
+    },
+    "star_ruby": {
+      "file": "public/images/artifacts/star_ruby.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        33,
+        38
+      ],
+      "k": 2.5128,
+      "kResidual": 0.6061,
+      "native": [
+        13,
+        15
+      ],
+      "method": "lattice"
+    },
+    "stinging_bug": {
+      "file": "public/images/artifacts/stinging_bug.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        29
+      ],
+      "k": 2.4337,
+      "kResidual": 0.8681,
+      "native": [
+        16,
+        12
+      ],
+      "method": "lattice"
+    },
+    "stone_wheel": {
+      "file": "public/images/artifacts/stone_wheel.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        50
+      ],
+      "k": 2.55,
+      "kResidual": null,
+      "native": [
+        20,
+        20
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "storm": {
+      "file": "public/images/artifacts/storm.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        33,
+        48
+      ],
+      "k": 3,
+      "kResidual": null,
+      "native": [
+        11,
+        16
+      ],
+      "method": "pinned"
+    },
+    "straw": {
+      "file": "public/images/artifacts/straw.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        51
+      ],
+      "k": 2.4972,
+      "kResidual": 0.5846,
+      "native": [
+        18,
+        20
+      ],
+      "method": "lattice"
+    },
+    "sunset_cloak": {
+      "file": "public/images/artifacts/sunset_cloak.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        53,
+        52
+      ],
+      "k": 2.4554,
+      "kResidual": 0.9298,
+      "native": [
+        22,
+        21
+      ],
+      "method": "lattice"
+    },
+    "swaying_eyes": {
+      "file": "public/images/artifacts/swaying_eyes.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        47,
+        42
+      ],
+      "k": 2.4348,
+      "kResidual": 0.9059,
+      "native": [
+        19,
+        17
+      ],
+      "method": "lattice"
+    },
+    "swordsmanship_textbook": {
+      "file": "public/images/artifacts/swordsmanship_textbook.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        45
+      ],
+      "k": 2.5004,
+      "kResidual": 0.5108,
+      "native": [
+        16,
+        18
+      ],
+      "method": "lattice"
+    },
+    "sword_earring": {
+      "file": "public/images/artifacts/sword_earring.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        26,
+        56
+      ],
+      "k": 2.5455,
+      "kResidual": null,
+      "native": [
+        10,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "tactical_manual": {
+      "file": "public/images/artifacts/tactical_manual.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        44
+      ],
+      "k": 2.4567,
+      "kResidual": 0.9341,
+      "native": [
+        16,
+        18
+      ],
+      "method": "lattice"
+    },
+    "talisman_of_talent": {
+      "file": "public/images/artifacts/talisman_of_talent.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        30
+      ],
+      "k": 2.4568,
+      "kResidual": 0.9273,
+      "native": [
+        14,
+        12
+      ],
+      "method": "lattice"
+    },
+    "terros_soul_powder": {
+      "file": "public/images/artifacts/terros_soul_powder.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        43
+      ],
+      "k": 2.5038,
+      "kResidual": 0.5846,
+      "native": [
+        14,
+        17
+      ],
+      "method": "lattice"
+    },
+    "thin_cushion": {
+      "file": "public/images/artifacts/thin_cushion.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        66,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        26,
+        16
+      ],
+      "method": "lattice"
+    },
+    "thornbush": {
+      "file": "public/images/artifacts/thornbush.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        41
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        16
+      ],
+      "method": "lattice"
+    },
+    "thorn_shell": {
+      "file": "public/images/artifacts/thorn_shell.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        18
+      ],
+      "method": "lattice"
+    },
+    "thunder": {
+      "file": "public/images/artifacts/thunder.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        55,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        22,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "thunders_earrings": {
+      "file": "public/images/artifacts/thunders_earrings.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        37
+      ],
+      "k": 2.4456,
+      "kResidual": 0.9011,
+      "native": [
+        16,
+        15
+      ],
+      "method": "lattice"
+    },
+    "thunder_judgment": {
+      "file": "public/images/artifacts/thunder_judgment.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        54,
+        61
+      ],
+      "k": 2.4391,
+      "kResidual": 0.9685,
+      "native": [
+        22,
+        25
+      ],
+      "method": "lattice"
+    },
+    "tome_of_transmutation_fire": {
+      "file": "public/images/artifacts/tome_of_transmutation_fire.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        46
+      ],
+      "k": 2.5556,
+      "kResidual": null,
+      "native": [
+        16,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "tome_of_transmutation_ice": {
+      "file": "public/images/artifacts/tome_of_transmutation_ice.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        44
+      ],
+      "k": 2.4676,
+      "kResidual": 0.8857,
+      "native": [
+        17,
+        18
+      ],
+      "method": "lattice"
+    },
+    "tome_of_transmutation_lightning": {
+      "file": "public/images/artifacts/tome_of_transmutation_lightning.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        44
+      ],
+      "k": 2.4684,
+      "kResidual": 0.7782,
+      "native": [
+        17,
+        18
+      ],
+      "method": "lattice"
+    },
+    "topaz_badge": {
+      "file": "public/images/artifacts/topaz_badge.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        50
+      ],
+      "k": 2.7481,
+      "kResidual": 0.9525,
+      "native": [
+        15,
+        18
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "touch_of_life": {
+      "file": "public/images/artifacts/touch_of_life.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        61
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        24
+      ],
+      "method": "lattice"
+    },
+    "toxic_spore_pouch": {
+      "file": "public/images/artifacts/toxic_spore_pouch.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        50
+      ],
+      "k": 3.161,
+      "kResidual": 0.989,
+      "native": [
+        18,
+        16
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "tuning_fork": {
+      "file": "public/images/artifacts/tuning_fork.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        32,
+        39
+      ],
+      "k": 2.4573,
+      "kResidual": 0.9212,
+      "native": [
+        13,
+        16
+      ],
+      "method": "lattice"
+    },
+    "unalloyed_gold_needle": {
+      "file": "public/images/artifacts/unalloyed_gold_needle.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        51
+      ],
+      "k": 2.4556,
+      "kResidual": 0.9164,
+      "native": [
+        19,
+        21
+      ],
+      "method": "lattice"
+    },
+    "unclean_bandage": {
+      "file": "public/images/artifacts/unclean_bandage.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        61,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        24,
+        22
+      ],
+      "method": "lattice"
+    },
+    "vane": {
+      "file": "public/images/artifacts/vane.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        59
+      ],
+      "k": 2.4963,
+      "kResidual": 0.6258,
+      "native": [
+        16,
+        24
+      ],
+      "method": "lattice"
+    },
+    "viscosity": {
+      "file": "public/images/artifacts/viscosity.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        51
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        20
+      ],
+      "method": "lattice"
+    },
+    "voluspa": {
+      "file": "public/images/artifacts/voluspa.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        51
+      ],
+      "k": 2.4838,
+      "kResidual": 0.6886,
+      "native": [
+        18,
+        21
+      ],
+      "method": "lattice"
+    },
+    "walter_work_monocle": {
+      "file": "public/images/artifacts/walter_work_monocle.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        61,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        24,
+        22
+      ],
+      "method": "lattice"
+    },
+    "wanderers_necklace": {
+      "file": "public/images/artifacts/wanderers_necklace.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        45,
+        58
+      ],
+      "k": 2.5217,
+      "kResidual": null,
+      "native": [
+        18,
+        23
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "wanderer_blessing": {
+      "file": "public/images/artifacts/wanderer_blessing.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        60
+      ],
+      "k": 2.8129,
+      "kResidual": 0.9412,
+      "native": [
+        16,
+        21
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "warm_stone": {
+      "file": "public/images/artifacts/warm_stone.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        40
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        16
+      ],
+      "method": "lattice"
+    },
+    "warning": {
+      "file": "public/images/artifacts/warning.webp",
+      "canvas": [
+        54,
+        71
+      ],
+      "bbox": [
+        36,
+        47
+      ],
+      "k": 2.4737,
+      "kResidual": null,
+      "native": [
+        15,
+        19
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "waters": {
+      "file": "public/images/artifacts/waters.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        58,
+        60
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        23,
+        24
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "water_bag": {
+      "file": "public/images/artifacts/water_bag.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        44,
+        41
+      ],
+      "k": 2.4962,
+      "kResidual": 0.5846,
+      "native": [
+        18,
+        16
+      ],
+      "method": "lattice"
+    },
+    "water_droplets_from_plitvice": {
+      "file": "public/images/artifacts/water_droplets_from_plitvice.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        32,
+        44
+      ],
+      "k": 2.4384,
+      "kResidual": 0.8929,
+      "native": [
+        13,
+        18
+      ],
+      "method": "lattice"
+    },
+    "water_spirit": {
+      "file": "public/images/artifacts/water_spirit.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        57,
+        57
+      ],
+      "k": 2.4783,
+      "kResidual": null,
+      "native": [
+        23,
+        23
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "whirlwind_stone": {
+      "file": "public/images/artifacts/whirlwind_stone.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        38,
+        38
+      ],
+      "k": 2.6545,
+      "kResidual": 0.7636,
+      "native": [
+        14,
+        14
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "white_bread": {
+      "file": "public/images/artifacts/white_bread.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        45,
+        40
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        16
+      ],
+      "method": "lattice"
+    },
+    "white_egg_shell": {
+      "file": "public/images/artifacts/white_egg_shell.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        46
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        18
+      ],
+      "method": "lattice"
+    },
+    "white_paper": {
+      "file": "public/images/artifacts/white_paper.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        49,
+        56
+      ],
+      "k": 2.5455,
+      "kResidual": null,
+      "native": [
+        19,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "white_planet": {
+      "file": "public/images/artifacts/white_planet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        30,
+        30
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        12,
+        12
+      ],
+      "method": "lattice"
+    },
+    "white_twig": {
+      "file": "public/images/artifacts/white_twig.webp",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        29,
+        56
+      ],
+      "k": 2.5455,
+      "kResidual": null,
+      "native": [
+        11,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "windpool_shawl": {
+      "file": "public/images/artifacts/windpool_shawl.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        45,
+        50
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        20
+      ],
+      "method": "lattice"
+    },
+    "wings": {
+      "file": "public/images/artifacts/wings.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        57,
+        56
+      ],
+      "k": 2.4402,
+      "kResidual": 0.9474,
+      "native": [
+        23,
+        23
+      ],
+      "method": "lattice"
+    },
+    "wizard": {
+      "file": "public/images/artifacts/wizard.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        49
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        18,
+        20
+      ],
+      "method": "lattice"
+    },
+    "yakumo_kodachi": {
+      "file": "public/images/artifacts/yakumo_kodachi.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        58
+      ],
+      "k": 2.4465,
+      "kResidual": 0.9239,
+      "native": [
+        23,
+        24
+      ],
+      "method": "lattice"
+    },
+    "yellow_planet": {
+      "file": "public/images/artifacts/yellow_planet.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        31
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        12
+      ],
+      "method": "lattice"
+    },
+    "zorous_watering_can": {
+      "file": "public/images/artifacts/zorous_watering_can.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        59,
+        45
+      ],
+      "k": 2.4583,
+      "kResidual": null,
+      "native": [
+        24,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "advance": {
+      "file": "public/images/slabs/advance.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        56
+      ],
+      "k": 2.4984,
+      "kResidual": 0.5533,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "advent": {
+      "file": "public/images/slabs/advent.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        42,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "agglutination": {
+      "file": "public/images/slabs/agglutination.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        43
+      ],
+      "k": 2.5038,
+      "kResidual": 0.5846,
+      "native": [
+        22,
+        17
+      ],
+      "method": "lattice"
+    },
+    "approximation": {
+      "file": "public/images/slabs/approximation.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        51,
+        51
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        17,
+        17
+      ],
+      "method": "lattice"
+    },
+    "base": {
+      "file": "public/images/slabs/base.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        66,
+        36
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        22,
+        12
+      ],
+      "method": "lattice"
+    },
+    "beating": {
+      "file": "public/images/slabs/beating.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "binary_star": {
+      "file": "public/images/slabs/binary_star.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "boundary": {
+      "file": "public/images/slabs/boundary.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        16
+      ],
+      "method": "lattice"
+    },
+    "certitude": {
+      "file": "public/images/slabs/certitude.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        40,
+        55
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        16,
+        22
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "cheer": {
+      "file": "public/images/slabs/cheer.webp",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        42,
+        36
+      ],
+      "k": 3,
+      "kResidual": null,
+      "native": [
+        14,
+        12
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "chivalry": {
+      "file": "public/images/slabs/chivalry.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        51,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        17,
+        22
+      ],
+      "method": "lattice"
+    },
+    "compete": {
+      "file": "public/images/slabs/compete.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        22
+      ],
+      "method": "lattice"
+    },
+    "compression": {
+      "file": "public/images/slabs/compression.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        41
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        16
+      ],
+      "method": "lattice"
+    },
+    "concurrency": {
+      "file": "public/images/slabs/concurrency.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        34,
+        64
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        11,
+        21
+      ],
+      "method": "lattice"
+    },
+    "connection": {
+      "file": "public/images/slabs/connection.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        42,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "courage": {
+      "file": "public/images/slabs/courage.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        45,
+        45
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        18,
+        18
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "daydream": {
+      "file": "public/images/slabs/daydream.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        51
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        20
+      ],
+      "method": "lattice"
+    },
+    "dedication": {
+      "file": "public/images/slabs/dedication.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        18
+      ],
+      "method": "lattice"
+    },
+    "defender": {
+      "file": "public/images/slabs/defender.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        58
+      ],
+      "k": 2.6042,
+      "kResidual": 0.9231,
+      "native": [
+        16,
+        22
+      ],
+      "method": "lattice",
+      "lowConfidence": true,
+      "artMismatch": true
+    },
+    "development": {
+      "file": "public/images/slabs/development.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        48,
+        48
+      ],
+      "k": 3.2657,
+      "kResidual": 0.8601,
+      "native": [
+        15,
+        15
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "disconnection": {
+      "file": "public/images/slabs/disconnection.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        57,
+        72
+      ],
+      "k": 3,
+      "kResidual": null,
+      "native": [
+        19,
+        24
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "distribution": {
+      "file": "public/images/slabs/distribution.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "dry": {
+      "file": "public/images/slabs/dry.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        36,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        12,
+        22
+      ],
+      "method": "lattice"
+    },
+    "entrance": {
+      "file": "public/images/slabs/entrance.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        31
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        12
+      ],
+      "method": "lattice"
+    },
+    "exit": {
+      "file": "public/images/slabs/exit.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        35,
+        29
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        14,
+        12
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "exploitation": {
+      "file": "public/images/slabs/exploitation.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        42,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "fate": {
+      "file": "public/images/slabs/fate.webp",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        42,
+        36
+      ],
+      "k": 3,
+      "kResidual": null,
+      "native": [
+        14,
+        12
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "flag": {
+      "file": "public/images/slabs/flag.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        42,
+        60
+      ],
+      "k": 2.7415,
+      "kResidual": 0.8601,
+      "native": [
+        15,
+        22
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "future": {
+      "file": "public/images/slabs/future.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        31
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        12
+      ],
+      "method": "lattice"
+    },
+    "handshake": {
+      "file": "public/images/slabs/handshake.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        42,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "harvesting": {
+      "file": "public/images/slabs/harvesting.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "home-town": {
+      "file": "public/images/slabs/home-town.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        60,
+        48
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        20,
+        16
+      ],
+      "method": "lattice"
+    },
+    "honor": {
+      "file": "public/images/slabs/honor.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        39,
+        60
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        16,
+        24
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "hope": {
+      "file": "public/images/slabs/hope.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        66,
+        42
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        22,
+        14
+      ],
+      "method": "lattice"
+    },
+    "hospitality": {
+      "file": "public/images/slabs/hospitality.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        60,
+        60
+      ],
+      "k": 2.5,
+      "kResidual": null,
+      "native": [
+        24,
+        24
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "joke": {
+      "file": "public/images/slabs/joke.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        49
+      ],
+      "k": 2.4971,
+      "kResidual": 0.5765,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "junction": {
+      "file": "public/images/slabs/junction.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        52,
+        52
+      ],
+      "k": 3.1077,
+      "kResidual": 0.8923,
+      "native": [
+        17,
+        17
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "justice": {
+      "file": "public/images/slabs/justice.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "last_stand": {
+      "file": "public/images/slabs/last_stand.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        62
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        19,
+        25
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "linear": {
+      "file": "public/images/slabs/linear.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        66,
+        42
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        22,
+        14
+      ],
+      "method": "lattice"
+    },
+    "load": {
+      "file": "public/images/slabs/load.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        31,
+        41
+      ],
+      "k": 2.503,
+      "kResidual": 0.5668,
+      "native": [
+        12,
+        16
+      ],
+      "method": "lattice"
+    },
+    "miracle": {
+      "file": "public/images/slabs/miracle.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "nurture": {
+      "file": "public/images/slabs/nurture.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "past": {
+      "file": "public/images/slabs/past.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        41,
+        31
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        16,
+        12
+      ],
+      "method": "lattice"
+    },
+    "peace": {
+      "file": "public/images/slabs/peace.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        62,
+        35
+      ],
+      "k": 2.48,
+      "kResidual": null,
+      "native": [
+        25,
+        14
+      ],
+      "method": "fallback",
+      "lowConfidence": true
+    },
+    "preparation": {
+      "file": "public/images/slabs/preparation.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        18,
+        18
+      ],
+      "method": "lattice"
+    },
+    "rally": {
+      "file": "public/images/slabs/rally.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        58,
+        58
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        19,
+        19
+      ],
+      "method": "lattice"
+    },
+    "rebellion": {
+      "file": "public/images/slabs/rebellion.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        54,
+        54
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        18,
+        18
+      ],
+      "method": "lattice"
+    },
+    "shade": {
+      "file": "public/images/slabs/shade.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        57,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        19,
+        22
+      ],
+      "method": "lattice"
+    },
+    "sheen": {
+      "file": "public/images/slabs/sheen.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        46
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        18
+      ],
+      "method": "lattice"
+    },
+    "sight": {
+      "file": "public/images/slabs/sight.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        54,
+        54
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        18,
+        18
+      ],
+      "method": "lattice"
+    },
+    "thorn": {
+      "file": "public/images/slabs/thorn.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        51,
+        51
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        20,
+        20
+      ],
+      "method": "lattice"
+    },
+    "tide": {
+      "file": "public/images/slabs/tide.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        46,
+        54
+      ],
+      "k": 2.4977,
+      "kResidual": 0.5697,
+      "native": [
+        18,
+        22
+      ],
+      "method": "lattice"
+    },
+    "transition": {
+      "file": "public/images/slabs/transition.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        56
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "triceps": {
+      "file": "public/images/slabs/triceps.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        56,
+        44
+      ],
+      "k": 2.4962,
+      "kResidual": 0.5846,
+      "native": [
+        22,
+        18
+      ],
+      "method": "lattice"
+    },
+    "unity": {
+      "file": "public/images/slabs/unity.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        66,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        22,
+        22
+      ],
+      "method": "lattice"
+    },
+    "vow": {
+      "file": "public/images/slabs/vow.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        54,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        18,
+        22
+      ],
+      "method": "lattice"
+    },
+    "warrant": {
+      "file": "public/images/slabs/warrant.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        42,
+        66
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        14,
+        22
+      ],
+      "method": "lattice"
+    },
+    "wedge": {
+      "file": "public/images/slabs/wedge.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        36
+      ],
+      "k": 2.8485,
+      "kResidual": 0.8485,
+      "native": [
+        13,
+        13
+      ],
+      "method": "lattice",
+      "lowConfidence": true
+    },
+    "wit": {
+      "file": "public/images/slabs/wit.png",
+      "canvas": [
+        100,
+        100
+      ],
+      "bbox": [
+        54,
+        54
+      ],
+      "k": 3,
+      "kResidual": 0,
+      "native": [
+        18,
+        18
+      ],
+      "method": "lattice"
+    },
+    "yearning": {
+      "file": "public/images/slabs/yearning.png",
+      "canvas": [
+        80,
+        80
+      ],
+      "bbox": [
+        36,
+        31
+      ],
+      "k": 2.5,
+      "kResidual": 0.5,
+      "native": [
+        14,
+        12
+      ],
+      "method": "lattice"
+    }
+  }
+}

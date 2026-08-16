@@ -40,6 +40,16 @@ const PITCH_RATIO_LO = 0.9
 const PITCH_RATIO_HI = 1.15
 const CELL_CENTER = (CELL - 1) / 2
 
+/** Last refine+sweep result per image, reused only when the seed rect and scorer identity match. */
+const refineSweepMemo = new WeakMap<
+  RGBAImage,
+  { seed: string; scorer: GridScorer | undefined; result: GridRect }
+>()
+
+function seedSig(seed: GridRect): string {
+  return `${seed.originX}|${seed.originY}|${seed.gridWidth}|${seed.gridHeight}|${seed.cols}|${seed.rows}`
+}
+
 function toGray(img: RGBAImage): Float32Array {
   const g = new Float32Array(img.width * img.height)
   const d = img.data
@@ -492,8 +502,22 @@ export function calibrateGrid(
       const probe: GridRect = { ...rect, originY: rect.originY + probeRow * pitchY, gridHeight: pitchY, rows: 1 }
       for (let c = 0; c < rect.cols; c++) {
         const box = cellBox(probe, c)
-        if (!inside(box)) continue
-        const cell = cropCellNearest(img, box.left, box.top, box.right, box.bottom)
+        // A probe cell clipped by the image border still matters: a grid that
+        // touches the edge (7.png sits at originY≈0) otherwise gets a free
+        // pass for the entire row it strands there — the same subgrid blind
+        // spot this probe exists to close. Probe whenever the majority of the
+        // cell is visible; slivers stay excluded so stretched crops of frame
+        // texture cannot masquerade as cells.
+        const top = Math.max(0, box.top)
+        const left = Math.max(0, box.left)
+        const bottom = Math.min(img.height, box.bottom)
+        const right = Math.min(img.width, box.right)
+        const visible = Math.max(0, right - left) * Math.max(0, bottom - top)
+        if (visible * 2 < (box.right - box.left) * (box.bottom - box.top)) continue
+        const cell = cropCellNearest(img, left, top, right, bottom)
+        // Unmasked occupancy (analyzeCell default). Recognition applies the
+        // overlay-glyph mask inside prepare(); the coverage probe stays on the
+        // pass-1 extractor so centroid/coverage geometry does not drift.
         if (analyzeCell(cell)) { count++; continue }
         if (dist3(ringMean(cell), M) <= yard) count++
       }
@@ -536,5 +560,11 @@ export function calibrateGrid(
   }
   if (!seed || seed.rows < 2) return null
 
-  return sweepOrigin(refineByCentroids(img, seed, objective), objective)
+  const sig = seedSig(seed)
+  const prev = refineSweepMemo.get(img)
+  if (prev && prev.seed === sig && prev.scorer === hint?.scorer) return prev.result
+
+  const result = sweepOrigin(refineByCentroids(img, seed, objective), objective)
+  refineSweepMemo.set(img, { seed: sig, scorer: hint?.scorer, result })
+  return result
 }

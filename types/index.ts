@@ -139,7 +139,6 @@ export interface RecognitionResult {
   type: ItemType | null
   level: number
   confidence: number
-  rotation?: 0 | 1 | 2 | 3
 }
 
 // ── Upload phase ──
@@ -151,7 +150,7 @@ export type UploadPhase =
   | 'complete'
   | 'error'
 
-// ── Vision Worker (plate-matcher + grid-calibrate) ──
+// ── Vision Worker (OpenCV.js Auto-Grid Detection) ──
 
 export interface TemplateData {
   value: string
@@ -180,13 +179,6 @@ export interface CellRect {
   height: number
 }
 
-export interface VisionMatchCandidate {
-  value: string
-  type: ItemType
-  rotation: 0 | 1 | 2 | 3
-  confidence: number
-}
-
 export interface VisionMatchResult {
   row: number
   col: number
@@ -194,25 +186,12 @@ export interface VisionMatchResult {
   type: ItemType | null
   confidence: number
   rotation: 0 | 1 | 2 | 3
-  candidates?: VisionMatchCandidate[]
-}
-
-/** Manually specified grid area (fallback uploader): skips auto calibration. */
-export interface ManualGridSpec {
-  originX: number
-  originY: number
-  gridWidth: number
-  gridHeight: number
-  rows: number
-  cols: number
-  /** Real slot count; trailing cells of the last row beyond this are skipped. */
-  totalSlots: number
 }
 
 export type VisionRequest =
   | { type: 'init' }
   | { type: 'load-templates'; templates: TemplateData[] }
-  | { type: 'detect'; buffer: ArrayBuffer; width: number; height: number; manualGrid?: ManualGridSpec }
+  | { type: 'detect'; buffer: ArrayBuffer; width: number; height: number }
   | { type: 'match'; cells: { row: number; col: number; cropBuffer: ArrayBuffer }[] }
 
 export type VisionResponse =
@@ -229,6 +208,5 @@ export type SmartUploadPhase =
   | 'initializing'
   | 'detecting'
   | 'highlighting'
-  | 'reviewing'
   | 'complete'
   | 'fallback'

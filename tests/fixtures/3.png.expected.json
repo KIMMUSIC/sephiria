@@ -14,10 +14,10 @@
  "expected": [
   {
    "slotIndex": 0,
-   "matchedValue": "shield_technique_manual",
+   "matchedValue": "swordsmanship_textbook",
    "type": "ARTIFACT",
    "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was shield_technique_manual): cover emblem is a sword with orange crossguard"
   },
   {
    "slotIndex": 1,
@@ -63,10 +63,10 @@
   },
   {
    "slotIndex": 7,
-   "matchedValue": "warrant",
+   "matchedValue": "honor",
    "type": "TABLET",
    "rotation": "any",
-   "_visualNote": "host-verified against sprite (round 2)"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was warrant): tan stem + green checkered canopy"
   },
   {
    "slotIndex": 8,
@@ -84,10 +84,10 @@
   },
   {
    "slotIndex": 10,
-   "matchedValue": null,
-   "type": null,
+   "matchedValue": "swaying_eyes",
+   "type": "ARTIFACT",
    "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was empty): dark blob with orange eye, '2/4' overlay"
   },
   {
    "slotIndex": 11,
@@ -126,10 +126,10 @@
   },
   {
    "slotIndex": 16,
-   "matchedValue": "thornbush",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
+   "matchedValue": "thorn",
+   "type": "TABLET",
+   "rotation": "any",
+   "_visualNote": "round-3 crop review, user-confirmed relabel (was thornbush ARTIFACT): dense green wreath with white diamond centre = legend tablet thorn"
   },
   {
    "slotIndex": 17,

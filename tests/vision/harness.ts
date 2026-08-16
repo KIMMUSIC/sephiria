@@ -2,6 +2,11 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
+import {
+  buildTemplateSources,
+  type RenderedOverridesDoc,
+  type SpriteNativesDoc,
+} from '@/lib/vision/template-catalog'
 import type {
   CellPrediction,
   ItemKind,
@@ -16,6 +21,8 @@ const ARTIFACT_DIR = path.join(PROJECT_ROOT, 'public', 'images', 'artifacts')
 const SLAB_DIR = path.join(PROJECT_ROOT, 'public', 'images', 'slabs')
 const FIXTURE_DIR = path.join(PROJECT_ROOT, 'tests', 'fixtures')
 const TABLETS_JSON = path.join(PROJECT_ROOT, 'data', 'tablets.json')
+const SPRITE_NATIVES_JSON = path.join(PROJECT_ROOT, 'data', 'sprite-natives.json')
+const RENDERED_OVERRIDES_JSON = path.join(PROJECT_ROOT, 'data', 'rendered-overrides.json')
 
 export interface GridRect {
   originX: number
@@ -67,49 +74,72 @@ export interface ScoreResult {
   counts: ScoreCounts
 }
 
-export async function loadImage(filePath: string): Promise<RGBAImage> {
-  const { data, info } = await sharp(filePath)
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true })
+const imageCache = new Map<string, Promise<RGBAImage>>()
+let templatesMemo: Promise<TemplateSource[]> | null = null
 
-  return {
-    width: info.width,
-    height: info.height,
-    data: new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength),
+export async function loadImage(filePath: string): Promise<RGBAImage> {
+  let hit = imageCache.get(filePath)
+  if (!hit) {
+    hit = sharp(filePath)
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true })
+      .then(({ data, info }) => ({
+        width: info.width,
+        height: info.height,
+        data: new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength),
+      }))
+    imageCache.set(filePath, hit)
   }
+  return hit
 }
 
 export async function loadAllTemplates(): Promise<TemplateSource[]> {
-  const tablets: { value: string; rotate?: boolean }[] = JSON.parse(
+  if (!templatesMemo) templatesMemo = loadAllTemplatesUncached()
+  return templatesMemo
+}
+
+async function decodeHarness(pathOrUrl: string): Promise<RGBAImage> {
+  const abs = path.isAbsolute(pathOrUrl) ? pathOrUrl : path.join(PROJECT_ROOT, pathOrUrl)
+  return loadImage(abs)
+}
+
+/**
+ * Directory listing (not data/artifacts.json) is the wiki sprite source so
+ * the 267+60 on-disk files keep their current order. Assembly — native
+ * attach, loud missing-entry errors, override kinds, webp↔png fallback —
+ * lives in lib/vision/template-catalog.ts.
+ */
+async function loadAllTemplatesUncached(): Promise<TemplateSource[]> {
+  const tabletsJson: { value: string; rotate?: boolean }[] = JSON.parse(
     fs.readFileSync(TABLETS_JSON, 'utf8')
   )
-  const rotatableTablets = new Set(tablets.filter((t) => t.rotate === true).map((t) => t.value))
+  const rotatableTablets = new Set(tabletsJson.filter((t) => t.rotate === true).map((t) => t.value))
+  const natives: SpriteNativesDoc = JSON.parse(fs.readFileSync(SPRITE_NATIVES_JSON, 'utf8'))
+  const overrides: RenderedOverridesDoc = fs.existsSync(RENDERED_OVERRIDES_JSON)
+    ? JSON.parse(fs.readFileSync(RENDERED_OVERRIDES_JSON, 'utf8'))
+    : { overrides: [] }
 
-  const entries: { dir: string; file: string; type: ItemKind }[] = [
-    ...fs.readdirSync(ARTIFACT_DIR).map((file) => ({
-      dir: ARTIFACT_DIR,
-      file,
-      type: 'ARTIFACT' as ItemKind,
-    })),
-    ...fs.readdirSync(SLAB_DIR).map((file) => ({
-      dir: SLAB_DIR,
-      file,
-      type: 'TABLET' as ItemKind,
-    })),
-  ]
-
-  const templates: TemplateSource[] = []
-  for (const entry of entries) {
-    const value = path.basename(entry.file, path.extname(entry.file))
-    templates.push({
+  const artifacts = fs.readdirSync(ARTIFACT_DIR).map((file) => ({
+    value: path.basename(file, path.extname(file)),
+    image: path.join(ARTIFACT_DIR, file),
+  }))
+  const tablets = fs.readdirSync(SLAB_DIR).map((file) => {
+    const value = path.basename(file, path.extname(file))
+    return {
       value,
-      type: entry.type,
-      image: await loadImage(path.join(entry.dir, entry.file)),
-      rotatable: entry.type === 'TABLET' && rotatableTablets.has(value),
-    })
-  }
-  return templates
+      image: path.join(SLAB_DIR, file),
+      rotate: rotatableTablets.has(value),
+    }
+  })
+
+  return buildTemplateSources({
+    artifacts,
+    tablets,
+    natives,
+    overrides,
+    decode: decodeHarness,
+  })
 }
 
 export function loadFixture(name: string): Fixture {

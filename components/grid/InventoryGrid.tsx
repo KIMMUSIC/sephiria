@@ -1,8 +1,10 @@
 'use client'
 
+import { useRef } from 'react'
 import { Minus, Plus } from 'lucide-react'
 import { useInventoryStore } from '@/store/inventoryStore'
 import GridCell from '@/components/grid/GridCell'
+import { CellConfirmPicker } from '@/components/upload/CellConfirmPicker'
 
 export function InventoryGrid() {
   const {
@@ -14,9 +16,24 @@ export function InventoryGrid() {
     rotateTablet,
     setSlotNum,
     slotNum,
+    recognitionMeta,
+    setPickerSlot,
   } = useInventoryStore()
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function handleClick(slotIndex: number) {
+    if (clickTimer.current) clearTimeout(clickTimer.current)
+    clickTimer.current = setTimeout(() => {
+      clickTimer.current = null
+      setPickerSlot(slotIndex)
+    }, 220)
+  }
 
   function handleDoubleClick(slotIndex: number) {
+    if (clickTimer.current) {
+      clearTimeout(clickTimer.current)
+      clickTimer.current = null
+    }
     removeItem(slotIndex)
   }
 
@@ -26,6 +43,7 @@ export function InventoryGrid() {
   }
 
   const activeMap = dragPreviewEffects ?? effectMap
+  const hasRecognition = Object.keys(recognitionMeta).length > 0
 
   return (
     <div className="flex flex-col gap-3">
@@ -43,6 +61,7 @@ export function InventoryGrid() {
               }
               const key = `${row.rowIndex}-${colIndex}`
               const effectValue = activeMap[key]
+              const meta = recognitionMeta[slotIndex]
               return (
                 <GridCell
                   key={slotIndex}
@@ -51,6 +70,10 @@ export function InventoryGrid() {
                   effectValue={effectValue}
                   onDoubleClick={handleDoubleClick}
                   onContextMenu={handleContextMenu}
+                  onClick={hasRecognition ? handleClick : undefined}
+                  lowConfidence={
+                    !!meta && !meta.overridden && meta.lowConfidence && !!slots[slotIndex]
+                  }
                 />
               )
             })}
@@ -75,6 +98,7 @@ export function InventoryGrid() {
           <Plus size={12} />
         </button>
       </div>
+      <CellConfirmPicker />
     </div>
   )
 }

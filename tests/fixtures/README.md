@@ -86,18 +86,30 @@ Values were produced by two-stage self-calibration (foreground-centroid regressi
 then a match-score sweep for origin) and visually verified against a gridline overlay on all five
 screenshots. See `PLAN/06-Recognition-Rebuild.md` §10-1.
 
-## Label status (round 2, 2026-08-09)
+## Label status (round 3, 2026-08-15)
 
 | image | slots | confirmed | empty | `???` |
 |---|---|---|---|---|
 | 1.jpeg | 30 | 11 | 0 | 19 |
 | 2.png | 36 | 18 | 16 | 2 |
-| 3.png | 36 | 16 | 17 | 3 |
+| 3.png | 36 | 17 | 16 | 3 |
 | 4.png | 36 | 16 | 18 | 2 |
-| 5.png | 36 | 25 | 5 | 6 |
+| 5.png | 36 | 26 | 4 | 6 |
 | 6.png | 30 | 29 | 1 | 0 |
 | 7.png | 35 | 29 | 6 | 0 |
-| **total** | **239** | **145** | **63** | **31** |
+| **total** | **239** | **147** | **61** | **31** |
+
+**Round 3 (2026-08-15):** the 10 label suspects flagged by the §9-G failure census were
+reviewed by the USER against side-by-side crops (cell | old label sprite | proposed sprite,
+preserved at `.omc/research/vision-diagnosis-2026-08-15/vision-census/crops/`) and ALL TEN
+were confirmed as label errors: 8 item relabels in 3.png/5.png (wit→preparation,
+unity→distribution, hope→advance, hope→connection, keel_fragment→kaleidoscope,
+shield_technique_manual→swordsmanship_textbook, warrant→honor, thornbush→thorn — the last
+also fixing type ARTIFACT→TABLET) plus 2 empty-label fixes (3.png#10→swaying_eyes,
+5.png#25→red_dew, identified by the user as 붉은 이슬; its "0/3" overlay suggests a
+depleted-state rendering). Every suspect came from candidate-assisted self-labelling —
+the user-truth fixtures (6/7.png) produced zero suspects, confirming the round-2 warning
+below.
 
 `6.png` and `7.png` are **user-supplied ground truth** — every cell named by the player, no
 candidate assistance, no `???`.
