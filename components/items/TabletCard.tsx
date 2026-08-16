@@ -18,17 +18,17 @@ const TIER_BORDER: Record<string, string> = {
   solid: 'border-tier-solid',
 }
 
-const ROTATION_DEGREES: Record<number, string> = {
-  0: 'rotate-0',
-  1: 'rotate-90',
-  2: 'rotate-180',
-  3: '-rotate-90',
-}
-
 export default function TabletCard({ tablet, size = 'md' }: TabletCardProps) {
   const { data, rotation, isCustom } = tablet
 
   const containerSize = size === 'sm' ? 'w-12 h-12' : 'w-full h-full'
+  // Engine rotation is 90° CW steps (rotateEffect rot1: (dx,dy)->(-dy,dx) on y-down).
+  // CSS rotate(+deg) is also CW. rotation 0 is a no-op for non-rotatable tablets.
+  const spriteTransform = {
+    transform: `rotate(${rotation * 90}deg)`,
+    transformOrigin: 'center',
+    transition: 'transform 150ms',
+  } as const
 
   return (
     <div
@@ -38,9 +38,12 @@ export default function TabletCard({ tablet, size = 'md' }: TabletCardProps) {
         TIER_BORDER[data.tier] ?? 'border-sephiria-border',
       )}
     >
-      {/* Tablet image */}
+      {/* Tablet image — only the sprite rotates; badges stay upright */}
       {data.image ? (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div
+          className="relative w-full h-full flex items-center justify-center"
+          style={spriteTransform}
+        >
           <Image
             src={data.image}
             alt={data.ko_label}
@@ -57,13 +60,10 @@ export default function TabletCard({ tablet, size = 'md' }: TabletCardProps) {
         </div>
       )}
 
-      {/* Rotation indicator */}
+      {/* Rotation indicator (upright) */}
       {data.rotate && (
         <div className="absolute bottom-0 right-0 p-0.5">
-          <RotateCw
-            size={10}
-            className={cn('text-sephiria-accent', ROTATION_DEGREES[rotation])}
-          />
+          <RotateCw size={10} className="text-sephiria-accent" />
         </div>
       )}
 

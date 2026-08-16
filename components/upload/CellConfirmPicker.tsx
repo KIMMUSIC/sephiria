@@ -31,12 +31,14 @@ function Thumb({
   type,
   label,
   score,
+  rotation = 0,
   onClick,
 }: {
   value: string
   type: ItemType
   label: string
   score?: number
+  rotation?: 0 | 1 | 2 | 3
   onClick: () => void
 }) {
   const src = imageOf(value, type)
@@ -48,7 +50,15 @@ function Thumb({
     >
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={label} className="h-12 w-12 object-contain" />
+        <img
+          src={src}
+          alt={label}
+          className="h-12 w-12 object-contain"
+          style={{
+            transform: `rotate(${rotation * 90}deg)`,
+            transformOrigin: 'center',
+          }}
+        />
       ) : (
         <div className="h-12 w-12" />
       )}
@@ -144,6 +154,7 @@ export function CellConfirmPicker() {
                   type={c.type}
                   label={labelOf(c.value, c.type)}
                   score={c.score}
+                  rotation={c.rotation}
                   onClick={() => {
                     overrideRecognizedCell(pickerSlot, {
                       value: c.value,
