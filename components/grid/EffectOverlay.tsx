@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { isArtifactDestroyed } from '@/lib/optimizerScore'
 import type { PlacedItem } from '@/types'
 
 interface EffectOverlayProps {
@@ -30,7 +31,7 @@ export default function EffectOverlay({ effectValue, item }: EffectOverlayProps)
   if (item?.type === 'ARTIFACT') {
     const artifact = item
     const currentLevel = artifact.currentLevel
-    if (currentLevel <= 0) {
+    if (isArtifactDestroyed(currentLevel)) {
       return (
         <div className="absolute top-0 inset-x-0 flex justify-center z-10 pointer-events-none">
           <span className="bg-red-600 text-white text-[9px] font-bold px-1 rounded-b leading-tight">

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ChevronDown, ChevronUp, Lock, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useInventoryStore } from '@/store/inventoryStore'
+import { isArtifactDestroyed } from '@/lib/optimizerScore'
 import type { PlacedArtifact } from '@/types'
 
 export default function ResultSummary() {
@@ -16,7 +17,7 @@ export default function ResultSummary() {
 
   const totalBaseLevel = artifacts.reduce((sum, a) => sum + a.level, 0)
   const totalCurrentLevel = artifacts.reduce((sum, a) => sum + a.currentLevel, 0)
-  const destroyedCount = artifacts.filter((a) => a.currentLevel <= 0).length
+  const destroyedCount = artifacts.filter((a) => isArtifactDestroyed(a.currentLevel)).length
   const lockedCount = artifacts.filter((a) => a.isLocked).length
 
   const levelDelta = totalCurrentLevel - totalBaseLevel

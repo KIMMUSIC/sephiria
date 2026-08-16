@@ -107,7 +107,15 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
   ): GridSlot => {
     if (pick.type === 'ARTIFACT') {
       const data = ARTIFACT_MAP.get(pick.value)
-      return data ? get().createArtifact(data, level) : null
+      if (!data) return null
+      // PLAN/07 E-3: screenshots carry no HUD level (level 0). Default to catalog
+      // max so loadFromRecognition and overrideRecognizedCell share one path.
+      // Level-0 catalog uniques stay 0 (alive under isArtifactDestroyed).
+      let ingestLevel = level
+      if (!(ingestLevel > 0)) {
+        ingestLevel = data.level ?? 0
+      }
+      return get().createArtifact(data, ingestLevel)
     }
     const data = TABLET_MAP.get(pick.value)
     if (!data) return null
@@ -263,18 +271,10 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
         }
 
         if (res.type && res.matchedValue) {
-          // PLAN/07 E-3: screenshots carry no HUD level (res.level 0).
-          // Default artifacts to catalog max so the optimizer does not treat
-          // a fresh recognition as destroyed.
-          let ingestLevel = res.level
-          if (res.type === 'ARTIFACT' && !(res.level > 0)) {
-            const artifactData = ARTIFACT_MAP.get(res.matchedValue)
-            if (artifactData) ingestLevel = artifactData.level
-          }
           slots[res.slotIndex] = placeRecognized(
             res.slotIndex,
             { value: res.matchedValue, type: res.type, rotation },
-            ingestLevel
+            res.level
           )
         }
       }
@@ -319,14 +319,17 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
       set({ slots, effectMap: {}, recognitionMeta: {}, pickerSlot: null })
     },
 
-    createArtifact: (data: ArtifactData, level: number): PlacedArtifact => ({
-      instanceId: generateId(),
-      type: 'ARTIFACT',
-      data,
-      level: Math.min(level, data.level),
-      currentLevel: level,
-      isLocked: false,
-    }),
+    createArtifact: (data: ArtifactData, level: number): PlacedArtifact => {
+      const capped = Math.max(0, Math.min(level, data.level))
+      return {
+        instanceId: generateId(),
+        type: 'ARTIFACT',
+        data,
+        level: capped,
+        currentLevel: capped,
+        isLocked: false,
+      }
+    },
 
     createTablet: (data: TabletData, isCustom = false, customEffects): PlacedTablet => {
       const effectDef = getTabletEffect(data.value) ?? { type: 'simple' as const, effects: [] }

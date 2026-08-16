@@ -41,6 +41,10 @@
 
 `loadFromRecognition` / `recalculate`의 rotation·`currentLevel` 로직은 이미 올바랐고 유지했다.
 
+### Correction (user-confirmed 2026-08-16)
+
+Destruction only at `currentLevel`/`finalLevel` **<= -1** (`isArtifactDestroyed(level) => level < 0`). Level 0 is a valid alive state for the 8 level-less `[고유]` catalog artifacts. Supersedes `finalLevel <= 0 → -99999`.
+
 ---
 
 ## B. Recognition

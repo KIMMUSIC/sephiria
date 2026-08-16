@@ -5,6 +5,7 @@ import { buildGridRows, slotToPosition } from '@/lib/gridUtils'
 import { nextRotation } from '@/lib/rotationUtils'
 import { getTabletEffect } from '@/data/tabletEffects'
 import { DEFAULT_SA_CONFIG } from '@/types'
+import { DESTRUCTION_SCORE, isArtifactDestroyed } from '@/lib/optimizerScore'
 import type { GridRow, GridSlot, PlacedArtifact, PlacedTablet } from '@/types'
 
 function tablet(value: string, rotation: 0 | 1 | 2 | 3 = 0): PlacedTablet {
@@ -35,7 +36,7 @@ function artifactScore(slots: GridSlot[], gridRows: GridRow[]): number {
     const pos = slotToPosition(i, gridRows)
     const bonus = map[`${pos.row}-${pos.col}`]
     const finalLevel = item.level + (typeof bonus === 'number' ? bonus : 0)
-    if (finalLevel <= 0) return -99999
+    if (isArtifactDestroyed(finalLevel)) return DESTRUCTION_SCORE
     score += finalLevel
   }
   return score

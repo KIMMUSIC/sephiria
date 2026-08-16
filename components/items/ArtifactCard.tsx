@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { Lock } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { isArtifactDestroyed } from '@/lib/optimizerScore'
 import type { PlacedArtifact } from '@/types'
 
 interface ArtifactCardProps {
@@ -21,7 +22,7 @@ const TIER_BORDER: Record<string, string> = {
 
 export default function ArtifactCard({ artifact, size = 'md', showLevel = true }: ArtifactCardProps) {
   const { data, level, currentLevel, isLocked } = artifact
-  const isDestroyed = currentLevel <= 0
+  const isDestroyed = isArtifactDestroyed(currentLevel)
   const isBuffed = currentLevel > level
   const isDebuffed = currentLevel < level && !isDestroyed
 

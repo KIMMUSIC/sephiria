@@ -6,6 +6,11 @@ import { getMaxRow, slotToPosition } from '@/lib/gridUtils'
 export const TIEBREAK = 0.01
 export const DESTRUCTION_SCORE = -99999
 
+/** Destroyed iff tablet reduction brings the cell to -1 or below. Level 0 is alive. */
+export function isArtifactDestroyed(level: number): boolean {
+  return level < 0
+}
+
 function complexPositionTiebreak(tablet: PlacedTablet, row: number, col: number, gridRows: GridRow[]): number {
   if (tablet.effectDef.type !== 'complex') return 0
   const maxRowIndex = getMaxRow(gridRows)
@@ -30,7 +35,7 @@ function complexPositionTiebreak(tablet: PlacedTablet, row: number, col: number,
 
 /**
  * SA objective.
- * Primary: sum of post-shield artifact final levels. Any finalLevel<=0 => destruction.
+ * Primary: sum of post-shield artifact final levels. Any finalLevel<0 => destruction.
  * Secondary: OOB-debuff / tablet-shield / complex-position counts at TIEBREAK scale.
  */
 export function evaluateBoard(slots: GridSlot[], gridRows: GridRow[]): number {
@@ -54,7 +59,7 @@ export function evaluateBoard(slots: GridSlot[], gridRows: GridRow[]): number {
       const effectVal = effectMap[posKey]
       const bonus = typeof effectVal === 'number' ? effectVal : 0
       const finalLevel = artifact.level + bonus
-      if (finalLevel <= 0) return DESTRUCTION_SCORE
+      if (isArtifactDestroyed(finalLevel)) return DESTRUCTION_SCORE
       levelSum += finalLevel
     } else if (item.type === 'TABLET') {
       const rawVal = rawEffects[posKey]
@@ -79,7 +84,7 @@ export function levelSumOnly(slots: GridSlot[], gridRows: GridRow[]): number {
     const pos = slotToPosition(i, gridRows)
     const bonus = effectMap[`${pos.row}-${pos.col}`]
     const finalLevel = item.level + (typeof bonus === 'number' ? bonus : 0)
-    if (finalLevel <= 0) return DESTRUCTION_SCORE
+    if (isArtifactDestroyed(finalLevel)) return DESTRUCTION_SCORE
     score += finalLevel
   }
   return score
