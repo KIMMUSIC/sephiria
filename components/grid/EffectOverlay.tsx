@@ -12,14 +12,13 @@ interface EffectOverlayProps {
 export default function EffectOverlay({ effectValue, item }: EffectOverlayProps) {
   if (effectValue === undefined) return null
 
-  // Ignore overlay: gray striped pattern
   if (effectValue === 'ignore') {
     return (
       <div
-        className="absolute inset-0 pointer-events-none rounded z-10"
+        className="pointer-events-none absolute inset-0 z-[10] rounded-inner"
         style={{
           background:
-            'repeating-linear-gradient(45deg, rgba(100,100,100,0.3) 0px, rgba(100,100,100,0.3) 4px, transparent 4px, transparent 8px)',
+            'repeating-linear-gradient(45deg, rgba(138,122,116,0.16) 0px, rgba(138,122,116,0.16) 4px, transparent 4px, transparent 8px)',
         }}
       />
     )
@@ -27,14 +26,13 @@ export default function EffectOverlay({ effectValue, item }: EffectOverlayProps)
 
   if (effectValue === 0) return null
 
-  // For artifacts: check if destroyed
   if (item?.type === 'ARTIFACT') {
     const artifact = item
     const currentLevel = artifact.currentLevel
     if (isArtifactDestroyed(currentLevel)) {
       return (
-        <div className="absolute top-0 inset-x-0 flex justify-center z-10 pointer-events-none">
-          <span className="bg-red-600 text-white text-[9px] font-bold px-1 rounded-b leading-tight">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[10] flex justify-center">
+          <span className="rounded-b bg-sephiria-destroy px-1 text-[9px] font-bold leading-tight text-sephiria-destroy-fg">
             파괴
           </span>
         </div>
@@ -46,11 +44,13 @@ export default function EffectOverlay({ effectValue, item }: EffectOverlayProps)
   const label = isPositive ? `+${effectValue}` : `${effectValue}`
 
   return (
-    <div className="absolute top-0 right-0 z-10 pointer-events-none">
+    <div className="pointer-events-none absolute right-0 top-0 z-[10]">
       <span
         className={cn(
-          'text-[9px] font-bold px-1 rounded-bl leading-tight block',
-          isPositive ? 'bg-blue-600 text-white' : 'bg-red-600 text-white',
+          'block rounded-bl px-1 text-[9px] font-bold leading-tight',
+          isPositive
+            ? 'bg-sephiria-buff text-sephiria-buff-fg'
+            : 'bg-sephiria-debuff text-sephiria-debuff-fg',
         )}
       >
         {label}

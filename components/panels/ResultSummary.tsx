@@ -1,14 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { ChevronDown, ChevronUp, Lock, AlertTriangle } from 'lucide-react'
+import { Lock, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Panel } from '@/components/ui/panel'
 import { useInventoryStore } from '@/store/inventoryStore'
 import { isArtifactDestroyed } from '@/lib/optimizerScore'
 import type { PlacedArtifact } from '@/types'
 
 export default function ResultSummary() {
-  const [collapsed, setCollapsed] = useState(false)
   const { slots, lastOptimize } = useInventoryStore()
 
   const placed = slots.filter(Boolean)
@@ -24,65 +23,51 @@ export default function ResultSummary() {
   const deltaSign = levelDelta >= 0 ? '+' : ''
 
   return (
-    <div className="bg-sephiria-panel border border-sephiria-border rounded-lg overflow-hidden">
-      {/* Header */}
-      <button
-        onClick={() => setCollapsed((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-2 hover:bg-sephiria-grid transition-colors"
-      >
-        <span className="text-white font-semibold text-sm">결과 요약</span>
-        {collapsed ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronUp size={16} className="text-gray-400" />}
-      </button>
-
-      {!collapsed && (
-        <div className="p-3 grid grid-cols-2 gap-2">
-          <StatCard label="아티팩트" value={artifacts.length} />
-          <StatCard label="석판" value={tablets.length} />
-          <StatCard
-            label="기본 레벨 합"
-            value={totalBaseLevel}
-          />
-          <StatCard
-            label="현재 레벨 합"
-            value={totalCurrentLevel}
-            sub={
-              levelDelta !== 0 ? (
-                <span className={cn(
-                  'text-[10px] font-semibold',
-                  levelDelta > 0 ? 'text-blue-400' : 'text-red-400'
-                )}>
-                  ({deltaSign}{levelDelta})
-                </span>
-              ) : undefined
-            }
-          />
-
-          {destroyedCount > 0 && (
-            <div className="col-span-2 flex items-center gap-2 bg-red-900/40 border border-red-700/50 rounded p-2">
-              <AlertTriangle size={14} className="text-red-400 shrink-0" />
-              <span className="text-red-300 text-xs font-medium">
-                파괴된 아티팩트: {destroyedCount}개
+    <Panel title="결과 요약">
+      <div className="grid grid-cols-2 gap-2">
+        <StatCard label="아티팩트" value={artifacts.length} />
+        <StatCard label="석판" value={tablets.length} />
+        <StatCard label="기본 레벨 합" value={totalBaseLevel} />
+        <StatCard
+          label="현재 레벨 합"
+          value={totalCurrentLevel}
+          sub={
+            levelDelta !== 0 ? (
+              <span className={cn(
+                'text-[10px] font-semibold',
+                levelDelta > 0 ? 'text-sephiria-buff-fg' : 'text-sephiria-debuff-fg'
+              )}>
+                ({deltaSign}{levelDelta})
               </span>
-            </div>
-          )}
+            ) : undefined
+          }
+        />
 
-          {lockedCount > 0 && (
-            <div className="col-span-2 flex items-center gap-2 bg-sephiria-cell rounded p-2">
-              <Lock size={14} className="text-sephiria-gold shrink-0" />
-              <span className="text-gray-300 text-xs">잠긴 아티팩트: {lockedCount}개</span>
-            </div>
-          )}
+        {destroyedCount > 0 && (
+          <div className="col-span-2 flex items-center gap-2 rounded-inner border border-sephiria-debuff-fg/20 bg-sephiria-debuff p-2">
+            <AlertTriangle size={14} className="shrink-0 text-sephiria-debuff-fg" />
+            <span className="text-xs font-medium text-sephiria-debuff-fg">
+              파괴된 아티팩트: {destroyedCount}개
+            </span>
+          </div>
+        )}
 
-          {lastOptimize && (
-            <div className="col-span-2 grid grid-cols-3 gap-2">
-              <StatCard label="최적화 이전" value={Number(lastOptimize.beforeScore.toFixed(2))} />
-              <StatCard label="최적화 이후" value={Number(lastOptimize.afterScore.toFixed(2))} />
-              <StatCard label="반복 횟수" value={lastOptimize.iterations} />
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+        {lockedCount > 0 && (
+          <div className="col-span-2 flex items-center gap-2 rounded-inner bg-sephiria-grid p-2">
+            <Lock size={14} className="shrink-0 text-sephiria-gold" />
+            <span className="text-xs text-sephiria-fg">잠긴 아티팩트: {lockedCount}개</span>
+          </div>
+        )}
+
+        {lastOptimize && (
+          <div className="col-span-2 grid grid-cols-3 gap-2">
+            <StatCard label="최적화 이전" value={Number(lastOptimize.beforeScore.toFixed(2))} />
+            <StatCard label="최적화 이후" value={Number(lastOptimize.afterScore.toFixed(2))} />
+            <StatCard label="반복 횟수" value={lastOptimize.iterations} />
+          </div>
+        )}
+      </div>
+    </Panel>
   )
 }
 
@@ -96,10 +81,10 @@ function StatCard({
   sub?: React.ReactNode
 }) {
   return (
-    <div className="bg-sephiria-cell rounded p-2 flex flex-col gap-0.5">
-      <span className="text-gray-400 text-[10px]">{label}</span>
+    <div className="flex flex-col gap-0.5 rounded-inner bg-sephiria-grid p-2">
+      <span className="text-[10px] text-sephiria-muted">{label}</span>
       <div className="flex items-baseline gap-1">
-        <span className="text-white font-semibold text-sm">{value}</span>
+        <span className="text-sm font-semibold tabular-nums text-sephiria-fg">{value}</span>
         {sub}
       </div>
     </div>

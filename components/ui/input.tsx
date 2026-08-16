@@ -11,8 +11,8 @@ export const Input = forwardRef<
     <input
       ref={ref}
       className={cn(
-        'h-9 w-full rounded-md border border-sephiria-border bg-sephiria-cell px-3 py-1',
-        'text-sm text-gray-200 placeholder:text-gray-500',
+        'h-9 w-full rounded-ctl border border-sephiria-border bg-sephiria-cell px-3 py-1',
+        'text-sm text-sephiria-fg placeholder:text-sephiria-muted',
         'focus:border-sephiria-accent focus:outline-none focus:ring-1 focus:ring-sephiria-accent',
         'disabled:cursor-not-allowed disabled:opacity-50',
         className

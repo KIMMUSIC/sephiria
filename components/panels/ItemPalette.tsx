@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { ChevronDown, ChevronUp, Search } from 'lucide-react'
+import { ChevronDown, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ARTIFACTS, ARTIFACT_SETS } from '@/data/artifacts'
 import { TABLETS } from '@/data/tablets'
-import type { ArtifactData, TabletData, Tier } from '@/types'
+import type { ArtifactData, TabletData } from '@/types'
 import Image from 'next/image'
 
 const TIERS: Array<{ label: string; value: string }> = [
@@ -26,7 +26,6 @@ const TIER_DOT: Record<string, string> = {
   solid: 'bg-tier-solid',
 }
 
-// ── Draggable Artifact Thumb ──
 function ArtifactThumb({ artifact, level }: { artifact: ArtifactData; level: number }) {
   const { setNodeRef, attributes, listeners, isDragging } = useDraggable({
     id: `palette-artifact-${artifact.id}`,
@@ -44,7 +43,7 @@ function ArtifactThumb({ artifact, level }: { artifact: ArtifactData; level: num
       {...attributes}
       {...listeners}
       className={cn(
-        'relative w-12 h-12 rounded border-2 bg-sephiria-cell cursor-grab active:cursor-grabbing overflow-hidden flex items-center justify-center',
+        'relative flex h-12 w-12 cursor-grab items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell active:cursor-grabbing',
         `border-tier-${artifact.tier}`,
         isDragging && 'opacity-40',
       )}
@@ -59,19 +58,17 @@ function ArtifactThumb({ artifact, level }: { artifact: ArtifactData; level: num
           unoptimized
         />
       ) : (
-        <span className="text-[8px] text-gray-400 text-center leading-tight px-0.5 break-words">
+        <span className="break-words px-0.5 text-center text-[8px] leading-tight text-sephiria-muted">
           {artifact.label_kor}
         </span>
       )}
-      {/* Level badge */}
-      <div className="absolute bottom-0 right-0 bg-black/70 text-gray-200 text-[9px] px-0.5 rounded-tl leading-tight">
+      <div className="absolute bottom-0 right-0 rounded-tl bg-sephiria-ink/75 px-0.5 text-[9px] leading-tight tabular-nums text-sephiria-bg">
         {level}
       </div>
     </div>
   )
 }
 
-// ── Draggable Tablet Thumb ──
 function TabletThumb({ tablet }: { tablet: TabletData }) {
   const { setNodeRef, attributes, listeners, isDragging } = useDraggable({
     id: `palette-tablet-${tablet.value}`,
@@ -88,7 +85,7 @@ function TabletThumb({ tablet }: { tablet: TabletData }) {
       {...attributes}
       {...listeners}
       className={cn(
-        'relative w-12 h-12 rounded border-2 bg-sephiria-cell cursor-grab active:cursor-grabbing overflow-hidden flex items-center justify-center',
+        'relative flex h-12 w-12 cursor-grab items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell active:cursor-grabbing',
         `border-tier-${tablet.tier}`,
         isDragging && 'opacity-40',
       )}
@@ -103,7 +100,7 @@ function TabletThumb({ tablet }: { tablet: TabletData }) {
           unoptimized
         />
       ) : (
-        <span className="text-[8px] text-gray-400 text-center leading-tight px-0.5 break-words">
+        <span className="break-words px-0.5 text-center text-[8px] leading-tight text-sephiria-muted">
           {tablet.ko_label}
         </span>
       )}
@@ -117,7 +114,6 @@ export function ItemPalette() {
   const [search, setSearch] = useState('')
   const [filterTier, setFilterTier] = useState<string>('all')
   const [filterSet, setFilterSet] = useState<string>('all')
-  // Per-artifact level inputs
   const [levelMap, setLevelMap] = useState<Record<number, number>>({})
 
   function getArtifactLevel(artifact: ArtifactData): number {
@@ -142,29 +138,35 @@ export function ItemPalette() {
   })
 
   return (
-    <div className="bg-sephiria-panel border border-sephiria-border rounded-lg overflow-hidden">
-      {/* Header */}
+    <section className="overflow-hidden rounded-shell border border-sephiria-border bg-sephiria-panel">
       <button
+        type="button"
         onClick={() => setCollapsed((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-2 hover:bg-sephiria-grid transition-colors"
+        className="flex w-full items-center justify-between px-4 py-2.5 text-sm font-semibold text-sephiria-fg transition-colors duration-200 ease-seph hover:bg-sephiria-grid/60"
       >
-        <span className="text-white font-semibold text-sm">아이템 팔레트</span>
-        {collapsed ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronUp size={16} className="text-gray-400" />}
+        <span>아이템 팔레트</span>
+        <ChevronDown
+          size={16}
+          className={cn(
+            'text-sephiria-muted transition-transform duration-200 ease-seph',
+            collapsed ? '' : 'rotate-180'
+          )}
+        />
       </button>
 
       {!collapsed && (
-        <div className="p-3 flex flex-col gap-3">
-          {/* Tabs */}
+        <div className="flex flex-col gap-3 border-t border-sephiria-border p-3">
           <div className="flex gap-1">
             {(['artifact', 'tablet'] as const).map((t) => (
               <button
                 key={t}
+                type="button"
                 onClick={() => setTab(t)}
                 className={cn(
-                  'px-3 py-1 text-xs rounded font-medium transition-colors',
+                  'rounded-ctl px-3 py-1 text-xs font-medium transition-colors duration-200 ease-seph',
                   tab === t
-                    ? 'bg-sephiria-accent text-white'
-                    : 'bg-sephiria-cell text-gray-400 hover:text-white',
+                    ? 'bg-sephiria-accent-soft text-sephiria-accent-fg'
+                    : 'bg-sephiria-cell text-sephiria-muted hover:text-sephiria-fg',
                 )}
               >
                 {t === 'artifact' ? '아티팩트' : '석판'}
@@ -172,45 +174,43 @@ export function ItemPalette() {
             ))}
           </div>
 
-          {/* Search */}
           <div className="relative">
-            <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500" />
+            <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-sephiria-muted" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="이름 검색..."
-              className="w-full bg-sephiria-cell border border-sephiria-border rounded px-6 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-sephiria-accent"
+              placeholder="이름 검색"
+              className="w-full rounded-ctl border border-sephiria-border bg-sephiria-cell py-1 pl-6 pr-2 text-xs text-sephiria-fg placeholder:text-sephiria-muted focus:border-sephiria-accent focus:outline-none focus:ring-1 focus:ring-sephiria-accent"
             />
           </div>
 
-          {/* Tier filters */}
           <div className="flex flex-wrap gap-1">
             {TIERS.map((t) => (
               <button
                 key={t.value}
+                type="button"
                 onClick={() => setFilterTier(t.value)}
                 className={cn(
-                  'px-2 py-0.5 text-[10px] rounded font-medium transition-colors flex items-center gap-1',
+                  'flex items-center gap-1 rounded-ctl px-2 py-0.5 text-[10px] font-medium transition-colors duration-200 ease-seph',
                   filterTier === t.value
-                    ? 'bg-sephiria-accent text-white'
-                    : 'bg-sephiria-cell text-gray-400 hover:text-white border border-sephiria-border',
+                    ? 'bg-sephiria-accent-soft text-sephiria-accent-fg'
+                    : 'border border-sephiria-border bg-sephiria-cell text-sephiria-muted hover:text-sephiria-fg',
                 )}
               >
                 {t.value !== 'all' && (
-                  <span className={cn('w-1.5 h-1.5 rounded-full', TIER_DOT[t.value])} />
+                  <span className={cn('h-1.5 w-1.5 rounded-full', TIER_DOT[t.value])} />
                 )}
                 {t.label}
               </button>
             ))}
           </div>
 
-          {/* Set filter (artifacts only) */}
           {tab === 'artifact' && (
             <select
               value={filterSet}
               onChange={(e) => setFilterSet(e.target.value)}
-              className="bg-sephiria-cell border border-sephiria-border rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-sephiria-accent"
+              className="rounded-ctl border border-sephiria-border bg-sephiria-cell px-2 py-1 text-xs text-sephiria-fg focus:border-sephiria-accent focus:outline-none"
             >
               <option value="all">전체 세트</option>
               {ARTIFACT_SETS.map((s) => (
@@ -219,37 +219,44 @@ export function ItemPalette() {
             </select>
           )}
 
-          {/* Item grid */}
           <div className="max-h-64 overflow-y-auto">
             {tab === 'artifact' ? (
-              <div className="grid grid-cols-4 gap-2">
-                {filteredArtifacts.map((artifact) => (
-                  <div key={artifact.id} className="flex flex-col items-center gap-1">
-                    <ArtifactThumb artifact={artifact} level={getArtifactLevel(artifact)} />
-                    <input
-                      type="number"
-                      min={0}
-                      max={artifact.level}
-                      value={getArtifactLevel(artifact)}
-                      onChange={(e) => setArtifactLevel(artifact.id, Number(e.target.value), artifact.level)}
-                      onClick={(e) => e.stopPropagation()}
-                      className="w-12 bg-sephiria-cell border border-sephiria-border rounded text-center text-[10px] text-white py-0.5 focus:outline-none focus:border-sephiria-accent"
-                    />
-                  </div>
-                ))}
-              </div>
+              filteredArtifacts.length === 0 ? (
+                <p className="py-6 text-center text-xs text-sephiria-muted">검색 결과가 없습니다.</p>
+              ) : (
+                <div className="grid grid-cols-4 gap-2">
+                  {filteredArtifacts.map((artifact) => (
+                    <div key={artifact.id} className="flex flex-col items-center gap-1">
+                      <ArtifactThumb artifact={artifact} level={getArtifactLevel(artifact)} />
+                      <input
+                        type="number"
+                        min={0}
+                        max={artifact.level}
+                        value={getArtifactLevel(artifact)}
+                        onChange={(e) => setArtifactLevel(artifact.id, Number(e.target.value), artifact.level)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-12 rounded-ctl border border-sephiria-border bg-sephiria-cell py-0.5 text-center text-[10px] tabular-nums text-sephiria-fg focus:border-sephiria-accent focus:outline-none"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )
             ) : (
-              <div className="grid grid-cols-4 gap-2">
-                {filteredTablets.map((tablet) => (
-                  <div key={tablet.value} className="flex flex-col items-center">
-                    <TabletThumb tablet={tablet} />
-                  </div>
-                ))}
-              </div>
+              filteredTablets.length === 0 ? (
+                <p className="py-6 text-center text-xs text-sephiria-muted">검색 결과가 없습니다.</p>
+              ) : (
+                <div className="grid grid-cols-4 gap-2">
+                  {filteredTablets.map((tablet) => (
+                    <div key={tablet.value} className="flex flex-col items-center">
+                      <TabletThumb tablet={tablet} />
+                    </div>
+                  ))}
+                </div>
+              )
             )}
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }

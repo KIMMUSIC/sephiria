@@ -46,7 +46,7 @@ function Thumb({
     <button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-center gap-1 rounded-md border border-sephiria-border bg-sephiria-cell p-1.5 hover:border-sephiria-accent w-[88px]"
+      className="flex w-[88px] flex-col items-center gap-1 rounded-inner border border-sephiria-border bg-sephiria-cell p-1.5 transition-colors duration-200 ease-seph hover:border-sephiria-accent"
     >
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -62,11 +62,11 @@ function Thumb({
       ) : (
         <div className="h-12 w-12" />
       )}
-      <span className="text-[10px] text-gray-200 text-center leading-tight line-clamp-2 w-full">
+      <span className="line-clamp-2 w-full text-center text-[10px] leading-tight text-sephiria-fg">
         {label}
       </span>
       {score != null && (
-        <span className="text-[9px] text-gray-500">{score.toFixed(3)}</span>
+        <span className="text-[9px] tabular-nums text-sephiria-muted">{score.toFixed(3)}</span>
       )}
     </button>
   )
@@ -133,19 +133,19 @@ export function CellConfirmPicker() {
     >
       <div className="flex flex-col gap-3">
         {meta && (
-          <p className="text-[11px] text-gray-400">
+          <p className="text-[11px] text-sephiria-muted">
             {meta.matchedValue
               ? `현재: ${labelOf(meta.matchedValue, meta.type)} · 점수 ${meta.confidence.toFixed(3)}`
               : '현재: 빈 칸'}
             {meta.lowConfidence && !meta.overridden && (
-              <span className="ml-2 text-yellow-400">확인 필요</span>
+              <span className="ml-2 text-sephiria-confirm-fg">확인 필요</span>
             )}
           </p>
         )}
 
         {candidates.length > 0 && (
           <div>
-            <p className="text-[11px] text-gray-400 mb-1.5">후보</p>
+            <p className="mb-1.5 text-[11px] text-sephiria-muted">후보</p>
             <div className="flex flex-wrap gap-2">
               {candidates.map((c) => (
                 <Thumb
@@ -182,22 +182,22 @@ export function CellConfirmPicker() {
         </Button>
 
         <div>
-          <p className="text-[11px] text-gray-400 mb-1.5">카탈로그 검색</p>
+          <p className="mb-1.5 text-[11px] text-sephiria-muted">카탈로그 검색</p>
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="이름 검색..."
+            placeholder="이름 검색"
             autoFocus
           />
           {searchHits.length > 0 && (
-            <div className="mt-2 max-h-48 overflow-y-auto flex flex-col gap-0.5">
+            <div className="mt-2 flex max-h-48 flex-col gap-0.5 overflow-y-auto">
               {searchHits.map((h) => (
                 <button
                   key={`${h.type}-${h.value}`}
                   type="button"
                   className={cn(
-                    'flex items-center gap-2 rounded px-2 py-1 text-left text-[12px]',
-                    'hover:bg-sephiria-cell text-gray-200'
+                    'flex items-center gap-2 rounded-ctl px-2 py-1 text-left text-[12px]',
+                    'text-sephiria-fg hover:bg-sephiria-grid'
                   )}
                   onClick={() => {
                     overrideRecognizedCell(pickerSlot, {
@@ -217,7 +217,7 @@ export function CellConfirmPicker() {
                     />
                   )}
                   <span className="flex-1 truncate">{h.label}</span>
-                  <span className="text-[10px] text-gray-500">
+                  <span className="text-[10px] text-sephiria-muted">
                     {h.type === 'ARTIFACT' ? '아티팩트' : '석판'}
                   </span>
                 </button>

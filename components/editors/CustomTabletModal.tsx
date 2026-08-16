@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { useInventoryStore } from '@/store/inventoryStore'
 import type { Effect } from '@/types'
 
@@ -11,23 +12,21 @@ interface CustomTabletModalProps {
   onClose: () => void
 }
 
-type CellValue = number // -1 ~ +5
+type CellValue = number
 
 const GRID_SIZE = 5
-const CENTER = 2 // center row/col
+const CENTER = 2
 
 function initGrid(): CellValue[][] {
-  return Array.from({ length: GRID_SIZE }, (_, row) =>
-    Array.from({ length: GRID_SIZE }, (_, col) =>
-      row === CENTER && col === CENTER ? 0 : 0
-    )
+  return Array.from({ length: GRID_SIZE }, () =>
+    Array.from({ length: GRID_SIZE }, () => 0)
   )
 }
 
 function cellBg(value: CellValue, isCenter: boolean): string {
-  if (isCenter) return 'bg-sephiria-gold/30 border-sephiria-gold'
-  if (value > 0) return 'bg-blue-900/60 border-blue-500'
-  if (value < 0) return 'bg-red-900/60 border-red-500'
+  if (isCenter) return 'bg-sephiria-confirm border-sephiria-gold'
+  if (value > 0) return 'bg-sephiria-buff border-sephiria-buff-fg/40'
+  if (value < 0) return 'bg-sephiria-debuff border-sephiria-debuff-fg/40'
   return 'bg-sephiria-cell border-sephiria-border'
 }
 
@@ -48,8 +47,6 @@ export function CustomTabletModal({ slotIndex, onClose }: CustomTabletModalProps
     setGrid((prev) => {
       const next = prev.map((r) => [...r])
       const cur = next[row][col]
-      // Cycle: 0 → 1 → 2 → 3 → 4 → 5 → 0
-      // But if currently negative, left click resets to 0 first
       if (cur < 0) {
         next[row][col] = 0
       } else {
@@ -65,7 +62,6 @@ export function CustomTabletModal({ slotIndex, onClose }: CustomTabletModalProps
     setGrid((prev) => {
       const next = prev.map((r) => [...r])
       const cur = next[row][col]
-      // Toggle: anything → -1, -1 → 0
       next[row][col] = cur === -1 ? 0 : -1
       return next
     })
@@ -77,7 +73,6 @@ export function CustomTabletModal({ slotIndex, onClose }: CustomTabletModalProps
       return
     }
 
-    // Convert 5x5 grid to Effect[]
     const effects: Effect[] = []
     for (let row = 0; row < GRID_SIZE; row++) {
       for (let col = 0; col < GRID_SIZE; col++) {
@@ -107,39 +102,44 @@ export function CustomTabletModal({ slotIndex, onClose }: CustomTabletModalProps
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="bg-sephiria-panel border border-sephiria-border rounded-xl shadow-2xl p-5 w-[360px] flex flex-col gap-4">
-        {/* Header */}
+    <div className="fixed inset-0 z-[50] flex items-center justify-center bg-sephiria-ink/30 px-4">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="custom-tablet-title"
+        className="flex w-[360px] flex-col gap-4 rounded-shell border border-sephiria-border bg-sephiria-panel p-5 shadow-seph"
+      >
         <div className="flex items-center justify-between">
-          <h2 className="text-white font-semibold text-base">커스텀 석판 편집</h2>
+          <h2 id="custom-tablet-title" className="text-base font-semibold text-sephiria-fg">
+            커스텀 석판 편집
+          </h2>
           <button
+            type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-sephiria-muted transition-colors duration-200 ease-seph hover:text-sephiria-fg"
+            aria-label="닫기"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Name input */}
         <div className="flex flex-col gap-1">
-          <label className="text-gray-400 text-xs">석판 이름</label>
+          <label className="text-xs text-sephiria-muted">석판 이름</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="bg-sephiria-cell border border-sephiria-border rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sephiria-accent"
+            className="rounded-ctl border border-sephiria-border bg-sephiria-cell px-3 py-1.5 text-sm text-sephiria-fg focus:border-sephiria-accent focus:outline-none focus:ring-1 focus:ring-sephiria-accent"
           />
         </div>
 
-        {/* Instructions */}
-        <div className="text-xs text-gray-500 leading-relaxed">
-          <span className="text-blue-400">좌클릭</span>: 양수 증가 (0→+5→0)
-          &nbsp;&nbsp;
-          <span className="text-red-400">우클릭</span>: 음수 토글 (0↔-1)
+        <div className="text-xs leading-relaxed text-sephiria-muted">
+          <span className="text-sephiria-buff-fg">좌클릭</span>: 양수 증가 (0→+5→0)
+          {'  '}
+          <span className="text-sephiria-debuff-fg">우클릭</span>: 음수 토글 (0↔-1)
         </div>
 
-        {/* 5x5 grid */}
-        <div className="flex flex-col gap-1 items-center">
+        <div className="flex flex-col items-center gap-1">
           {grid.map((row, rowIdx) => (
             <div key={rowIdx} className="flex gap-1">
               {row.map((value, colIdx) => {
@@ -147,19 +147,20 @@ export function CustomTabletModal({ slotIndex, onClose }: CustomTabletModalProps
                 return (
                   <button
                     key={colIdx}
+                    type="button"
                     onClick={() => handleLeftClick(rowIdx, colIdx)}
                     onContextMenu={(e) => handleRightClick(e, rowIdx, colIdx)}
                     disabled={isCenter}
                     className={cn(
-                      'w-12 h-12 rounded border-2 text-sm font-bold transition-colors select-none',
+                      'h-12 w-12 select-none rounded-inner border-2 text-sm font-bold tabular-nums transition-colors duration-200 ease-seph',
                       cellBg(value, isCenter),
                       isCenter
-                        ? 'text-sephiria-gold cursor-default'
+                        ? 'cursor-default text-sephiria-gold'
                         : value > 0
-                        ? 'text-blue-300 hover:bg-blue-800/60'
+                        ? 'text-sephiria-buff-fg hover:bg-sephiria-buff'
                         : value < 0
-                        ? 'text-red-300 hover:bg-red-800/60'
-                        : 'text-gray-600 hover:bg-sephiria-grid',
+                        ? 'text-sephiria-debuff-fg hover:bg-sephiria-debuff'
+                        : 'text-sephiria-muted hover:bg-sephiria-grid',
                     )}
                   >
                     {cellLabel(value, isCenter)}
@@ -170,8 +171,7 @@ export function CustomTabletModal({ slotIndex, onClose }: CustomTabletModalProps
           ))}
         </div>
 
-        {/* Effect preview */}
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-sephiria-muted">
           효과 셀: {
             grid.flat().filter((v, i) => {
               const row = Math.floor(i / GRID_SIZE)
@@ -181,20 +181,13 @@ export function CustomTabletModal({ slotIndex, onClose }: CustomTabletModalProps
           }개
         </div>
 
-        {/* Buttons */}
-        <div className="flex gap-2 justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm text-gray-400 hover:text-white border border-sephiria-border rounded hover:bg-sephiria-grid transition-colors"
-          >
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={onClose}>
             취소
-          </button>
-          <button
-            onClick={handleConfirm}
-            className="px-4 py-2 text-sm bg-sephiria-accent hover:bg-purple-500 text-white font-semibold rounded transition-colors"
-          >
+          </Button>
+          <Button size="sm" onClick={handleConfirm}>
             확인
-          </button>
+          </Button>
         </div>
       </div>
     </div>

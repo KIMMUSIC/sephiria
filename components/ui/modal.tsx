@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, type ReactNode } from 'react'
+import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface ModalProps {
@@ -24,28 +25,31 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-[50] flex items-center justify-center px-4">
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-sephiria-ink/30"
         onClick={onClose}
       />
-      {/* Content */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
         className={cn(
-          'relative z-10 max-h-[90vh] overflow-auto rounded-xl border border-sephiria-border bg-sephiria-panel p-6 shadow-2xl',
+          'relative z-[50] max-h-[90vh] overflow-auto rounded-shell border border-sephiria-border bg-sephiria-panel p-6 shadow-seph',
           className
         )}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-100">{title}</h2>
+          <h2 id="modal-title" className="text-lg font-semibold tracking-tight text-sephiria-fg">
+            {title}
+          </h2>
           <button
+            type="button"
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 hover:bg-sephiria-cell hover:text-white"
+            className="rounded-ctl p-1 text-sephiria-muted transition-colors duration-200 ease-seph hover:bg-sephiria-grid hover:text-sephiria-fg"
+            aria-label="닫기"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X size={18} />
           </button>
         </div>
         {children}

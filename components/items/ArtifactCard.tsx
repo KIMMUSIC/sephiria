@@ -31,15 +31,14 @@ export default function ArtifactCard({ artifact, size = 'md', showLevel = true }
   return (
     <div
       className={cn(
-        'relative flex flex-col items-center justify-center rounded border-2 overflow-hidden select-none',
+        'relative flex select-none flex-col items-center justify-center overflow-hidden rounded-inner border-2',
         containerSize,
         TIER_BORDER[data.tier] ?? 'border-sephiria-border',
-        isDestroyed && 'opacity-60 bg-red-950/60',
+        isDestroyed && 'bg-sephiria-destroy/60 opacity-70',
       )}
     >
-      {/* Artifact image */}
       {data.image ? (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="relative flex h-full w-full items-center justify-center">
           <Image
             src={data.image}
             alt={data.label_kor}
@@ -49,38 +48,35 @@ export default function ArtifactCard({ artifact, size = 'md', showLevel = true }
           />
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-sephiria-cell">
-          <span className="text-[9px] text-gray-400 text-center leading-tight px-0.5 break-words">
+        <div className="flex h-full w-full items-center justify-center bg-sephiria-cell">
+          <span className="break-words px-0.5 text-center text-[9px] leading-tight text-sephiria-muted">
             {data.label_kor}
           </span>
         </div>
       )}
 
-      {/* Level badge */}
       {showLevel && (
         <div
           className={cn(
-            'absolute bottom-0 right-0 text-[10px] font-bold px-1 rounded-tl leading-tight',
-            isDestroyed && 'bg-red-600 text-white',
-            !isDestroyed && isBuffed && 'bg-blue-600 text-white',
-            !isDestroyed && isDebuffed && 'bg-yellow-600 text-white',
-            !isDestroyed && !isBuffed && !isDebuffed && 'bg-black/70 text-gray-200',
+            'absolute bottom-0 right-0 rounded-tl px-1 text-[10px] font-bold leading-tight tabular-nums',
+            isDestroyed && 'bg-sephiria-destroy text-sephiria-destroy-fg',
+            !isDestroyed && isBuffed && 'bg-sephiria-buff text-sephiria-buff-fg',
+            !isDestroyed && isDebuffed && 'bg-sephiria-confirm text-sephiria-confirm-fg',
+            !isDestroyed && !isBuffed && !isDebuffed && 'bg-sephiria-ink/75 text-sephiria-bg',
           )}
         >
           {currentLevel}
         </div>
       )}
 
-      {/* Destroyed overlay */}
       {isDestroyed && (
-        <div className="absolute inset-0 flex items-center justify-center bg-red-900/40">
-          <span className="text-red-400 text-[9px] font-bold">파괴</span>
+        <div className="absolute inset-0 flex items-center justify-center bg-sephiria-destroy/40">
+          <span className="text-[9px] font-bold text-sephiria-destroy-fg">파괴</span>
         </div>
       )}
 
-      {/* Lock icon */}
       {isLocked && (
-        <div className="absolute top-0 left-0 p-0.5">
+        <div className="absolute left-0 top-0 p-0.5">
           <Lock size={10} className="text-sephiria-gold" />
         </div>
       )}

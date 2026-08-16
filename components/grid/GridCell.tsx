@@ -37,7 +37,6 @@ export default function GridCell({
     data: { source: 'grid', slotIndex },
   })
 
-  // Merge droppable + draggable refs
   const setRef = (node: HTMLDivElement | null) => {
     setDropRef(node)
     setDragRef(node)
@@ -49,10 +48,10 @@ export default function GridCell({
       {...attributes}
       {...listeners}
       className={cn(
-        'relative bg-sephiria-cell border border-sephiria-border rounded-md',
-        'w-[80px] h-[80px] flex items-center justify-center cursor-pointer',
-        'transition-all duration-100',
-        isOver && 'border-sephiria-accent bg-sephiria-accent/20 scale-105',
+        'relative flex h-[80px] w-[80px] cursor-pointer items-center justify-center',
+        'rounded-inner border border-sephiria-border bg-sephiria-cell',
+        'transition-transform duration-200 ease-seph',
+        isOver && 'scale-105 border-sephiria-accent bg-sephiria-accent-soft',
         isDragging && 'opacity-40',
         !item && 'hover:bg-sephiria-grid',
       )}
@@ -60,7 +59,6 @@ export default function GridCell({
       onDoubleClick={() => onDoubleClick(slotIndex)}
       onContextMenu={(e) => onContextMenu(e, slotIndex)}
     >
-      {/* Item content */}
       {item?.type === 'ARTIFACT' && (
         <ArtifactCard artifact={item} size="md" showLevel />
       )}
@@ -68,20 +66,20 @@ export default function GridCell({
         <TabletCard tablet={item} size="md" />
       )}
 
-      {/* Empty cell indicator */}
       {!item && (
-        <div className="w-full h-full flex items-center justify-center">
-          <span className="text-sephiria-border/40 text-xs select-none">{slotIndex + 1}</span>
+        <div className="flex h-full w-full items-center justify-center">
+          <span className="select-none text-xs tabular-nums text-sephiria-border">
+            {slotIndex + 1}
+          </span>
         </div>
       )}
 
       {lowConfidence && (
-        <span className="absolute top-0.5 right-0.5 z-10 rounded bg-yellow-500 px-1 py-px text-[9px] font-bold leading-tight text-black pointer-events-none">
+        <span className="pointer-events-none absolute right-0.5 top-0.5 z-[10] rounded bg-sephiria-confirm px-1 py-px text-[9px] font-bold leading-tight text-sephiria-confirm-fg">
           확인
         </span>
       )}
 
-      {/* Effect overlay */}
       <EffectOverlay effectValue={effectValue} item={item} />
     </div>
   )

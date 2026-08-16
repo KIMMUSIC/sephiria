@@ -1,66 +1,113 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
-
 :root {
-  --bg-primary: #1a0f1a;
-  --bg-panel: #2f1c2c;
-  --bg-grid: #40273b;
-  --bg-cell: #352040;
-  --border-color: #5a3d55;
-  --accent: #8b5cf6;
+  color-scheme: light;
+  --seph-bg: #f7f6f3;
+  --seph-panel: #fffbfa;
+  --seph-grid: #f1ebe6;
+  --seph-cell: #ffffff;
+  --seph-border: #e6ddd6;
+  --seph-fg: #3a322e;
+  --seph-muted: #8a7a74;
+  --seph-accent: #c47a8a;
+  --seph-accent-soft: #f6e4e8;
+  --seph-accent-fg: #7a3d4a;
+  --seph-ink: #2c2623;
+  --seph-gold: #c9a06a;
+  --seph-buff: #e1f3fe;
+  --seph-buff-fg: #1f6c9f;
+  --seph-debuff: #fdebec;
+  --seph-debuff-fg: #9f2f2d;
+  --seph-destroy: #f4d0d2;
+  --seph-destroy-fg: #8a2422;
+  --seph-confirm: #fbf3db;
+  --seph-confirm-fg: #956400;
+  --z-cell: 10;
+  --z-modal: 50;
+  --z-grain: 60;
 }
 
 body {
-  font-family: 'Pretendard Variable', sans-serif;
-  background-color: var(--bg-primary);
-  color: #e2d5e8;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  background-color: var(--seph-bg);
+  color: var(--seph-fg);
 }
 
-/* Scrollbar */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: calc(var(--z-grain) + 1);
+  border-radius: 6px;
+  background: var(--seph-ink);
+  color: var(--seph-bg);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Grain on a fixed layer only - never on scrolling containers */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-panel);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
+  width: 8px;
+  height: 8px;
 }
 
-/* Grid cell animations */
+::-webkit-scrollbar-track {
+  background: var(--seph-grid);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--seph-border);
+  border-radius: 4px;
+}
+
 .grid-cell {
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .effect-badge {
-  animation: fadeIn 0.2s ease-in;
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 4px rgba(139, 92, 246, 0.3); }
-  50% { box-shadow: 0 0 12px rgba(139, 92, 246, 0.6); }
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .cell-buff {
-  box-shadow: inset 0 0 8px rgba(59, 130, 246, 0.4);
+  box-shadow: inset 0 0 0 1px var(--seph-buff-fg);
 }
 
 .cell-debuff {
-  box-shadow: inset 0 0 8px rgba(239, 68, 68, 0.4);
+  box-shadow: inset 0 0 0 1px var(--seph-debuff-fg);
 }
 
 .cell-destroy {
-  box-shadow: inset 0 0 12px rgba(220, 38, 38, 0.6);
-  animation: pulse-glow 1.5s infinite;
+  box-shadow: inset 0 0 0 2px var(--seph-destroy-fg);
 }
 
 .cell-ignore {
@@ -68,14 +115,21 @@ body {
     45deg,
     transparent,
     transparent 4px,
-    rgba(107, 114, 128, 0.2) 4px,
-    rgba(107, 114, 128, 0.2) 8px
+    rgba(138, 122, 116, 0.12) 4px,
+    rgba(138, 122, 116, 0.12) 8px
   );
 }
 
-/* Drag overlay */
 .drag-overlay {
   opacity: 0.85;
-  transform: scale(1.05);
+  transform: scale(1.04);
   cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effect-badge,
+  .grid-cell {
+    animation: none;
+    transition: none;
+  }
 }

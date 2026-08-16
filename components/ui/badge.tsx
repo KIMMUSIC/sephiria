@@ -12,13 +12,13 @@ export function Badge({ children, variant = 'default', className }: BadgeProps) 
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none',
+        'inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold leading-none',
         {
-          default: 'bg-sephiria-panel text-gray-300',
-          buff: 'bg-blue-500/80 text-white',
-          debuff: 'bg-red-500/80 text-white',
-          destroy: 'bg-red-700 text-white animate-pulse',
-          tier: 'bg-sephiria-panel text-gray-300',
+          default: 'bg-sephiria-grid text-sephiria-muted',
+          buff: 'bg-sephiria-buff text-sephiria-buff-fg',
+          debuff: 'bg-sephiria-debuff text-sephiria-debuff-fg',
+          destroy: 'bg-sephiria-destroy text-sephiria-destroy-fg',
+          tier: 'bg-sephiria-grid text-sephiria-fg',
         }[variant],
         className
       )}

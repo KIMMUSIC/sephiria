@@ -22,26 +22,23 @@ export default function TabletCard({ tablet, size = 'md' }: TabletCardProps) {
   const { data, rotation, isCustom } = tablet
 
   const containerSize = size === 'sm' ? 'w-12 h-12' : 'w-full h-full'
-  // Engine rotation is 90° CW steps (rotateEffect rot1: (dx,dy)->(-dy,dx) on y-down).
-  // CSS rotate(+deg) is also CW. rotation 0 is a no-op for non-rotatable tablets.
   const spriteTransform = {
     transform: `rotate(${rotation * 90}deg)`,
     transformOrigin: 'center',
-    transition: 'transform 150ms',
+    transition: 'transform 150ms cubic-bezier(0.16, 1, 0.3, 1)',
   } as const
 
   return (
     <div
       className={cn(
-        'relative flex flex-col items-center justify-center rounded border-2 overflow-hidden select-none',
+        'relative flex select-none flex-col items-center justify-center overflow-hidden rounded-inner border-2',
         containerSize,
         TIER_BORDER[data.tier] ?? 'border-sephiria-border',
       )}
     >
-      {/* Tablet image — only the sprite rotates; badges stay upright */}
       {data.image ? (
         <div
-          className="relative w-full h-full flex items-center justify-center"
+          className="relative flex h-full w-full items-center justify-center"
           style={spriteTransform}
         >
           <Image
@@ -53,23 +50,21 @@ export default function TabletCard({ tablet, size = 'md' }: TabletCardProps) {
           />
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-sephiria-cell">
-          <span className="text-[9px] text-gray-400 text-center leading-tight px-0.5 break-words">
+        <div className="flex h-full w-full items-center justify-center bg-sephiria-cell">
+          <span className="break-words px-0.5 text-center text-[9px] leading-tight text-sephiria-muted">
             {data.ko_label}
           </span>
         </div>
       )}
 
-      {/* Rotation indicator (upright) */}
       {data.rotate && (
         <div className="absolute bottom-0 right-0 p-0.5">
           <RotateCw size={10} className="text-sephiria-accent" />
         </div>
       )}
 
-      {/* Custom badge */}
       {isCustom && (
-        <div className="absolute top-0 left-0 bg-sephiria-gold/90 text-black text-[8px] font-bold px-0.5 rounded-br leading-tight">
+        <div className="absolute left-0 top-0 rounded-br bg-sephiria-gold px-0.5 text-[8px] font-bold leading-tight text-sephiria-ink">
           커스텀
         </div>
       )}

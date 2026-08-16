@@ -12,8 +12,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ko" className="dark">
-      <body className="min-h-screen bg-sephiria-bg antialiased">
+    <html lang="ko">
+      <body className="min-h-[100dvh] bg-sephiria-bg text-sephiria-fg antialiased">
+        <a href="#main" className="skip-link">
+          본문으로 건너뛰기
+        </a>
         {children}
       </body>
     </html>

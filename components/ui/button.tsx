@@ -15,18 +15,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled}
         className={cn(
-          'inline-flex items-center justify-center rounded-md font-medium transition-colors',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sephiria-accent',
+          'inline-flex items-center justify-center rounded-ctl font-medium',
+          'transition-transform duration-200 ease-seph',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sephiria-accent focus-visible:ring-offset-2 focus-visible:ring-offset-sephiria-bg',
           'disabled:pointer-events-none disabled:opacity-50',
+          'active:scale-[0.98]',
           {
             default:
-              'bg-sephiria-accent text-white hover:bg-sephiria-accent/80',
+              'bg-sephiria-ink text-sephiria-bg hover:bg-sephiria-fg',
             outline:
-              'border border-sephiria-border bg-transparent text-gray-200 hover:bg-sephiria-panel',
+              'border border-sephiria-border bg-transparent text-sephiria-fg hover:bg-sephiria-grid',
             ghost:
-              'bg-transparent text-gray-300 hover:bg-sephiria-panel hover:text-white',
+              'bg-transparent text-sephiria-muted hover:bg-sephiria-grid hover:text-sephiria-fg',
             destructive:
-              'bg-red-600 text-white hover:bg-red-700',
+              'bg-sephiria-debuff text-sephiria-debuff-fg hover:bg-sephiria-destroy',
           }[variant],
           {
             sm: 'h-8 px-3 text-xs',
