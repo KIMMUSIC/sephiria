@@ -4,18 +4,19 @@ import { useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { ChevronDown, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { ARTIFACTS, ARTIFACT_SETS } from '@/data/artifacts'
+import { ARTIFACTS } from '@/data/artifacts'
 import { TABLETS } from '@/data/tablets'
-import type { ArtifactData, TabletData } from '@/types'
+import { COMBO_KO, COMBO_ORDER, TIER_KO } from '@/data/wikiLabels'
+import type { ArtifactData, TabletData, Tier } from '@/types'
 import Image from 'next/image'
 
-const TIERS: Array<{ label: string; value: string }> = [
+const TIER_FILTERS: Array<{ label: string; value: 'all' | Tier }> = [
   { label: '전체', value: 'all' },
-  { label: '커먼', value: 'common' },
-  { label: '어드밴스드', value: 'advanced' },
-  { label: '레어', value: 'rare' },
-  { label: '레전드', value: 'legend' },
-  { label: '솔리드', value: 'solid' },
+  { label: TIER_KO.common, value: 'common' },
+  { label: TIER_KO.advanced, value: 'advanced' },
+  { label: TIER_KO.rare, value: 'rare' },
+  { label: TIER_KO.legend, value: 'legend' },
+  { label: TIER_KO.solid, value: 'solid' },
 ]
 
 const TIER_DOT: Record<string, string> = {
@@ -43,11 +44,11 @@ function ArtifactThumb({ artifact, level }: { artifact: ArtifactData; level: num
       {...attributes}
       {...listeners}
       className={cn(
-        'relative flex h-12 w-12 cursor-grab items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell active:cursor-grabbing',
+        'relative flex aspect-square w-full cursor-grab items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell active:cursor-grabbing',
         `border-tier-${artifact.tier}`,
         isDragging && 'opacity-40',
       )}
-      title={artifact.label_kor}
+      title={`${artifact.label_kor} · ${TIER_KO[artifact.tier]}`}
     >
       {artifact.image ? (
         <Image
@@ -62,9 +63,6 @@ function ArtifactThumb({ artifact, level }: { artifact: ArtifactData; level: num
           {artifact.label_kor}
         </span>
       )}
-      <div className="absolute bottom-0 right-0 rounded-tl bg-sephiria-ink/75 px-0.5 text-[9px] leading-tight tabular-nums text-sephiria-bg">
-        {level}
-      </div>
     </div>
   )
 }
@@ -85,11 +83,11 @@ function TabletThumb({ tablet }: { tablet: TabletData }) {
       {...attributes}
       {...listeners}
       className={cn(
-        'relative flex h-12 w-12 cursor-grab items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell active:cursor-grabbing',
+        'relative flex aspect-square w-full cursor-grab items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell active:cursor-grabbing',
         `border-tier-${tablet.tier}`,
         isDragging && 'opacity-40',
       )}
-      title={tablet.ko_label}
+      title={`${tablet.ko_label} · ${TIER_KO[tablet.tier]}`}
     >
       {tablet.image ? (
         <Image
@@ -112,7 +110,7 @@ export function ItemPalette() {
   const [collapsed, setCollapsed] = useState(false)
   const [tab, setTab] = useState<'artifact' | 'tablet'>('artifact')
   const [search, setSearch] = useState('')
-  const [filterTier, setFilterTier] = useState<string>('all')
+  const [filterTier, setFilterTier] = useState<'all' | Tier>('all')
   const [filterSet, setFilterSet] = useState<string>('all')
   const [levelMap, setLevelMap] = useState<Record<number, number>>({})
 
@@ -127,7 +125,11 @@ export function ItemPalette() {
   const filteredArtifacts = ARTIFACTS.filter((a) => {
     if (search && !a.label_kor.includes(search) && !a.label_eng.toLowerCase().includes(search.toLowerCase())) return false
     if (filterTier !== 'all' && a.tier !== filterTier) return false
-    if (filterSet !== 'all' && !a.effect.sets.includes(filterSet)) return false
+    if (filterSet === 'none') {
+      if ((a.effect.sets ?? []).length > 0) return false
+    } else if (filterSet !== 'all' && !(a.effect.sets ?? []).includes(filterSet)) {
+      return false
+    }
     return true
   })
 
@@ -186,7 +188,7 @@ export function ItemPalette() {
           </div>
 
           <div className="flex flex-wrap gap-1">
-            {TIERS.map((t) => (
+            {TIER_FILTERS.map((t) => (
               <button
                 key={t.value}
                 type="button"
@@ -211,45 +213,59 @@ export function ItemPalette() {
               value={filterSet}
               onChange={(e) => setFilterSet(e.target.value)}
               className="rounded-ctl border border-sephiria-border bg-sephiria-cell px-2 py-1 text-xs text-sephiria-fg focus:border-sephiria-accent focus:outline-none"
+              aria-label="콤보 필터"
             >
-              <option value="all">전체 세트</option>
-              {ARTIFACT_SETS.map((s) => (
-                <option key={s} value={s}>{s}</option>
+              <option value="all">전체 콤보</option>
+              <option value="none">콤보 없음</option>
+              {COMBO_ORDER.map((slug) => (
+                <option key={slug} value={slug}>
+                  {COMBO_KO[slug]}
+                </option>
               ))}
             </select>
           )}
 
-          <div className="max-h-64 overflow-y-auto">
+          <div className="max-h-80 overflow-y-auto">
             {tab === 'artifact' ? (
               filteredArtifacts.length === 0 ? (
                 <p className="py-6 text-center text-xs text-sephiria-muted">검색 결과가 없습니다.</p>
               ) : (
-                <div className="grid grid-cols-4 gap-2">
-                  {filteredArtifacts.map((artifact) => (
-                    <div key={artifact.id} className="flex flex-col items-center gap-1">
-                      <ArtifactThumb artifact={artifact} level={getArtifactLevel(artifact)} />
-                      <input
-                        type="number"
-                        min={0}
-                        max={artifact.level}
-                        value={getArtifactLevel(artifact)}
-                        onChange={(e) => setArtifactLevel(artifact.id, Number(e.target.value), artifact.level)}
-                        onClick={(e) => e.stopPropagation()}
-                        className="w-12 rounded-ctl border border-sephiria-border bg-sephiria-cell py-0.5 text-center text-[10px] tabular-nums text-sephiria-fg focus:border-sephiria-accent focus:outline-none"
-                      />
-                    </div>
-                  ))}
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(3.5rem,1fr))] gap-2">
+                  {filteredArtifacts.map((artifact) => {
+                    const scalable = artifact.level > 0
+                    return (
+                      <div key={artifact.id} className="flex min-w-0 flex-col items-stretch gap-1">
+                        <ArtifactThumb artifact={artifact} level={getArtifactLevel(artifact)} />
+                        {scalable ? (
+                          <label className="flex items-center gap-0.5">
+                            <span className="sr-only">{artifact.label_kor} 강화 레벨</span>
+                            <span className="text-[9px] text-sephiria-muted" aria-hidden>
+                              Lv
+                            </span>
+                            <input
+                              type="number"
+                              min={0}
+                              max={artifact.level}
+                              value={getArtifactLevel(artifact)}
+                              onChange={(e) => setArtifactLevel(artifact.id, Number(e.target.value), artifact.level)}
+                              onClick={(e) => e.stopPropagation()}
+                              title={`강화 레벨 (최대 ${artifact.level})`}
+                              className="min-w-0 flex-1 rounded-ctl border border-sephiria-border bg-sephiria-cell py-0.5 text-center text-[10px] tabular-nums text-sephiria-fg focus:border-sephiria-accent focus:outline-none"
+                            />
+                          </label>
+                        ) : null}
+                      </div>
+                    )
+                  })}
                 </div>
               )
             ) : (
               filteredTablets.length === 0 ? (
                 <p className="py-6 text-center text-xs text-sephiria-muted">검색 결과가 없습니다.</p>
               ) : (
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(3.25rem,1fr))] gap-1.5">
                   {filteredTablets.map((tablet) => (
-                    <div key={tablet.value} className="flex flex-col items-center">
-                      <TabletThumb tablet={tablet} />
-                    </div>
+                    <TabletThumb key={tablet.value} tablet={tablet} />
                   ))}
                 </div>
               )

@@ -1,4 +1,7 @@
 import type { Tier } from '@/types'
+import { TIER_KO } from '@/data/wikiLabels'
+
+export { TIER_KO as TIER_LABELS }
 
 export const TIER_COLORS: Record<Tier, string> = {
   common: 'border-tier-common text-tier-common',
@@ -14,14 +17,6 @@ export const TIER_BG: Record<Tier, string> = {
   rare: 'bg-tier-rare/20',
   legend: 'bg-tier-legend/20',
   solid: 'bg-tier-solid/20',
-}
-
-export const TIER_LABELS: Record<Tier, string> = {
-  common: '일반',
-  advanced: '고급',
-  rare: '희귀',
-  legend: '전설',
-  solid: '견고',
 }
 
 export const ALL_TIERS: Tier[] = ['common', 'advanced', 'rare', 'legend', 'solid']
