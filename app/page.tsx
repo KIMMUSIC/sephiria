@@ -7,6 +7,7 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { InventoryGrid } from '@/components/grid/InventoryGrid'
+import { HeaderActions } from '@/components/layout/HeaderActions'
 import { ArtifactListPanel } from '@/components/panels/ArtifactListPanel'
 import { ComboPanel } from '@/components/panels/ComboPanel'
 import { ItemPalette } from '@/components/panels/ItemPalette'
@@ -38,7 +39,10 @@ export default function Home() {
             스크린샷을 올리거나 팔레트에서 배치한 뒤, 석판 효과를 반영한 최적 자리를 찾습니다.
           </p>
         </div>
-        <ResetButton />
+        <div className="flex items-center gap-2">
+          <HeaderActions />
+          <ResetButton />
+        </div>
       </header>
 
       <DndContext
