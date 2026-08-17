@@ -54,6 +54,13 @@ export default function Home() {
           않는다 — 그리드는 항상 화면에 남는다. xl 미만에서는 [그리드 | 도구] 2열에
           팔레트가 아래 전폭으로 내려가고(order + flex-wrap), sm 미만은 단일 열.
 
+          도구 열에 [&>*]:shrink-0 이 필요한 이유 — 이 열은 max-h 를 가진 flex-col
+          컨테이너라 자식 패널이 기본 flex-shrink:1 로 줄어든다. Panel 루트에
+          overflow-hidden 이 있어 자동 최소 크기가 0 이 되므로, 막지 않으면 패널이
+          헤더 높이까지 찌부러지고 본문이 잘린 채 스크롤도 생기지 않는다.
+          팔레트 열은 display:block 이라 같은 문제가 없다 — 블록은 자식을 줄이지 않고
+          바로 overflow 로 넘긴다.
+
           열 폭 예산 — xl 시작점(1280px)에서 가용 폭은 1280 − md:px-8(64) − 세로
           스크롤바(≈17) ≈ 1199px. 그리드는 sm:w-[31rem]+md:p-4+border ≈ 530px 고정이라,
           좌 17rem(272) + 그리드 530 + 우 min 20rem(320) + gap-6×2(48) = 1170px 로
@@ -72,7 +79,7 @@ export default function Home() {
           </section>
 
           <aside
-            className="order-2 flex w-full min-w-0 flex-col gap-3 lg:w-auto lg:flex-1 xl:sticky xl:top-6 xl:order-3 xl:max-h-[calc(100dvh-3rem)] xl:min-w-[20rem] xl:overflow-y-auto 2xl:min-w-[22rem]"
+            className="order-2 flex w-full min-w-0 flex-col gap-3 [&>*]:shrink-0 lg:w-auto lg:flex-1 xl:sticky xl:top-6 xl:order-3 xl:max-h-[calc(100dvh-3rem)] xl:min-w-[20rem] xl:overflow-y-auto 2xl:min-w-[22rem]"
             aria-label="도구"
           >
             <ScreenshotUploader />
