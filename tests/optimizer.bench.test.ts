@@ -22,7 +22,7 @@ function artifact(id: string, level: number): PlacedArtifact {
   return {
     instanceId: id, type: 'ARTIFACT',
     data: { id: 1, value: id, label_kor: id, label_eng: id, tier: 'common', level: 5, image: '', effect: { sets: [], content: '' }, description: '' },
-    level, currentLevel: level, isLocked: false,
+    level, currentLevel: level, isLocked: false, priority: 'normal', targetLevel: null,
   }
 }
 function artifactScore(slots: GridSlot[], gridRows: GridRow[]): number {

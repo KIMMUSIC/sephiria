@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { evaluateBoard, TIEBREAK, DESTRUCTION_SCORE } from '@/lib/optimizerScore'
+import { buildScoreWeights, evaluateBoard, DESTRUCTION_SCORE } from '@/lib/optimizerScore'
 import { buildGridRows, positionToSlot } from '@/lib/gridUtils'
 import { nextRotation } from '@/lib/rotationUtils'
 import { getTabletEffect } from '@/data/tabletEffects'
@@ -25,7 +25,7 @@ function artifact(id: string, level: number, locked = false): PlacedArtifact {
       id: 1, value: id, label_kor: id, label_eng: id, tier: 'common', level: 5,
       image: '', effect: { sets: [], content: '' }, description: '',
     },
-    level, currentLevel: level, isLocked: locked,
+    level, currentLevel: level, isLocked: locked, priority: 'normal', targetLevel: null,
   }
 }
 
@@ -59,18 +59,20 @@ function mutate(slots: GridSlot[]): GridSlot[] {
 }
 
 function runSA(slots: GridSlot[], gridRows: GridRow[], maxTimeMs = 400) {
+  const weights = buildScoreWeights(slots)
+  const deltaScale = weights.baseUnit || 1
   let current = JSON.parse(JSON.stringify(slots)) as GridSlot[]
   let best = JSON.parse(JSON.stringify(slots)) as GridSlot[]
-  let currentScore = evaluateBoard(current, gridRows)
+  let currentScore = evaluateBoard(current, gridRows, weights)
   let bestScore = currentScore
   let temp = DEFAULT_SA_CONFIG.initialTemp
   const start = Date.now()
   let iteration = 0
   while (temp > DEFAULT_SA_CONFIG.minTemp && Date.now() - start < maxTimeMs) {
     const neighbor = mutate(current)
-    const neighborScore = evaluateBoard(neighbor, gridRows)
+    const neighborScore = evaluateBoard(neighbor, gridRows, weights)
     const delta = neighborScore - currentScore
-    if (delta > 0 || Math.random() < Math.exp(delta / temp)) {
+    if (delta > 0 || Math.random() < Math.exp(delta / deltaScale / temp)) {
       current = neighbor
       currentScore = neighborScore
     }
@@ -81,7 +83,7 @@ function runSA(slots: GridSlot[], gridRows: GridRow[], maxTimeMs = 400) {
     temp *= DEFAULT_SA_CONFIG.coolingRate
     iteration++
   }
-  return { bestScore, startScore: evaluateBoard(slots, gridRows), iteration, best }
+  return { bestScore, startScore: evaluateBoard(slots, gridRows, weights), iteration, best }
 }
 
 describe('optimizer smoke', () => {
@@ -132,12 +134,17 @@ describe('optimizer smoke', () => {
     worse[positionToSlot(0, 0, gridRows)!] = tablet('justice', 0)
     worse[positionToSlot(5, 0, gridRows)!] = tablet('flag', 0)
 
-    const high = evaluateBoard(better, gridRows)
-    const low = evaluateBoard(worse, gridRows)
-    expect(Math.floor(high)).toBe(6)
-    expect(Math.floor(low)).toBe(5)
+    // Both boards hold the same artifact multiset shape, so the band units match.
+    const weights = buildScoreWeights(better)
+    expect(buildScoreWeights(worse).base).toBe(weights.base)
+
+    const high = evaluateBoard(better, gridRows, weights)
+    const low = evaluateBoard(worse, gridRows, weights)
+    expect(Math.floor(high / weights.base)).toBe(6)
+    expect(Math.floor(low / weights.base)).toBe(5)
     expect(high).toBeGreaterThan(low)
-    expect(high - low).toBeGreaterThan(0.5)
+    // A whole level must outrank every structural tie-breaker put together.
+    expect(high - low).toBeGreaterThanOrEqual(weights.base - weights.struct * 8 * 34)
   })
 
   it('keeps locked artifacts in place across mutations', () => {
@@ -161,9 +168,10 @@ describe('optimizer smoke', () => {
     const last = positionToSlot(5, 0, gridRows)
     expect(last).not.toBeNull()
     slots[last!] = tablet('flag', 0)
-    const score = evaluateBoard(slots, gridRows)
-    // primary = 3; OOB -1 from flag should add TIEBREAK
-    expect(score).toBeGreaterThan(3)
-    expect(score).toBeLessThan(4)
+    const weights = buildScoreWeights(slots)
+    const score = evaluateBoard(slots, gridRows, weights)
+    // primary = 3 level units; the OOB -1 from flag only moves the structural band
+    expect(score).toBeGreaterThan(3 * weights.base)
+    expect(score).toBeLessThan(4 * weights.base)
   })
 })
