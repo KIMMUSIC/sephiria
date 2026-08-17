@@ -55,15 +55,24 @@ const RECOGNIZERS: RecognizerCase[] = [
     // Raised after roadmap 6 (pixel-exact re-rank in original screenshot space):
     // top-1 141 -> 144, overall 202 -> 205. Flips: 2.png#1 heart, 4.png#23
     // frozen_bow, 4.png#25 defender. JPEG 1.jpeg unchanged (lossless=false).
-    floor: { emptyAccuracy: 0.9951, top1Correct: 144, overallCorrect: 205 },
+    // 2026-08-17 slot-count correction: 2/3/4/5.png were labelled rows*cols = 36
+    // when each bag really holds 32; the four extra cells per fixture were frame
+    // chrome labelled as empty inventory. Removing those 16 trivially-correct
+    // empties shrinks the yardstick, it does not move recognition:
+    //   top-1      144 -> 144   (unchanged, every fixture identical)
+    //   overall    205 -> 189   (-16, exactly the removed empties)
+    //   empty acc  207/208 -> 191/192  (still exactly one empty error)
+    // The recognizer still classifies the whole rows*cols rect and the result is
+    // trimmed afterwards — see lib/vision/inventory-scan.ts for why.
+    floor: { emptyAccuracy: 0.9947, top1Correct: 144, overallCorrect: 189 },
     // Measured, not aspirational: these are today's numbers pinned so a future
     // change cannot trade one fixture away against another.
     perFixture: {
       '1.jpeg': { top1: 9, overall: 9 },
-      '2.png': { top1: 19, overall: 35 },
-      '3.png': { top1: 17, overall: 33 },
-      '4.png': { top1: 16, overall: 34 },
-      '5.png': { top1: 25, overall: 29 },
+      '2.png': { top1: 19, overall: 31 },
+      '3.png': { top1: 17, overall: 29 },
+      '4.png': { top1: 16, overall: 30 },
+      '5.png': { top1: 25, overall: 25 },
       '6.png': { top1: 29, overall: 30 },
       '7.png': { top1: 29, overall: 35 },
     },
@@ -95,11 +104,15 @@ describe('recognition accuracy', () => {
         it(`scores ${name}`, async () => {
           const fixture = loadFixture(name)
           const { img, opts } = await loadRecognizeInput(fixture, gridAware)
-          const predictions = await recognizer.recognize(img, {
+          const wide = await recognizer.recognize(img, {
             ...opts,
             lossless: name.endsWith('.png'),
           })
 
+          expect(wide).toHaveLength(fixture.rows * fixture.cols)
+
+          // Trim to the bag's real size, the same way inventory-scan does.
+          const predictions = wide.filter((p) => p.slotIndex < fixture.totalSlots)
           expect(predictions).toHaveLength(fixture.totalSlots)
 
           const result = score(predictions, fixture)

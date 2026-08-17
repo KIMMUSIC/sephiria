@@ -6,7 +6,14 @@ import type { CellPrediction, RGBAImage } from '@/lib/vision/types'
 type WorkerResponse =
   | { type: 'progress'; stage: string; percent: number }
   | { type: 'ready'; templateCount: number }
-  | { type: 'result'; predictions: CellPrediction[]; rows: number; cols: number }
+  | {
+      type: 'result'
+      predictions: CellPrediction[]
+      rows: number
+      cols: number
+      slotCount: number
+      lastRowCols: number
+    }
   | { type: 'error'; message: string }
 
 export interface RecognitionWorkerState {
@@ -20,6 +27,10 @@ export interface RecognitionRunResult {
   predictions: CellPrediction[]
   rows: number
   cols: number
+  /** Real inventory size — full rows plus the measured last-row width. */
+  slotCount: number
+  /** Cells present in the last row, in [0, cols]. */
+  lastRowCols: number
 }
 
 export interface UseRecognitionWorkerReturn {
@@ -102,6 +113,8 @@ export function useRecognitionWorker(): UseRecognitionWorkerReturn {
               predictions: msg.predictions,
               rows: msg.rows,
               cols: msg.cols,
+              slotCount: msg.slotCount,
+              lastRowCols: msg.lastRowCols,
             })
             setState({ status: 'done', stage: '인식 완료', percent: 100, error: null })
           }

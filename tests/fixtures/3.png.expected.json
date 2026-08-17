@@ -1,269 +1,242 @@
 {
- "imagePath": "인벤 예시/3.png",
- "rows": 6,
- "cols": 6,
- "totalSlots": 36,
- "grid": {
-  "originX": 44.49,
-  "originY": 41.83,
-  "gridWidth": 716.1,
-  "gridHeight": 729.78
- },
- "_status": "Phase 0 ground truth, round 2. grid = self-calibrated and visually verified. empty/occupied verified. Item identities present only where the host visually matched the cell against the actual sprite; '???' = unverified and skipped.",
- "_provenance": "host visual verification vs public/images sprites, catalog synced to wiki 267/60",
- "expected": [
-  {
-   "slotIndex": 0,
-   "matchedValue": "swordsmanship_textbook",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "round-3 crop review, user-confirmed relabel (was shield_technique_manual): cover emblem is a sword with orange crossguard"
+  "imagePath": "인벤 예시/3.png",
+  "rows": 6,
+  "cols": 6,
+  "totalSlots": 32,
+  "grid": {
+    "originX": 44.49,
+    "originY": 41.83,
+    "gridWidth": 716.1,
+    "gridHeight": 729.78
   },
-  {
-   "slotIndex": 1,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 2,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 3,
-   "matchedValue": "giant_telescope",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 4,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 5,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 6,
-   "matchedValue": "???",
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "occupied, identity unverified"
-  },
-  {
-   "slotIndex": 7,
-   "matchedValue": "honor",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "round-3 crop review, user-confirmed relabel (was warrant): tan stem + green checkered canopy"
-  },
-  {
-   "slotIndex": 8,
-   "matchedValue": "black_planet",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 9,
-   "matchedValue": "cloth_armor",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 10,
-   "matchedValue": "swaying_eyes",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "round-3 crop review, user-confirmed relabel (was empty): dark blob with orange eye, '2/4' overlay"
-  },
-  {
-   "slotIndex": 11,
-   "matchedValue": "ruby_brooch",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 12,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 13,
-   "matchedValue": "ice_cloud_butterfly",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 14,
-   "matchedValue": "flux_mk2",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 15,
-   "matchedValue": "shield",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 16,
-   "matchedValue": "thorn",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "round-3 crop review, user-confirmed relabel (was thornbush ARTIFACT): dense green wreath with white diamond centre = legend tablet thorn"
-  },
-  {
-   "slotIndex": 17,
-   "matchedValue": "mini_balista",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 18,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 19,
-   "matchedValue": "black_tea",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 20,
-   "matchedValue": "certitude",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 21,
-   "matchedValue": "???",
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "occupied, identity unverified"
-  },
-  {
-   "slotIndex": 22,
-   "matchedValue": "???",
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "occupied, identity unverified"
-  },
-  {
-   "slotIndex": 23,
-   "matchedValue": "bloodstone_earrings",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 24,
-   "matchedValue": "base",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 25,
-   "matchedValue": "rock_elephant",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 26,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 27,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 28,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 29,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 30,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 31,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 32,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 33,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 34,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 35,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  }
- ],
- "_labelling": "Round 2 used plate-matcher top-8 proposals plus direct browsing of the full 327-sprite catalog. Candidate-assisted, so treat measured top-1 as mildly optimistic; cells whose answer was absent from the top-8 were resolved from the catalog specifically to counter that bias."
+  "_status": "Phase 0 ground truth, round 2. grid = self-calibrated and visually verified. empty/occupied verified. Item identities present only where the host visually matched the cell against the actual sprite; '???' = unverified and skipped.",
+  "_provenance": "host visual verification vs public/images sprites, catalog synced to wiki 267/60",
+  "expected": [
+    {
+      "slotIndex": 0,
+      "matchedValue": "swordsmanship_textbook",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "round-3 crop review, user-confirmed relabel (was shield_technique_manual): cover emblem is a sword with orange crossguard"
+    },
+    {
+      "slotIndex": 1,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 2,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 3,
+      "matchedValue": "giant_telescope",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 4,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 5,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 6,
+      "matchedValue": "???",
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "occupied, identity unverified"
+    },
+    {
+      "slotIndex": 7,
+      "matchedValue": "honor",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "round-3 crop review, user-confirmed relabel (was warrant): tan stem + green checkered canopy"
+    },
+    {
+      "slotIndex": 8,
+      "matchedValue": "black_planet",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 9,
+      "matchedValue": "cloth_armor",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 10,
+      "matchedValue": "swaying_eyes",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "round-3 crop review, user-confirmed relabel (was empty): dark blob with orange eye, '2/4' overlay"
+    },
+    {
+      "slotIndex": 11,
+      "matchedValue": "ruby_brooch",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 12,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 13,
+      "matchedValue": "ice_cloud_butterfly",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 14,
+      "matchedValue": "flux_mk2",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 15,
+      "matchedValue": "shield",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 16,
+      "matchedValue": "thorn",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "round-3 crop review, user-confirmed relabel (was thornbush ARTIFACT): dense green wreath with white diamond centre = legend tablet thorn"
+    },
+    {
+      "slotIndex": 17,
+      "matchedValue": "mini_balista",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 18,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 19,
+      "matchedValue": "black_tea",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 20,
+      "matchedValue": "certitude",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 21,
+      "matchedValue": "???",
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "occupied, identity unverified"
+    },
+    {
+      "slotIndex": 22,
+      "matchedValue": "???",
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "occupied, identity unverified"
+    },
+    {
+      "slotIndex": 23,
+      "matchedValue": "bloodstone_earrings",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 24,
+      "matchedValue": "base",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 25,
+      "matchedValue": "rock_elephant",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 26,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 27,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 28,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 29,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 30,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 31,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    }
+  ],
+  "_labelling": "Round 2 used plate-matcher top-8 proposals plus direct browsing of the full 327-sprite catalog. Candidate-assisted, so treat measured top-1 as mildly optimistic; cells whose answer was absent from the top-8 were resolved from the catalog specifically to counter that bias.",
+  "_slotCountCorrection": "2026-08-17 correction: totalSlots was rows*cols (36). The bag's last row holds only 2 plates; slots 32-35 are frame/chrome outside the inventory and were labelled as empty inventory cells. Verified visually against the screenshot and independently against lib/vision/last-row.ts inferLastRowCols, which reports lastRowCols=2 for this image. The four removed cells were all matchedValue:null, so no item label was lost."
 }

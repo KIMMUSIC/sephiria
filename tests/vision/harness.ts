@@ -193,10 +193,14 @@ export async function loadRecognizeInput(
   fixture: Fixture,
   gridAware: boolean
 ): Promise<RecognizeInput> {
+  // Production recognizes the whole calibrated rect and trims afterwards
+  // (lib/vision/inventory-scan.ts), so the harness feeds rows*cols here.
+  // `fixture.totalSlots` is the inventory's real size and is what the caller
+  // trims the predictions to before scoring.
   const opts: RecognizeOptions = {
     rows: fixture.rows,
     cols: fixture.cols,
-    totalSlots: fixture.totalSlots,
+    totalSlots: fixture.rows * fixture.cols,
   }
   if (gridAware && fixture.grid) {
     return {

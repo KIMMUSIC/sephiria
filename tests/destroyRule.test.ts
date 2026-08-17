@@ -119,7 +119,11 @@ describe('destroy rule via recognition + effects', () => {
     expect(evaluateBoard(slots, gridRows)).toBe(DESTRUCTION_SCORE)
   })
 
-  it('overrideRecognizedCell uses catalog level; level-0 uniques stay alive at 0', () => {
+  // A screenshot carries no 인챈트 information and every artifact starts at 0:
+  //   "기본 레벨은 0이고 인챈트와 석판의 효과로 현재 레벨을 상한까지 올릴 수 있다"
+  //   — namu.wiki/w/세피리아/아티팩트
+  // The catalog `level` is the star cap, not a starting value.
+  it('overrideRecognizedCell ingests enchant 0; the catalog level stays a cap', () => {
     const necklace = ARTIFACT_MAP.get('eye_crystal_necklace')
     const smoke = ARTIFACT_MAP.get('smoke_screen')
     expect(necklace).toBeDefined()
@@ -132,8 +136,9 @@ describe('destroy rule via recognition + effects', () => {
     })
     const normal = useInventoryStore.getState().slots[0] as PlacedArtifact
     expect(normal.data.value).toBe('eye_crystal_necklace')
-    expect(normal.level).toBe(necklace!.level)
-    expect(normal.currentLevel).toBe(necklace!.level)
+    expect(normal.level).toBe(0)
+    expect(normal.currentLevel).toBe(0)
+    expect(normal.data.level).toBe(necklace!.level)
     expect(isArtifactDestroyed(normal.currentLevel)).toBe(false)
 
     useInventoryStore.getState().overrideRecognizedCell(1, {

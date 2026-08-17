@@ -61,8 +61,8 @@ export default function ResultSummary() {
 
         {lastOptimize && (
           <div className="col-span-2 grid grid-cols-3 gap-2">
-            <StatCard label="최적화 이전" value={Number(lastOptimize.beforeScore.toFixed(2))} />
-            <StatCard label="최적화 이후" value={Number(lastOptimize.afterScore.toFixed(2))} />
+            <StatCard label="최적화 이전" value={lastOptimize.beforeLevelSum} />
+            <StatCard label="최적화 이후" value={lastOptimize.afterLevelSum} />
             <StatCard label="반복 횟수" value={lastOptimize.iterations} />
           </div>
         )}

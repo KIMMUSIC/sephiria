@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   applyTabletShield,
   calculateAllEffects,
+  calculateBoardEffects,
   calculateEffectsWithShield,
 } from '@/lib/effectEngine'
 import { buildGridRows, positionToSlot } from '@/lib/gridUtils'
@@ -56,6 +57,8 @@ function makeArtifact(level = 3): PlacedArtifact {
     level,
     currentLevel: level,
     isLocked: false,
+    priority: 'normal',
+    targetLevel: null,
   }
 }
 
@@ -82,6 +85,10 @@ function effectsAt(
   bypass?: Set<string>
 ) {
   return calculateAllEffects(board.slots, board.gridRows, bypass)
+}
+
+function waivedAt(board: { slots: GridSlot[]; gridRows: GridRow[] }): Set<string> {
+  return calculateBoardEffects(board.slots, board.gridRows).constraintIgnore
 }
 
 describe('flag (깃발)', () => {
@@ -114,29 +121,47 @@ describe('flag (깃발)', () => {
 })
 
 describe('home_town (고양)', () => {
-  it('marks the cell to the RIGHT as ignore at rotation 0', () => {
+  // "심플하게 아티팩트의 제약조건을 해소하는 기능만 있는 석판" — namu.wiki/w/세피리아/석판
+  it('waives the <제약> of the cell to the RIGHT at rotation 0, and changes no level', () => {
     const board = emptyBoard()
     place(board, 2, 2, makeTablet('home_town', 0))
     const map = effectsAt(board)
+    const waived = waivedAt(board)
 
-    expect(map['2-3']).toBe('ignore')
+    expect(waived.has('2-3')).toBe(true)
+    expect(waived.has('2-1')).toBe(false)
+    expect(waived.has('1-2')).toBe(false)
+
+    // It grants no level of its own, anywhere.
+    expect(map['2-3']).toBe(0)
     expect(map['1-2']).toBe(0)
     expect(map['2-1']).toBe(0)
     expect(map['3-2']).toBe(0)
   })
+
+  it('rotates the waived cell', () => {
+    const board = emptyBoard()
+    place(board, 2, 2, makeTablet('home_town', 1))
+    const waived = waivedAt(board)
+
+    expect(waived.has('3-2')).toBe(true)
+    expect(waived.has('2-3')).toBe(false)
+  })
 })
 
 describe('hospitality (환대)', () => {
-  it('adds numeric bonuses and does not mark cells ignore', () => {
+  // "두 칸에 레벨 강화와 제약 무시를 동시에 제공한다" — namu.wiki/w/세피리아/석판
+  it('adds numeric bonuses AND waives <제약> on the same two cells', () => {
     const board = emptyBoard()
     place(board, 2, 2, makeTablet('hospitality', 0))
     const map = effectsAt(board)
+    const waived = waivedAt(board)
 
     expect(map['1-2']).toBe(1)
     expect(map['2-1']).toBe(2)
-    expect(map['1-2']).not.toBe('ignore')
-    expect(map['2-1']).not.toBe('ignore')
-    expect(Object.values(map).some((v) => v === 'ignore')).toBe(false)
+    expect(waived.has('1-2')).toBe(true)
+    expect(waived.has('2-1')).toBe(true)
+    expect(waived.has('2-3')).toBe(false)
   })
 
   it('bypass shield so hospitality-hit tablet cells are not zeroed', () => {
@@ -185,31 +210,38 @@ describe('rebellion (반항)', () => {
 })
 
 describe('connection (이음)', () => {
-  it('rotates both the +2 and the ignore cell', () => {
+  it('rotates both the +2 and the 제약 무시 cell', () => {
     const board = emptyBoard()
     place(board, 2, 2, makeTablet('connection', 1))
     const map = effectsAt(board)
 
-    // rot 1: {0,-1} → right +2, {0,1} → left ignore
+    // rot 1: {0,-1} → right +2, {0,1} → left 제약 무시
+    const waived = waivedAt(board)
     expect(map['2-3']).toBe(2)
-    expect(map['2-1']).toBe('ignore')
-    // unrotated up/+2 and down/ignore must not apply
+    expect(waived.has('2-1')).toBe(true)
+    // the waived cell keeps its own level untouched
+    expect(map['2-1']).toBe(0)
+    // unrotated up/+2 and down/waive must not apply
     expect(map['1-2']).toBe(0)
-    expect(map['3-2']).toBe(0)
+    expect(waived.has('3-2')).toBe(false)
   })
 })
 
-describe('currentLevel bonus', () => {
-  it('treats ignore cells as 0 bonus', () => {
+describe('제약 무시 does not block level effects', () => {
+  // The old implementation zeroed a 고양-marked cell. The wiki gives 고양 no level
+  // effect at all — it only resolves the artifact's own 제약 — so another tablet's
+  // buff on that same cell must still land.
+  it('lets another tablet buff a cell that 고양 waives', () => {
     const board = emptyBoard()
     place(board, 2, 2, makeTablet('home_town', 0))
+    // 환호(cheer) buffs the cell above it, so place it at (3,3) to hit (2,3).
+    place(board, 3, 3, makeTablet('cheer', 0))
     const artifact = makeArtifact(4)
     place(board, 2, 3, artifact)
-    const map = calculateEffectsWithShield(board.slots, board.gridRows)
-    const bonus = typeof map['2-3'] === 'number' ? map['2-3'] : 0
-    expect(map['2-3']).toBe('ignore')
-    expect(bonus).toBe(0)
-    expect(artifact.level + bonus).toBe(4)
+
+    const { effects, constraintIgnore } = calculateBoardEffects(board.slots, board.gridRows)
+    expect(constraintIgnore.has('2-3')).toBe(true)
+    expect(effects['2-3']).toBeGreaterThan(0)
   })
 })
 

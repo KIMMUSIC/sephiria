@@ -5,10 +5,13 @@
  * ~330 RGBA sprites are never transferred from the main thread. Main posts
  * only the screenshot RGBA buffer (transferable) plus `lossless`.
  *
- * Pipeline: calibrateGrid({ cols: 6 }) — no rows hint, match scorer on —
- * then PlateMatcherRecognizer.recognize. No OpenCV.
+ * Pipeline: calibrateGrid({ cols: 6 }) — no rows hint, match scorer on — then
+ * scanInventory, which recognizes the calibrated rect and trims the result to the
+ * bag's real size. See lib/vision/inventory-scan.ts for why those two steps are
+ * separate. No OpenCV.
  */
 import { calibrateGrid, type GridScorer } from '@/lib/vision/grid-calibrate'
+import { scanInventory } from '@/lib/vision/inventory-scan'
 import { PlateMatcherRecognizer } from '@/lib/vision/plate-matcher'
 import { loadBrowserTemplates } from '@/lib/vision/browser-loader'
 import type { CellPrediction, RGBAImage, TemplateSource } from '@/lib/vision/types'
@@ -31,6 +34,10 @@ export type RecognitionResponse =
       predictions: CellPrediction[]
       rows: number
       cols: number
+      /** Real inventory size: full rows plus the measured last-row width. */
+      slotCount: number
+      /** Cells present in the last row, in [0, cols]. */
+      lastRowCols: number
       grid: {
         originX: number
         originY: number
@@ -96,12 +103,8 @@ self.onmessage = async (e: MessageEvent<RecognitionRequest>) => {
       }
 
       post({ type: 'progress', stage: '아이템 인식 중...', percent: 88 })
-      const predictions = await rec.recognize(img, {
-        rows: grid.rows,
-        cols: grid.cols,
-        totalSlots: grid.rows * grid.cols,
-        grid,
-        ...(msg.lossless ? { lossless: true } : {}),
+      const { predictions, slotCount, lastRowCols } = await scanInventory(rec, img, grid, {
+        lossless: msg.lossless,
       })
 
       post({
@@ -109,6 +112,8 @@ self.onmessage = async (e: MessageEvent<RecognitionRequest>) => {
         predictions,
         rows: grid.rows,
         cols: grid.cols,
+        slotCount,
+        lastRowCols,
         grid: {
           originX: grid.originX,
           originY: grid.originY,

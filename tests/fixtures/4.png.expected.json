@@ -1,269 +1,242 @@
 {
- "imagePath": "인벤 예시/4.png",
- "rows": 6,
- "cols": 6,
- "totalSlots": 36,
- "grid": {
-  "originX": 38.47,
-  "originY": 35.86,
-  "gridWidth": 716.16,
-  "gridHeight": 718.92
- },
- "_status": "Phase 0 ground truth, round 2. grid = self-calibrated and visually verified. empty/occupied verified. Item identities present only where the host visually matched the cell against the actual sprite; '???' = unverified and skipped.",
- "_provenance": "host visual verification vs public/images sprites, catalog synced to wiki 267/60",
- "expected": [
-  {
-   "slotIndex": 0,
-   "matchedValue": "shade",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite"
+  "imagePath": "인벤 예시/4.png",
+  "rows": 6,
+  "cols": 6,
+  "totalSlots": 32,
+  "grid": {
+    "originX": 38.47,
+    "originY": 35.86,
+    "gridWidth": 716.16,
+    "gridHeight": 718.92
   },
-  {
-   "slotIndex": 1,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 2,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 3,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 4,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 5,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 6,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 7,
-   "matchedValue": "???",
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "occupied, identity unverified"
-  },
-  {
-   "slotIndex": 8,
-   "matchedValue": "???",
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "occupied, identity unverified"
-  },
-  {
-   "slotIndex": 9,
-   "matchedValue": "ice_wings",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 10,
-   "matchedValue": "load",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 11,
-   "matchedValue": "exit",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 12,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 13,
-   "matchedValue": "touch_of_life",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 14,
-   "matchedValue": "load",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 15,
-   "matchedValue": "exit",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 16,
-   "matchedValue": "exit",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 17,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 18,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 19,
-   "matchedValue": "begonia_flavor_pocket",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 20,
-   "matchedValue": "keel_fragment",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 21,
-   "matchedValue": "mast_model",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 22,
-   "matchedValue": "storm",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 23,
-   "matchedValue": "frozen_bow",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 24,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 25,
-   "matchedValue": "defender",
-   "type": "TABLET",
-   "rotation": "any",
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 26,
-   "matchedValue": "small_magic",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite"
-  },
-  {
-   "slotIndex": 27,
-   "matchedValue": "voluspa",
-   "type": "ARTIFACT",
-   "rotation": 0,
-   "_visualNote": "host-verified against sprite (round 2)"
-  },
-  {
-   "slotIndex": 28,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 29,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 30,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 31,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 32,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 33,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 34,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  },
-  {
-   "slotIndex": 35,
-   "matchedValue": null,
-   "type": null,
-   "rotation": 0,
-   "_visualNote": "empty slot (effect overlay text only, if any)"
-  }
- ],
- "_labelling": "Round 2 used plate-matcher top-8 proposals plus direct browsing of the full 327-sprite catalog. Candidate-assisted, so treat measured top-1 as mildly optimistic; cells whose answer was absent from the top-8 were resolved from the catalog specifically to counter that bias."
+  "_status": "Phase 0 ground truth, round 2. grid = self-calibrated and visually verified. empty/occupied verified. Item identities present only where the host visually matched the cell against the actual sprite; '???' = unverified and skipped.",
+  "_provenance": "host visual verification vs public/images sprites, catalog synced to wiki 267/60",
+  "expected": [
+    {
+      "slotIndex": 0,
+      "matchedValue": "shade",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 1,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 2,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 3,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 4,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 5,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 6,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 7,
+      "matchedValue": "???",
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "occupied, identity unverified"
+    },
+    {
+      "slotIndex": 8,
+      "matchedValue": "???",
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "occupied, identity unverified"
+    },
+    {
+      "slotIndex": 9,
+      "matchedValue": "ice_wings",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 10,
+      "matchedValue": "load",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 11,
+      "matchedValue": "exit",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 12,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 13,
+      "matchedValue": "touch_of_life",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 14,
+      "matchedValue": "load",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 15,
+      "matchedValue": "exit",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 16,
+      "matchedValue": "exit",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 17,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 18,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 19,
+      "matchedValue": "begonia_flavor_pocket",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 20,
+      "matchedValue": "keel_fragment",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 21,
+      "matchedValue": "mast_model",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 22,
+      "matchedValue": "storm",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 23,
+      "matchedValue": "frozen_bow",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 24,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 25,
+      "matchedValue": "defender",
+      "type": "TABLET",
+      "rotation": "any",
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 26,
+      "matchedValue": "small_magic",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite"
+    },
+    {
+      "slotIndex": 27,
+      "matchedValue": "voluspa",
+      "type": "ARTIFACT",
+      "rotation": 0,
+      "_visualNote": "host-verified against sprite (round 2)"
+    },
+    {
+      "slotIndex": 28,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 29,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 30,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    },
+    {
+      "slotIndex": 31,
+      "matchedValue": null,
+      "type": null,
+      "rotation": 0,
+      "_visualNote": "empty slot (effect overlay text only, if any)"
+    }
+  ],
+  "_labelling": "Round 2 used plate-matcher top-8 proposals plus direct browsing of the full 327-sprite catalog. Candidate-assisted, so treat measured top-1 as mildly optimistic; cells whose answer was absent from the top-8 were resolved from the catalog specifically to counter that bias.",
+  "_slotCountCorrection": "2026-08-17 correction: totalSlots was rows*cols (36). The bag's last row holds only 2 plates; slots 32-35 are frame/chrome outside the inventory and were labelled as empty inventory cells. Verified visually against the screenshot and independently against lib/vision/last-row.ts inferLastRowCols, which reports lastRowCols=2 for this image. The four removed cells were all matchedValue:null, so no item label was lost."
 }

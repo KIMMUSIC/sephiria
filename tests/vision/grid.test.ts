@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { calibrateGrid, type GridRect, type GridScorer } from '@/lib/vision/grid-calibrate'
 import { PlateMatcherRecognizer } from '@/lib/vision/plate-matcher'
-import type { TemplateSource } from '@/lib/vision/types'
+import type { CellPrediction, TemplateSource } from '@/lib/vision/types'
 import {
   aggregateCounts,
   loadAllTemplates,
@@ -33,11 +33,14 @@ const AUTO_PER_FIXTURE: Record<string, { top1: number; overall: number }> = {
   // roadmap 5: auto per-fixture floors held (140/201); fallback rose 176 -> 184.
   // roadmap 6: exact re-rank on auto rects. 4.png 14/32 -> 15/33 (frozen_bow;
   // defender still a transfer-margin miss on the auto crop). 6.png 28/29 -> 29/30.
+  // 2026-08-17 slot-count correction: 2/3/4/5.png hold 32 slots, not rows*cols = 36.
+  // Removing the 16 frame cells that were labelled as empty inventory drops only
+  // `overall`; every `top1` below is byte-identical to the previous pin.
   '1.jpeg': { top1: 8, overall: 8 },
-  '2.png': { top1: 19, overall: 35 },
-  '3.png': { top1: 17, overall: 33 },
-  '4.png': { top1: 15, overall: 33 },
-  '5.png': { top1: 25, overall: 29 },
+  '2.png': { top1: 19, overall: 31 },
+  '3.png': { top1: 17, overall: 29 },
+  '4.png': { top1: 15, overall: 29 },
+  '5.png': { top1: 25, overall: 25 },
   '6.png': { top1: 29, overall: 30 },
   '7.png': { top1: 29, overall: 35 },
 }
@@ -103,23 +106,29 @@ describe('grid calibration', () => {
       const fixture = loadFixture(name)
       const img = await loadImage(resolveFixtureImage(fixture))
 
+      // Production recognizes the calibrated rect and trims after
+      // (lib/vision/inventory-scan.ts); `scoreTrimmed` mirrors that.
       const base = {
         rows: fixture.rows,
         cols: fixture.cols,
-        totalSlots: fixture.totalSlots,
+        totalSlots: fixture.rows * fixture.cols,
         lossless: name.endsWith('.png'),
       }
+      const scoreTrimmed = (predictions: CellPrediction[]) =>
+        score(
+          predictions.filter((p) => p.slotIndex < fixture.totalSlots),
+          fixture
+        )
 
-      const handLabelled = score(
-        await recognizer.recognize(img, { ...base, grid: fixture.grid }),
-        fixture
+      const handLabelled = scoreTrimmed(
+        await recognizer.recognize(img, { ...base, grid: fixture.grid })
       )
 
       const detected = calibrateGrid(img, { cols: fixture.cols, rows: fixture.rows, scorer })
       expect(detected).not.toBeNull()
       const auto = sameRect(detected, fixture.grid)
         ? handLabelled
-        : score(await recognizer.recognize(img, { ...base, grid: detected! }), fixture)
+        : scoreTrimmed(await recognizer.recognize(img, { ...base, grid: detected! }))
       const min = AUTO_PER_FIXTURE[name]
       expect(auto.counts.top1Correct, `${name} auto top1`).toBeGreaterThanOrEqual(min.top1)
       expect(auto.counts.overallCorrect, `${name} auto overall`).toBeGreaterThanOrEqual(min.overall)
@@ -132,7 +141,7 @@ describe('grid calibration', () => {
         ? auto
         : sameRect(fallbackGrid, fixture.grid)
           ? handLabelled
-          : score(await recognizer.recognize(img, { ...base, grid: fallbackGrid! }), fixture)
+          : scoreTrimmed(await recognizer.recognize(img, { ...base, grid: fallbackGrid! }))
 
       // The production call: the user never tells us the row count.
       const autoRows = calibrateGrid(img, { cols: fixture.cols, scorer })
@@ -166,12 +175,15 @@ describe('grid calibration', () => {
     // roadmap 5: auto held 140/201; fallback 176 -> 184.
     // roadmap 6: auto 140/201 -> 142/203 (4.png frozen_bow + 6.png);
     // fallback 184 -> 195.
+    // 2026-08-17 slot-count correction: auto overall 203 -> 187, fallback 195 -> 179,
+    // both exactly -16 for the frame cells removed from the ground truth.
+    // auto top1 stays 142 — the correction moved the yardstick, not the matcher.
     const auto = aggregateCounts(rows.map((r) => r.auto.counts))
-    expect(auto.counts.overallCorrect).toBeGreaterThanOrEqual(203)
+    expect(auto.counts.overallCorrect).toBeGreaterThanOrEqual(187)
     expect(auto.counts.top1Correct).toBeGreaterThanOrEqual(142)
 
     const fallback = aggregateCounts(rows.map((r) => r.fallback.counts))
-    expect(fallback.counts.overallCorrect).toBeGreaterThanOrEqual(195)
+    expect(fallback.counts.overallCorrect).toBeGreaterThanOrEqual(179)
   })
 
   afterAll(() => {

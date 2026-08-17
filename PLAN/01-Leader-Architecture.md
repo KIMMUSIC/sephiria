@@ -67,7 +67,7 @@ type Effect = {
   dx: number     // 열 오프셋
   dy: number     // 행 오프셋 (음수 = 위)
   value: number  // -1 ~ +5
-  flag?: 'ignore' // 석판 방패 무시
+  flag?: 'ignore' // 정정: 제약 무시 (환대). 석판 방패 우회는 이 앱의 부수 규칙
 }
 
 // 아이템 등급
@@ -127,7 +127,7 @@ interface GridRow {
 }
 
 // 효과 맵: "row-col" → 누적 효과값
-type EffectMap = Record<string, number | 'ignore'>
+type EffectMap = Record<string, number>  // 정정: 'ignore' 센티널 제거, BoardEffects.constraintIgnore 로 분리
 ```
 
 ### 설계 포인트 (기존 대비 변경)
@@ -183,14 +183,14 @@ function applySimpleEffect(
 | 석판 | 로직 요약 |
 |------|----------|
 | `linear` (선의) | 마지막 행에 위치 시 좌우 +1 |
-| `home_town` (고양) | 회전 방향 한 칸을 "ignore"로 마킹 |
+| `home_town` (고양) | 회전 방향 한 칸 아티팩트의 `<제약>` 해제 (레벨 효과 없음) |
 | `agglutination` (응집) | 위 +3, 회전 방향에 따라 행/열 전체 -1 |
 | `transition` (전이) | 회전에 따라 행 +1·열 -1 또는 행 -1·열 +1 |
 | `justice` (정의) | 맨 좌/우 열에 위치 시 해당 열 전체 +1 |
 | `base` (기반) | 같은 행 전체 +1 (자신 제외) |
 | `concurrency` (동시성) | 같은 열 전체 +1 (자신 제외) |
 | `rebellion` (반항) | 대각선 방향 끝까지 +1 |
-| `connection` (이음) | 위 +2, 아래를 "ignore"로 마킹 |
+| `connection` (이음) | 위 +2, 아래 칸 아티팩트의 `<제약>` 해제 |
 | `shade` (차양) | 첫 행에 위치 시 마지막 행 전체 +1 |
 | `boundary` (경계) | 첫 행 + 마지막 행 전체 +1 |
 | `sheen` (광휘) | 행/열 전체 +1 (회전 의존) + 위아래 +2 |
