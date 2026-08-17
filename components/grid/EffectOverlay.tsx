@@ -36,6 +36,11 @@ export default function EffectOverlay({
   const destroyed =
     item?.type === 'ARTIFACT' && isArtifactDestroyed(item.currentLevel)
 
+  // 아티팩트 칸은 우하단에 `현재/최대` 레벨 배지(ArtifactCard)를 보여주므로 우상단
+  // 석판 델타를 겹쳐 놓지 않는다. 석판이 얼마를 줬는지는 아티팩트 목록과 셀 에디터의
+  // `석판 +n` 에서 본다. 빈 칸과 석판 칸에서는 델타가 유일한 정보라 그대로 유지한다.
+  const isArtifactCell = item?.type === 'ARTIFACT'
+
   return (
     <>
       {showIgnoreWash && (
@@ -56,6 +61,7 @@ export default function EffectOverlay({
           </span>
         </div>
       ) : (
+        !isArtifactCell &&
         effectValue !== undefined &&
         effectValue !== 0 && (
           <div className="pointer-events-none absolute right-0 top-0 z-[11]">
