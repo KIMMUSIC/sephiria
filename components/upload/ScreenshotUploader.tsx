@@ -18,6 +18,8 @@ export function ScreenshotUploader() {
 
   const loadFromRecognition = useInventoryStore((s) => s.loadFromRecognition)
   const setSlotNum = useInventoryStore((s) => s.setSlotNum)
+  const resetToken = useInventoryStore((s) => s.resetToken)
+  const seenResetToken = useRef(resetToken)
   const { state, result, init, recognize, resetState } = useRecognitionWorker()
 
   useEffect(() => {
@@ -27,10 +29,11 @@ export function ScreenshotUploader() {
 
   const applyResult = useCallback(() => {
     if (!result) return
-    const { predictions, rows, cols } = result
-    const required = rows * cols
-    if (required !== useInventoryStore.getState().slotNum) {
-      setSlotNum(required)
+    // The bag's last row is usually short, so rows*cols overstates the inventory
+    // (a 32-slot bag calibrates as a 6x6 rect). Use the measured slot count.
+    const { predictions, slotCount } = result
+    if (slotCount !== useInventoryStore.getState().slotNum) {
+      setSlotNum(slotCount)
     }
     const ingest: RecognitionIngest[] = predictions.map((p) => ({
       slotIndex: p.slotIndex,
@@ -97,6 +100,15 @@ export function ScreenshotUploader() {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [resetState])
 
+  // 전체 초기화 clears the board from the store; this panel also holds a phase and a
+  // file input of its own. Remounting would work but would re-download all 335
+  // templates, so it listens for the reset instead.
+  useEffect(() => {
+    if (seenResetToken.current === resetToken) return
+    seenResetToken.current = resetToken
+    handleReset()
+  }, [resetToken, handleReset])
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) void processFile(file)
@@ -155,7 +167,7 @@ export function ScreenshotUploader() {
           </div>
           {lowCount > 0 && (
             <p className="text-center text-[10px] text-sephiria-confirm-fg">
-              노란 확인 칸을 클릭해 후보를 고르세요
+              노란 확인 칸을 클릭한 뒤 ‘다른 아이템으로 교체’에서 후보를 고르세요
             </p>
           )}
           <Button variant="outline" size="sm" className="w-full" onClick={handleReset}>

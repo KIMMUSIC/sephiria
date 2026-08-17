@@ -6,15 +6,20 @@ import ArtifactCard from '@/components/items/ArtifactCard'
 import TabletCard from '@/components/items/TabletCard'
 import EffectOverlay from '@/components/grid/EffectOverlay'
 import type { GridSlot } from '@/types'
+import type { ConstraintStatus } from '@/lib/constraints'
 
 interface GridCellProps {
   slotIndex: number
   item: GridSlot
-  effectValue: number | 'ignore' | undefined
+  effectValue: number | undefined
   onDoubleClick: (slotIndex: number) => void
   onContextMenu: (e: React.MouseEvent, slotIndex: number) => void
   onClick?: (slotIndex: number) => void
   lowConfidence?: boolean
+  constraintIgnored?: boolean
+  constraintStatus?: ConstraintStatus
+  /** 칸에 각인된 인벤토리 레벨 — EffectOverlay 의 좌하단 배지로 표시된다. */
+  cellLevel?: number
 }
 
 export default function GridCell({
@@ -25,6 +30,9 @@ export default function GridCell({
   onContextMenu,
   onClick,
   lowConfidence,
+  constraintIgnored,
+  constraintStatus,
+  cellLevel,
 }: GridCellProps) {
   const { setNodeRef: setDropRef, isOver } = useDroppable({
     id: `cell-${slotIndex}`,
@@ -48,7 +56,7 @@ export default function GridCell({
       {...attributes}
       {...listeners}
       className={cn(
-        'relative flex h-[80px] w-[80px] cursor-pointer items-center justify-center',
+        'relative flex aspect-square w-full cursor-pointer items-center justify-center',
         'rounded-inner border border-sephiria-border bg-sephiria-cell',
         'transition-transform duration-200 ease-seph',
         isOver && 'scale-105 border-sephiria-accent bg-sephiria-accent-soft',
@@ -80,7 +88,13 @@ export default function GridCell({
         </span>
       )}
 
-      <EffectOverlay effectValue={effectValue} item={item} />
+      <EffectOverlay
+        effectValue={effectValue}
+        item={item}
+        constraintIgnored={constraintIgnored}
+        constraintStatus={constraintStatus}
+        cellLevel={cellLevel}
+      />
     </div>
   )
 }

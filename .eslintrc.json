@@ -1,0 +1,5 @@
+{
+  // next lint 가 설정 없이는 대화형 프롬프트로 빠져 exit 1 이 되므로 (CI 불가)
+  // devDependencies 의 eslint-config-next 를 그대로 사용한다.
+  "extends": "next/core-web-vitals"
+}
