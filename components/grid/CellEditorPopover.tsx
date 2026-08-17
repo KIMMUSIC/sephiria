@@ -271,13 +271,23 @@ function ArtifactEditor({
           </div>
           {evaluation && (
             <div className="mt-0.5 flex items-center gap-2 text-[10px] tabular-nums text-sephiria-muted">
+              {/* 그리드 배지와 같은 자르기 전 값을 보인다 — 초과는 7/5 로 나온다. */}
               <span
                 className={cn(
                   'font-semibold',
-                  evaluation.finalLevel < 0 ? 'text-sephiria-destroy-fg' : 'text-sephiria-fg'
+                  evaluation.rawLevel < 0
+                    ? 'text-sephiria-destroy-fg'
+                    : evaluation.rawLevel > maxLevel
+                    ? 'text-sephiria-confirm-fg'
+                    : 'text-sephiria-fg'
                 )}
+                title={
+                  evaluation.rawLevel > maxLevel
+                    ? `상한 초과 — ${evaluation.rawLevel - maxLevel} 만큼은 버려집니다`
+                    : undefined
+                }
               >
-                Lv {evaluation.finalLevel} / {maxLevel}
+                Lv {evaluation.rawLevel} / {maxLevel}
               </span>
               {evaluation.tabletBonus !== 0 && (
                 <span

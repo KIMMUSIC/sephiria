@@ -68,7 +68,12 @@ export default function GridCell({
       onContextMenu={(e) => onContextMenu(e, slotIndex)}
     >
       {item?.type === 'ARTIFACT' && (
-        <ArtifactCard artifact={item} size="md" showLevel />
+        <ArtifactCard
+          artifact={item}
+          size="md"
+          showLevel
+          levelDelta={(effectValue ?? 0) + (cellLevel ?? 0)}
+        />
       )}
       {item?.type === 'TABLET' && (
         <TabletCard tablet={item} size="md" />

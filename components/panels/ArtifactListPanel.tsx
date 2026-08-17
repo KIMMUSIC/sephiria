@@ -143,6 +143,7 @@ function ArtifactRow({
     artifact,
     slotIndex,
     finalLevel,
+    rawLevel,
     tabletBonus,
     cellLevel,
     constraintKind,
@@ -194,17 +195,28 @@ function ArtifactRow({
             <span>
               칸 {slotIndex + 1}
             </span>
+            {/*
+              자르기 전 rawLevel 을 보여 그리드 배지와 숫자가 갈라지지 않게 한다.
+              상한을 넘으면 초과분은 버려지므로 '주의' 색으로 드러낸다.
+            */}
             <span
               className={cn(
                 'font-semibold',
-                finalLevel < 0
+                rawLevel < 0
                   ? 'text-sephiria-destroy-fg'
+                  : rawLevel > maxLevel
+                  ? 'text-sephiria-confirm-fg'
                   : target !== null && goalMet
                   ? 'text-sephiria-buff-fg'
                   : 'text-sephiria-fg'
               )}
+              title={
+                rawLevel > maxLevel
+                  ? `상한 초과 — ${rawLevel - maxLevel} 만큼은 버려집니다`
+                  : undefined
+              }
             >
-              Lv {finalLevel} / {maxLevel}
+              Lv {rawLevel} / {maxLevel}
             </span>
             {/* 석판 보너스와 칸 레벨은 출처가 다르다 — 석판은 아이템 효과, 칸 레벨은 칸에 각인된 값. */}
             {tabletBonus !== 0 && (

@@ -41,6 +41,18 @@ export function finalLevelOf(artifact: PlacedArtifact, bonus: number): number {
   return Math.min(artifact.level + bonus, cap)
 }
 
+/**
+ * 자르기 전 레벨 — 인챈트 + 석판 + 칸 레벨을 그대로 더한 값.
+ *
+ * 점수는 반드시 finalLevelOf 를 쓴다. 상한 초과분은 버려지는 값이라
+ * (별은 상한이다 — namu.wiki/w/세피리아/아티팩트) 최적화가 그걸 쪻으면
+ * 쓸데없는 자리를 고른다. 이 값은 오직 **표시용**이다 — 7/5 처럼
+ * 얼마나 낭비되고 있는지 사용자에게 보여 주기 위해 쓴다.
+ */
+export function rawLevelOf(artifact: PlacedArtifact, bonus: number): number {
+  return artifact.level + bonus
+}
+
 /** Satisfying a `<제약>` is worth about as much as fully enhancing that artifact. */
 function constraintValue(artifact: PlacedArtifact): number {
   return Math.max(1, artifact.data.level ?? 0)
@@ -244,8 +256,10 @@ export interface ArtifactEvaluation {
   cellLevel: number
   /** 석판만의 델타 (쉴드 적용 후), 칸 레벨 제외. */
   tabletBonus: number
-  /** enchant + bonus, capped at the star maximum. */
+  /** enchant + bonus, capped at the star maximum. 점수는 이 값만 쓴다. */
   finalLevel: number
+  /** 자르기 전 enchant + bonus. 표시 전용 — rawLevelOf 주석 참고. */
+  rawLevel: number
   destroyed: boolean
   constraintKind: ConstraintKind | null
   constraintStatus: ConstraintStatus
@@ -312,6 +326,7 @@ export function evaluateBoardDetail(
       const cellLevel = config?.cellLevels?.[i] ?? 0
       const bonus = tabletBonus + cellLevel
       const finalLevel = finalLevelOf(artifact, bonus)
+      const rawLevel = rawLevelOf(artifact, bonus)
       const isDestroyed = isArtifactDestroyed(finalLevel)
       if (isDestroyed) destroyed = true
 
@@ -328,6 +343,7 @@ export function evaluateBoardDetail(
         cellLevel,
         tabletBonus,
         finalLevel,
+        rawLevel,
         destroyed: isDestroyed,
         constraintKind: kind,
         constraintStatus: status,
