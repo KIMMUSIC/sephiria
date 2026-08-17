@@ -4,13 +4,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { X, Search, Plus, RotateCw } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn, withParticle } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useInventoryStore } from '@/store/inventoryStore'
 import { TABLETS, TABLET_MAP } from '@/data/tablets'
 import { TIER_KO } from '@/data/wikiLabels'
 import { calculateBoardEffects } from '@/lib/effectEngine'
-import { activationConditionsOf, canRotate, isRotatable } from '@/lib/tabletMeta'
+import { PREVIEW_COLS, PREVIEW_ROW_COUNT, previewPlacement } from '@/lib/fusionPreview'
+import { activationConditionsOf, canRotate, isRotatable, TABLET_ACTIVATION } from '@/lib/tabletMeta'
 import { nextRotation } from '@/lib/rotationUtils'
 import type { FusedSource, GridRow, GridSlot, PlacedTablet, TabletData } from '@/types'
 
@@ -19,13 +20,12 @@ interface TabletFusionModalProps {
   onClose: () => void
 }
 
-const PREVIEW_SIZE = 5
-const PREVIEW_CENTER = 2
-const PREVIEW_ROWS: GridRow[] = Array.from({ length: PREVIEW_SIZE }, (_, i) => ({
+const PREVIEW_ROWS: GridRow[] = Array.from({ length: PREVIEW_ROW_COUNT }, (_, i) => ({
   rowIndex: i,
-  cols: PREVIEW_SIZE,
+  cols: PREVIEW_COLS,
 }))
-const PREVIEW_CENTER_SLOT = PREVIEW_CENTER * PREVIEW_SIZE + PREVIEW_CENTER
+const PREVIEW_FALLBACK_ROW = Math.floor((PREVIEW_ROW_COUNT - 1) / 2)
+const PREVIEW_FALLBACK_COL = Math.floor((PREVIEW_COLS - 1) / 2)
 
 const TIER_BORDER: Record<string, string> = {
   common: 'border-tier-common',
@@ -77,9 +77,10 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
       isCustom: false,
       fusedFrom: picked,
     }
-    const slots: GridSlot[] = new Array(PREVIEW_SIZE * PREVIEW_SIZE).fill(null)
-    slots[PREVIEW_CENTER_SLOT] = tablet
-    return calculateBoardEffects(slots, PREVIEW_ROWS)
+    const placement = previewPlacement(picked)
+    const slots: GridSlot[] = new Array(PREVIEW_ROW_COUNT * PREVIEW_COLS).fill(null)
+    slots[placement.slot] = tablet
+    return { ...calculateBoardEffects(slots, PREVIEW_ROWS), placement }
   }, [picked])
 
   const conditions = activationConditionsOf(picked)
@@ -290,11 +291,13 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
           <div className="flex flex-col items-center gap-2">
             <span className="text-[10px] font-medium text-sephiria-muted">합성 결과 미리보기</span>
             <div className="flex flex-col gap-1">
-              {Array.from({ length: PREVIEW_SIZE }, (_, row) => (
+              {Array.from({ length: PREVIEW_ROW_COUNT }, (_, row) => (
                 <div key={row} className="flex gap-1">
-                  {Array.from({ length: PREVIEW_SIZE }, (_, col) => {
+                  {Array.from({ length: PREVIEW_COLS }, (_, col) => {
                     const key = `${row}-${col}`
-                    const isCenter = row === PREVIEW_CENTER && col === PREVIEW_CENTER
+                    const placedRow = preview?.placement.row ?? PREVIEW_FALLBACK_ROW
+                    const placedCol = preview?.placement.col ?? PREVIEW_FALLBACK_COL
+                    const isPlaced = row === placedRow && col === placedCol
                     const value = preview?.effects[key] ?? 0
                     const waives = preview?.constraintIgnore.has(key) ?? false
                     return (
@@ -302,7 +305,7 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
                         key={col}
                         className={cn(
                           'flex h-9 w-9 flex-col items-center justify-center rounded-inner border text-[10px] font-bold leading-none tabular-nums',
-                          isCenter
+                          isPlaced
                             ? 'border-sephiria-gold bg-sephiria-confirm text-sephiria-gold'
                             : value > 0
                             ? 'border-sephiria-buff-fg/40 bg-sephiria-buff text-sephiria-buff-fg'
@@ -311,7 +314,7 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
                             : 'border-sephiria-border bg-sephiria-cell text-sephiria-muted'
                         )}
                       >
-                        {isCenter ? (
+                        {isPlaced ? (
                           '석판'
                         ) : (
                           <>
@@ -329,10 +332,25 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
                 </div>
               ))}
             </div>
-            <p className="max-w-[12rem] text-center text-[9px] leading-snug text-sephiria-muted">
-              위치 조건이 있는 석판(선의·차양·정의·깃발)과 행/열 전체 석판은 실제 인벤 위치에서만
-              발동하므로 이 미리보기에는 나타나지 않습니다.
-            </p>
+            {preview && (
+              <div className="max-w-[14rem] text-center text-[9px] leading-snug">
+                <p className="text-sephiria-muted">{preview.placement.label}에 놓았을 때</p>
+                {preview.placement.dormant.length > 0 && (
+                  <p className="mt-1 rounded-inner bg-sephiria-confirm px-1.5 py-1 text-sephiria-confirm-fg">
+                    {withParticle(
+                      preview.placement.dormant.map((v) => labelOf(v)).join('·'),
+                      '은',
+                      '는'
+                    )}{' '}
+                    {preview.placement.dormant
+                      .flatMap((v) => TABLET_ACTIVATION[v] ?? [])
+                      .filter((c, i, arr) => arr.indexOf(c) === i)
+                      .join('·')}
+                    에서만 발동해 이 자리에서는 꺼져 있습니다. 두 조건을 동시에 만족하는 칸이 없습니다.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
