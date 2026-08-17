@@ -8,7 +8,7 @@ import type {
   PlacedTablet,
 } from '@/types'
 import { applyTabletShield, calculateAllEffects, type EffectStats } from '@/lib/effectEngine'
-import { comboCounts, totalComboTiers } from '@/lib/comboEngine'
+import { comboCounts, totalComboTiers, whitePaperCount, WHITE_PAPER_VALUE } from '@/lib/comboEngine'
 import { comboTiersMet, maxComboTiers } from '@/data/comboEffects'
 import { getMaxRow, slotToPosition } from '@/lib/gridUtils'
 import {
@@ -103,8 +103,24 @@ export const STRUCT_TIEBREAK_CAP = 4096
  */
 export const COMBO_TIEBREAK_CAP = 256
 
+/**
+ * comboGoal 밴드가 세는 값의 절대 상한. 실제 상한은 보드에서 계산하고
+ * (목표 콤보 아티팩트 수 + 하얀 종이 장수), 이 상수는 밴드 사슬이
+ * Number.MAX_SAFE_INTEGER 를 넘지 않게 하는 마지막 빗장이다.
+ */
+export const COMBO_GOAL_STACK_CAP = 64
+
 export interface ScoreWeights {
-  /** 최상위: targetCombo 가 도달한 단계 수. 목표 콤보가 없으면 상한 0. */
+  /**
+   * 최상위: targetCombo 의 **스택 수**. 목표 콤보가 없으면 상한 0.
+   *
+   * 단계 수가 아니라 스택 수를 세는 이유: 단계 수는 임계값 사이에서 평평해
+   * 최적화기에 기울기를 주지 못한다. 바람노래는 임계값이 2/4/6/8/10 이라
+   * 스택 6 과 7 이 둘 다 3단계이고, 그러면 하얀 종이가 양옆에 붙든 말든 점수가
+   * 같아서 종이가 아무 데나 떠돌았다. 스택 수는 단계 수에 대해 단조이므로
+   * 임계값을 넘길 수 있을 때는 같은 답을 고르고, 넘길 수 없을 때도 사용자가
+   * 지정한 콤보 옆에 종이를 붙여 둔다.
+   */
   comboGoal: number
   goalHigh: number
   goalNormal: number
@@ -123,11 +139,17 @@ export function buildScoreWeights(slots: GridSlot[], config?: BoardConfig): Scor
   let goalNormalCap = 0
   let goalHighCap = 0
   const comboSlugs = new Set<string>()
+  const targetCombo = config?.targetCombo ?? null
+  let targetBase = 0
+  let paperCount = 0
 
   for (const item of slots) {
     if (!item || item.type !== 'ARTIFACT') continue
     const artifact = item as PlacedArtifact
-    for (const slug of artifact.data.effect?.sets ?? []) comboSlugs.add(slug)
+    const sets = artifact.data.effect?.sets ?? []
+    for (const slug of sets) comboSlugs.add(slug)
+    if (artifact.data.value === WHITE_PAPER_VALUE) paperCount += 1
+    if (targetCombo && sets.includes(targetCombo)) targetBase += 1
     const maxLevel = Math.max(0, artifact.data.level ?? 0)
     const cval = constraintKindOf(artifact) ? constraintValue(artifact) : 0
 
@@ -154,8 +176,12 @@ export function buildScoreWeights(slots: GridSlot[], config?: BoardConfig): Scor
   })
   const comboAllCap = Math.min(comboAllCapRaw, COMBO_TIEBREAK_CAP)
 
-  const targetCombo = config?.targetCombo ?? null
-  const comboGoalCap = targetCombo ? maxComboTiers(targetCombo) : 0
+  // 목표 콤보의 스택은 보드에 있는 그 태그 아티팩트 수 + 하얀 종이 장수를
+  // 넘을 수 없다. 상수 대신 이 실측값을 상한으로 쓰면 밴드 사슬이 불필요하게
+  // 부풀지 않는다 — 오버플로 여유가 거기서 나온다.
+  const comboGoalCap = targetCombo
+    ? Math.min(targetBase + paperCount, COMBO_GOAL_STACK_CAP)
+    : 0
 
   // Structural tie-breakers are counts, clamped so the band cannot overflow — see
   // STRUCT_TIEBREAK_CAP. evaluateBoardDetail applies the same clamp.
@@ -342,8 +368,9 @@ export function evaluateBoardDetail(
   const counts = comboCounts(slots, gridRows)
   const comboAll = Math.min(totalComboTiers(counts), COMBO_TIEBREAK_CAP)
   const targetCombo = config?.targetCombo ?? null
+  // 단계 수가 아니라 스택 수 — 이유는 ScoreWeights.comboGoal 주석 참고.
   const comboGoal = targetCombo
-    ? comboTiersMet(targetCombo, counts.get(targetCombo)?.total ?? 0)
+    ? Math.min(counts.get(targetCombo)?.total ?? 0, COMBO_GOAL_STACK_CAP)
     : 0
 
   const score = destroyed

@@ -6,7 +6,7 @@ import { useInventoryStore } from '@/store/inventoryStore'
 import {
   WHITE_PAPER_VALUE,
   comboCounts,
-  whitePaperOpportunities,
+  whitePaperTargets,
 } from '@/lib/comboEngine'
 import { comboTiersMet, nextComboTier } from '@/data/comboEffects'
 import { COMBO_KO, COMBO_ORDER } from '@/data/wikiLabels'
@@ -27,7 +27,10 @@ export function ComboPanel() {
   const setTargetCombo = useInventoryStore((s) => s.setTargetCombo)
 
   const counts = useMemo(() => comboCounts(slots, gridRows), [slots, gridRows])
-  const opportunities = useMemo(() => whitePaperOpportunities(slots, gridRows), [slots, gridRows])
+  const targets = useMemo(() => whitePaperTargets(slots, gridRows), [slots, gridRows])
+  // 임계값을 넘기는 후보와, 넘기진 못해도 종이를 붙여 둘 수 있는 후보를 나눈다.
+  const opportunities = useMemo(() => targets.filter((t) => t.crossesThreshold), [targets])
+  const holdOnly = useMemo(() => targets.filter((t) => !t.crossesThreshold), [targets])
 
   const hasArtifacts = slots.some((slot) => slot?.type === 'ARTIFACT')
   const hasWhitePaper = slots.some(
@@ -91,7 +94,7 @@ export function ComboPanel() {
               <span className="text-[11px] font-semibold text-sephiria-fg">
                 하얀 종이 목표 콤보
               </span>
-              {opportunities.length > 0 ? (
+              {targets.length > 0 ? (
                 <>
                   <select
                     value={targetCombo ?? ''}
@@ -100,25 +103,47 @@ export function ComboPanel() {
                     className="w-full rounded-ctl border border-sephiria-border bg-sephiria-cell px-2 py-1 text-xs text-sephiria-fg focus:border-sephiria-accent focus:outline-none"
                   >
                     <option value="">목표 없음</option>
-                    {opportunities.map((o) => (
-                      <option key={o.slug} value={o.slug}>
-                        {o.ko} · {o.count} → {o.nextTier.count} ({o.nextTier.text})
-                      </option>
-                    ))}
-                    {/* 선택해 둔 목표가 배치 변경으로 기회 목록에서 빠져도 현재 값은 보이게 유지한다. */}
-                    {targetCombo && !opportunities.some((o) => o.slug === targetCombo) && (
+                    {opportunities.length > 0 && (
+                      <optgroup label="임계값을 넘깁니다">
+                        {opportunities.map((o) => (
+                          <option key={o.slug} value={o.slug}>
+                            {o.ko} · {o.base} → {o.achievable}
+                            {o.nextTier ? ` (${o.nextTier.text})` : ''}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
+                    {/*
+                      임계값을 넘기지 못해도 종이를 그 콤보에 붙여 두고 싶을 수 있다.
+                      목표 밴드가 스택 수를 세므로 이쪽을 고르면 최적화가 종이를 양옆에
+                      붙여 둔다 — 단계만 세면 임계값 사이에서 평평해 종이가 떠돌았던 그 문제다.
+                    */}
+                    {holdOnly.length > 0 && (
+                      <optgroup label="임계값은 못 넘기지만 스택을 유지합니다">
+                        {holdOnly.map((o) => (
+                          <option key={o.slug} value={o.slug}>
+                            {o.ko} · {o.base} → {o.achievable}
+                            {o.nextTier ? ` (다음 ${o.nextTier.count}개)` : ' (최대 단계)'}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
+                    {/* 선택해 둔 목표가 배치 변경으로 목록에서 빠져도 현재 값은 보이게 유지한다. */}
+                    {targetCombo && !targets.some((o) => o.slug === targetCombo) && (
                       <option value={targetCombo}>
                         {COMBO_KO[targetCombo] ?? targetCombo} (현재 목표)
                       </option>
                     )}
                   </select>
                   <p className="text-[10px] leading-snug text-sephiria-muted">
-                    하얀 종이 양옆에 같은 콤보 아티팩트가 오도록 배치를 맞춥니다.
+                    하얀 종이 양옆에 같은 콤보 아티팩트가 오도록 배치를 맞춥니다. 표시된 숫자는
+                    종이를 뺀 순수 아티팩트 수 → 종이까지 합친 도달 가능 수입니다.
                   </p>
                 </>
               ) : (
                 <p className="text-[10px] leading-snug text-sephiria-muted">
-                  하얀 종이로 임계값을 넘길 수 있는 콤보가 없습니다.
+                  하얀 종이를 붙일 수 있는 콤보가 없습니다. 종이 양옆에 놓으려면 같은 콤보
+                  아티팩트가 2개 이상 배치되어 있어야 합니다.
                 </p>
               )}
             </div>

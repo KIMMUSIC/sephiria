@@ -5,6 +5,8 @@ import {
   totalComboTiers,
   whitePaperOpportunities,
 } from '@/lib/comboEngine'
+import { comboTiersMet } from '@/data/comboEffects'
+import { buildScoreWeights, evaluateBoard } from '@/lib/optimizerScore'
 import { buildGridRows, positionToSlot } from '@/lib/gridUtils'
 import { ARTIFACT_MAP } from '@/data/artifacts'
 import { getTabletEffect } from '@/data/tabletEffects'
@@ -202,23 +204,30 @@ describe('totalComboTiers', () => {
 
 // ──────────────────────────────────────────────────────────────
 describe('whitePaperOpportunities', () => {
-  it('lists 호수 at 2 stacks — one more crosses the 3 threshold', () => {
+  /** 종이 한 장을 항상 보드에 놓는다 — 종이가 없으면 기회 자체가 없다. */
+  function withPaper(values: string[], paperAt = at(4, 0)): GridSlot[] {
     const slots = board()
-    slots[at(0, 0)] = fromCatalog('dried_flower')
-    slots[at(1, 0)] = fromCatalog('water_bag')
+    values.forEach((v, i) => {
+      slots[at(Math.floor(i / 6), i % 6)] = fromCatalog(v)
+    })
+    slots[paperAt] = fromCatalog(WHITE_PAPER_VALUE)
+    return slots
+  }
+
+  it('lists 호수 at 2 stacks — one more crosses the 3 threshold', () => {
+    const slots = withPaper(['dried_flower', 'water_bag'])
 
     const opportunities = whitePaperOpportunities(slots, ROWS)
     expect(opportunities).toHaveLength(1)
     expect(opportunities[0].slug).toBe('lake')
     expect(opportunities[0].ko).toBe('호수')
-    expect(opportunities[0].count).toBe(2)
-    expect(opportunities[0].nextTier.count).toBe(3)
+    expect(opportunities[0].base).toBe(2)
+    expect(opportunities[0].achievable).toBe(3)
+    expect(opportunities[0].nextTier!.count).toBe(3)
   })
 
   it('skips 견고 at 2 stacks — 3 is not a threshold on 2/4/6/8/10', () => {
-    const slots = board()
-    slots[at(0, 0)] = fromCatalog('shield_technique_manual')
-    slots[at(1, 0)] = fromCatalog('begonia_flavor_pocket')
+    const slots = withPaper(['shield_technique_manual', 'begonia_flavor_pocket'])
 
     expect(whitePaperOpportunities(slots, ROWS)).toEqual([])
   })
@@ -226,10 +235,66 @@ describe('whitePaperOpportunities', () => {
   it('skips a combo with only one artifact even when +1 would cross a threshold', () => {
     // 연금술 thresholds are 1/2/3, so 1 + 1 = 2 does cross — but a 하얀 종이
     // needs a combo artifact on each side, so one is never enough.
-    const slots = board()
-    slots[at(0, 0)] = fromCatalog('reinforced_potion_lid')
+    const slots = withPaper(['reinforced_potion_lid'])
 
     expect(whitePaperOpportunities(slots, ROWS)).toEqual([])
+  })
+
+  it('offers nothing with no 하얀 종이 on the board', () => {
+    const slots = board()
+    slots[at(0, 0)] = fromCatalog('dried_flower')
+    slots[at(0, 1)] = fromCatalog('water_bag')
+
+    expect(whitePaperOpportunities(slots, ROWS)).toEqual([])
+  })
+
+  // 사용자가 보고한 회귀: 바람노래 기본 6 + 종이 1 = 총 7 인 보드에서
+  // 7→8 을 권했다. 종이는 한 장뿐이라 8 은 도달할 수 없는 목표였다.
+  it('does not offer a target that needs a second 하얀 종이', () => {
+    const six = [
+      'windpool_shawl',
+      'compression_band',
+      'thornbush',
+      'gold_cloak',
+      'vane',
+      'sheet_music_bree',
+    ]
+    // 종이가 이미 양옆에 붙어 기여하고 있는 상태를 만든다 (총 7).
+    const slots = board()
+    slots[at(0, 0)] = fromCatalog(six[0])
+    slots[at(0, 1)] = fromCatalog(WHITE_PAPER_VALUE)
+    slots[at(0, 2)] = fromCatalog(six[1])
+    six.slice(2).forEach((v, i) => {
+      slots[at(1, i)] = fromCatalog(v)
+    })
+
+    const counts = comboCounts(slots, ROWS)
+    expect(counts.get('spring_song')).toMatchObject({ base: 6, whitePaper: 1, total: 7 })
+    // 기본 6 에서 종이 한 장으로 닿는 최대가 7 이고, 7 은 임계값이 아니다.
+    expect(whitePaperOpportunities(slots, ROWS).map((o) => o.slug)).not.toContain('spring_song')
+  })
+
+  it('offers 바람노래 once a seventh tagged artifact makes 8 reachable', () => {
+    const seven = [
+      'windpool_shawl',
+      'compression_band',
+      'thornbush',
+      'gold_cloak',
+      'vane',
+      'sheet_music_bree',
+      'silver_bracelet',
+    ]
+    const slots = board()
+    seven.forEach((v, i) => {
+      slots[at(Math.floor(i / 6), i % 6)] = fromCatalog(v)
+    })
+    slots[at(4, 0)] = fromCatalog(WHITE_PAPER_VALUE)
+
+    const found = whitePaperOpportunities(slots, ROWS).find((o) => o.slug === 'spring_song')
+    expect(found).toBeDefined()
+    expect(found!.base).toBe(7)
+    expect(found!.achievable).toBe(8)
+    expect(found!.nextTier!.count).toBe(8)
   })
 
   it('sorts candidates in COMBO_ORDER', () => {
@@ -239,8 +304,61 @@ describe('whitePaperOpportunities', () => {
     slots[at(0, 1)] = fromCatalog('angry_potato')
     slots[at(1, 0)] = fromCatalog('dried_flower')
     slots[at(1, 1)] = fromCatalog('water_bag')
+    slots[at(4, 0)] = fromCatalog(WHITE_PAPER_VALUE)
 
     const opportunities = whitePaperOpportunities(slots, ROWS)
     expect(opportunities.map((o) => o.slug)).toEqual(['lake', 'alchemy'])
+  })
+})
+
+// ──────────────────────────────────────────────────────────────
+// 목표 콤보 밴드는 단계 수가 아니라 스택 수를 센다. 단계 수만 세면 임계값
+// 사이에서 점수가 평평해져 최적화기가 하얀 종이를 제자리에 붙일 이유를 잃는다.
+describe('comboGoal band gradient', () => {
+  const SIX = [
+    'windpool_shawl',
+    'compression_band',
+    'thornbush',
+    'gold_cloak',
+    'vane',
+    'sheet_music_bree',
+  ]
+
+  /** 종이를 flanked=true 면 바람노래 둘 사이에, false 면 멀리 떨어뜨려 놓는다. */
+  function build(flanked: boolean): GridSlot[] {
+    const slots = board()
+    slots[at(0, 0)] = fromCatalog(SIX[0])
+    slots[at(0, 2)] = fromCatalog(SIX[1])
+    SIX.slice(2).forEach((v, i) => {
+      slots[at(1, i)] = fromCatalog(v)
+    })
+    slots[flanked ? at(0, 1) : at(3, 0)] = fromCatalog(WHITE_PAPER_VALUE)
+    return slots
+  }
+
+  it('바람노래 스택 6과 7은 도달 단계가 같다 — 단계만 세면 기울기가 없다', () => {
+    expect(comboTiersMet('spring_song', 6)).toBe(comboTiersMet('spring_song', 7))
+  })
+
+  it('임계값을 넘기지 못해도 종이가 목표 콤보에 붙은 배치를 더 높게 친다', () => {
+    const flanked = build(true)
+    const adrift = build(false)
+
+    expect(comboCounts(flanked, ROWS).get('spring_song')!.total).toBe(7)
+    expect(comboCounts(adrift, ROWS).get('spring_song')!.total).toBe(6)
+
+    const config = { targetCombo: 'spring_song' }
+    const weights = buildScoreWeights(flanked, config)
+    expect(evaluateBoard(flanked, ROWS, weights, config)).toBeGreaterThan(
+      evaluateBoard(adrift, ROWS, weights, config)
+    )
+  })
+
+  it('목표 콤보가 없으면 두 배치의 점수 차가 최상위 밴드에서 나오지 않는다', () => {
+    const weights = buildScoreWeights(build(true))
+    const flankedScore = evaluateBoard(build(true), ROWS, weights)
+    const adriftScore = evaluateBoard(build(false), ROWS, weights)
+    // comboAll 은 단계 수라 6과 7이 같은 값 — 목표를 지정하지 않으면 동점이다.
+    expect(flankedScore).toBe(adriftScore)
   })
 })

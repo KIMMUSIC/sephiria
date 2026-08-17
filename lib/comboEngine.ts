@@ -95,26 +95,80 @@ export function totalComboTiers(counts: Map<string, ComboCount>): number {
   return sum
 }
 
+/** 보드에 놓인 하얀 종이 장수. */
+export function whitePaperCount(slots: GridSlot[]): number {
+  let n = 0
+  for (const slot of slots) {
+    if (slot?.type === 'ARTIFACT' && slot.data.value === WHITE_PAPER_VALUE) n += 1
+  }
+  return n
+}
+
 /**
- * Combos where one more 하얀 종이 stack actually crosses a threshold:
- * (a) the board holds 2+ artifacts of that combo (a 하얀 종이 needs one on each
- *     side), and
- * (b) total + 1 reaches a tier that total does not.
- * Sorted in COMBO_ORDER (wiki section 3.1–3.20) order.
+ * 하얀 종이가 이 콤보에 더해 줄 수 있는 최대 스택.
+ *
+ * 종이 한 장은 양옆에 그 콤보 아티팩트가 하나씩 있어야 하고, 줄지어 놓으면
+ * A 종이 A 종이 A 처럼 가운데 아티팩트를 공유할 수 있다. 그래서 종이 k 장을
+ * 모두 쓰려면 그 콤보 아티팩트가 k+1 개 필요하다. 격자 폭·빈칸 사정은 넣지
+ * 않았으므로 이 값은 상한이다.
  */
+export function whitePaperHeadroom(base: number, papers: number): number {
+  if (base < 2 || papers < 1) return 0
+  return Math.min(papers, base - 1)
+}
+
+export interface WhitePaperTarget {
+  slug: string
+  ko: string
+  /** 종이 도움 없이 세어지는 스택 — 아티팩트 태그만. */
+  base: number
+  /** 종이를 최대한 활용했을 때 도달 가능한 스택. */
+  achievable: number
+  /** base 기준으로 다음 임계값. 이미 마지막 단계면 null. */
+  nextTier: ComboTier | null
+  /** achievable 이 base 보다 높은 단계에 닿는가. */
+  crossesThreshold: boolean
+}
+
+/**
+ * 하얀 종이를 붙일 수 있는 모든 콤보. 양옆에 놓을 같은 콤보 아티팩트가
+ * 2개 이상이고 보드에 종이가 있으면 후보다. COMBO_ORDER(위키 3.1–3.20) 순서.
+ *
+ * 판정 기준은 base 다. entry.total 은 지금 종이가 붙어 있는지에 따라 흔들리므로,
+ * 그 값을 기준으로 "+1 이 임계값을 넘는가" 를 물으면 **종이 한 장이 더 있어야
+ * 가능한 목표**를 제안하게 된다. 바람노래 기본 6 + 종이 1 = 7 인 보드에서
+ * 7→8 을 권하던 것이 그 경우다 — 종이가 한 장뿐이라 8 은 도달할 수 없다.
+ */
+export function whitePaperTargets(
+  slots: GridSlot[],
+  gridRows: GridRow[]
+): WhitePaperTarget[] {
+  const counts = comboCounts(slots, gridRows)
+  const papers = whitePaperCount(slots)
+  const out: WhitePaperTarget[] = []
+  for (const slug of COMBO_ORDER) {
+    const entry = counts.get(slug)
+    if (!entry) continue
+    const headroom = whitePaperHeadroom(entry.base, papers)
+    if (headroom === 0) continue
+    const achievable = entry.base + headroom
+    out.push({
+      slug,
+      ko: COMBO_EFFECTS[slug].ko,
+      base: entry.base,
+      achievable,
+      nextTier: nextComboTier(slug, entry.base),
+      crossesThreshold:
+        comboTiersMet(slug, achievable) > comboTiersMet(slug, entry.base),
+    })
+  }
+  return out
+}
+
+/** 붙일 수 있는 콤보 중, 종이로 실제로 임계값을 넘기는 것만. */
 export function whitePaperOpportunities(
   slots: GridSlot[],
   gridRows: GridRow[]
-): Array<{ slug: string; ko: string; count: number; nextTier: ComboTier }> {
-  const counts = comboCounts(slots, gridRows)
-  const out: Array<{ slug: string; ko: string; count: number; nextTier: ComboTier }> = []
-  for (const slug of COMBO_ORDER) {
-    const entry = counts.get(slug)
-    if (!entry || entry.base < 2) continue
-    if (comboTiersMet(slug, entry.total + 1) <= comboTiersMet(slug, entry.total)) continue
-    const nextTier = nextComboTier(slug, entry.total)
-    if (!nextTier) continue
-    out.push({ slug, ko: COMBO_EFFECTS[slug].ko, count: entry.total, nextTier })
-  }
-  return out
+): WhitePaperTarget[] {
+  return whitePaperTargets(slots, gridRows).filter((t) => t.crossesThreshold)
 }
