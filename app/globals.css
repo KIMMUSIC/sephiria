@@ -6,26 +6,58 @@
 
 :root {
   color-scheme: light;
-  --seph-bg: #f7f6f3;
-  --seph-panel: #fffbfa;
-  --seph-grid: #f1ebe6;
-  --seph-cell: #ffffff;
-  --seph-border: #e6ddd6;
-  --seph-fg: #3a322e;
-  --seph-muted: #8a7a74;
-  --seph-accent: #c47a8a;
-  --seph-accent-soft: #f6e4e8;
-  --seph-accent-fg: #7a3d4a;
-  --seph-ink: #2c2623;
-  --seph-gold: #c9a06a;
-  --seph-buff: #e1f3fe;
-  --seph-buff-fg: #1f6c9f;
-  --seph-debuff: #fdebec;
-  --seph-debuff-fg: #9f2f2d;
-  --seph-destroy: #f4d0d2;
-  --seph-destroy-fg: #8a2422;
-  --seph-confirm: #fbf3db;
-  --seph-confirm-fg: #956400;
+
+  /*
+   * 팔레트의 진실의 원천은 채널 3개짜리 --seph-*-rgb 다.
+   * Tailwind 는 맨 var(--x) 로 정의된 색에는 /불투명도 유틸리티를 아예 생성하지
+   * 않는다 — bg-sephiria-ink/75, bg-sephiria-ink/30 같은 클래스가 컴파일된 CSS 에
+   * 존재하지 않아 조용히 무시되고 있었다. 채널로 두면 config 의
+   * rgb(var(--x) / <alpha-value>) 가 알파를 받아 정상 생성된다.
+   * 아래 --seph-* 는 그 채널에서 파생한 것이라 globals.css 안의 직접 var() 사용은
+   * 그대로 두어도 된다.
+   */
+  --seph-bg-rgb: 247 246 243;
+  --seph-panel-rgb: 255 251 250;
+  --seph-grid-rgb: 241 235 230;
+  --seph-cell-rgb: 255 255 255;
+  --seph-border-rgb: 230 221 214;
+  --seph-fg-rgb: 58 50 46;
+  --seph-muted-rgb: 138 122 116;
+  --seph-accent-rgb: 196 122 138;
+  --seph-accent-soft-rgb: 246 228 232;
+  --seph-accent-fg-rgb: 122 61 74;
+  --seph-ink-rgb: 44 38 35;
+  --seph-gold-rgb: 201 160 106;
+  --seph-buff-rgb: 225 243 254;
+  --seph-buff-fg-rgb: 31 108 159;
+  --seph-debuff-rgb: 253 235 236;
+  --seph-debuff-fg-rgb: 159 47 45;
+  --seph-destroy-rgb: 244 208 210;
+  --seph-destroy-fg-rgb: 138 36 34;
+  --seph-confirm-rgb: 251 243 219;
+  --seph-confirm-fg-rgb: 149 100 0;
+
+  --seph-bg: rgb(var(--seph-bg-rgb));
+  --seph-panel: rgb(var(--seph-panel-rgb));
+  --seph-grid: rgb(var(--seph-grid-rgb));
+  --seph-cell: rgb(var(--seph-cell-rgb));
+  --seph-border: rgb(var(--seph-border-rgb));
+  --seph-fg: rgb(var(--seph-fg-rgb));
+  --seph-muted: rgb(var(--seph-muted-rgb));
+  --seph-accent: rgb(var(--seph-accent-rgb));
+  --seph-accent-soft: rgb(var(--seph-accent-soft-rgb));
+  --seph-accent-fg: rgb(var(--seph-accent-fg-rgb));
+  --seph-ink: rgb(var(--seph-ink-rgb));
+  --seph-gold: rgb(var(--seph-gold-rgb));
+  --seph-buff: rgb(var(--seph-buff-rgb));
+  --seph-buff-fg: rgb(var(--seph-buff-fg-rgb));
+  --seph-debuff: rgb(var(--seph-debuff-rgb));
+  --seph-debuff-fg: rgb(var(--seph-debuff-fg-rgb));
+  --seph-destroy: rgb(var(--seph-destroy-rgb));
+  --seph-destroy-fg: rgb(var(--seph-destroy-fg-rgb));
+  --seph-confirm: rgb(var(--seph-confirm-rgb));
+  --seph-confirm-fg: rgb(var(--seph-confirm-fg-rgb));
+
   --z-cell: 10;
   --z-modal: 50;
   --z-grain: 60;
