@@ -190,14 +190,22 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
               {options.map((option) => {
                 const count = picked.filter((p) => p.value === option.value).length
                 return (
+                  /*
+                    정사각 비율을 버튼이 아니라 래퍼 div 가 든다.
+                    <button> 을 그리드 아이템으로 두면 aspect-ratio 로 유도된 높이가
+                    행 크기 계산에 전달되지 않는다 — 버튼은 54px 로 그려지는데 행은
+                    글자 높이(19.5px)로 잡혀서 아이템이 다음 행을 덮고 스프라이트가 겹쳐
+                    보였다. alignSelf/display 조정으로는 바뀌지 않고 래퍼만 효과가 있다
+                    (팔레트의 썸네일은 div 라 원래 멀줦했다).
+                  */
+                  <div key={option.value} className="relative aspect-square w-full">
                   <button
-                    key={option.value}
                     type="button"
                     onClick={() => pick(option.value)}
                     aria-pressed={count > 0}
                     title={`${option.ko_label} · ${TIER_KO[option.tier]}${option.rotate ? ' · 회전 가능' : ' · 회전 불가'}`}
                     className={cn(
-                      'relative flex aspect-square items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell transition-transform duration-200 ease-seph active:scale-[0.98]',
+                      'absolute inset-0 flex items-center justify-center overflow-hidden rounded-inner border-2 bg-sephiria-cell transition-transform duration-200 ease-seph active:scale-[0.98]',
                       TIER_BORDER[option.tier] ?? 'border-sephiria-border',
                       count > 0 && 'ring-2 ring-sephiria-accent'
                     )}
@@ -221,6 +229,7 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
                       </span>
                     )}
                   </button>
+                  </div>
                 )
               })}
             </div>
