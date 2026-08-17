@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { X, Search, Plus, RotateCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -131,9 +132,15 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
     return () => window.removeEventListener('keydown', handler)
   }, [open, onClose])
 
-  if (!open) return null
+  // 공용 Modal 과 같은 이유로 body 로 포털한다 — components/ui/modal.tsx 주석 참고.
+  // 이 모달은 왜쪽 sticky 팔레트 열 안의 ItemPalette 에서 렌더되므로
+  // 포털 없이는 그 열의 쌓임 맥락에 갇혀 그리드에 덮인다.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
-  return (
+  if (!open || !mounted) return null
+
+  return createPortal(
     <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 py-6">
       <div className="absolute inset-0 bg-sephiria-ink/30" onClick={onClose} />
       <div
@@ -382,6 +389,7 @@ export function TabletFusionModal({ open, onClose }: TabletFusionModalProps) {
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
